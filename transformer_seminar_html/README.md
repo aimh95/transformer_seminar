@@ -98,6 +98,64 @@ gradient가 weight를 업데이트하는 방향을 시각적으로 이해하기 
 - Beginner / Detail 모드 전환
 - 재생 / 일시정지 / 이전 / 다음 / 속도 조절
 
+## Q&A 주석 시스템
+
+각 섹션 핵심 개념 아래에 접고 펼 수 있는 **Q&A 블록**이 삽입됩니다. 우측 하단 **Q&A 목록 패널**에서 전체 목록을 보고 클릭하면 해당 위치로 이동합니다.
+
+### Q&A URL 직접 접근
+
+```
+index.html#qa-attention-score-matrix-001
+index.html#qa-qkv-projection-001
+index.html#qa-look-ahead-mask-001
+index.html#qa-ffn-position-wise-001
+index.html#qa-backpropagation-001
+```
+
+### 새 Q&A 추가 방법
+
+1. `index.html` 내 `<script>` 블록의 `const qaItems = [...]` 배열에 항목 추가
+2. 형식:
+   ```javascript
+   {
+     anchor: 'look-ahead-mask',          // data-anchor 값 (기존 20개 중 선택)
+     id: 'qa-look-ahead-mask-002',       // 고유 ID (anchor + 번호)
+     q: '질문 텍스트',
+     short: '한 줄 핵심 답변',
+     detail: '상세 설명 (2~4문장)',
+     summary: '한 줄 요약',
+   },
+   ```
+3. 같은 `anchor`를 가진 항목이 여러 개면 같은 위치에 순서대로 삽입됩니다.
+4. 새 anchor가 필요하면 해당 섹션 HTML에 `<div class="qa-target" data-anchor="새-이름"></div>` 추가.
+
+### 현재 anchor 위치 (20개)
+
+| anchor | 섹션 |
+|--------|------|
+| tokenizer | sec2 |
+| embedding-lookup | sec3 |
+| positional-encoding | sec4 |
+| encoder-decoder-overview | sec5 |
+| encoder-layer | sec6 |
+| qkv-projection | sec7 ★ |
+| attention-score-matrix | sec8 ★ |
+| scaled-dot-product | sec9 |
+| softmax-attention-weight | sec9 |
+| value-weighted-sum | sec9 |
+| multi-head-attention | sec10 |
+| residual-layernorm | sec11 |
+| ffn-position-wise | sec12 ★ |
+| decoder-shifted-target | sec14 |
+| look-ahead-mask | sec15 ★ |
+| cross-attention | sec16 |
+| padding-mask | sec17 |
+| linear-softmax | sec18 |
+| training-vs-inference | sec19 |
+| backpropagation | 시뮬레이터 ★ |
+
+★ = seed Q&A 포함
+
 ## 기술 정확성 체크리스트
 
 - [x] Look-Ahead Mask는 Q/K/V가 아닌 Score Matrix에 적용 (MaskedScore = Score + Mask)

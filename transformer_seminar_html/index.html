@@ -405,6 +405,35 @@
     .vbk-arr { color:#EF4444; font-size:14px; }
     .vbadge { display:inline-block; background:#FEE2E2; border:1px solid #FECACA; border-radius:4px; padding:1px 5px; font-size:9.5px; font-weight:700; color:#DC2626; margin:1px; animation:vpulse 1.2s ease infinite; }
     @keyframes vpulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── Q&A Annotation System ─────────────────────────────── */
+  .qa-target { display:block; height:0; overflow:visible; }
+  .qa-note { margin:14px 0 18px; border:1.5px solid #FCD34D; border-radius:9px; overflow:hidden; }
+  .qa-toggle { display:flex; align-items:center; gap:8px; padding:10px 14px; background:#FEFCE8; cursor:pointer; user-select:none; }
+  .qa-toggle:hover { background:#FEF9C3; }
+  .qa-badge { font-size:11px; font-weight:700; color:#92400E; background:#FDE68A; padding:2px 8px; border-radius:10px; flex-shrink:0; white-space:nowrap; }
+  .qa-title { flex:1; font-size:13.5px; font-weight:600; color:#78350F; line-height:1.4; }
+  .qa-chevron { font-size:13px; color:#B45309; transition:transform .2s; flex-shrink:0; }
+  .qa-note.open .qa-chevron { transform:rotate(90deg); }
+  .qa-body { display:none; padding:14px 16px 16px; background:#fff; border-top:1px solid #FDE68A; }
+  .qa-note.open .qa-body { display:block; }
+  .qa-answer-short { font-size:14px; font-weight:700; color:#1F2937; margin-bottom:10px; padding:8px 12px; background:#FFF7ED; border-left:3px solid #F59E0B; border-radius:4px; }
+  .qa-answer-detail { font-size:13px; color:#374151; line-height:1.75; margin-bottom:12px; }
+  .qa-answer-summary { font-size:12px; color:#6B7280; background:#F9FAFB; border-left:3px solid #FCD34D; padding:8px 12px; border-radius:4px; line-height:1.6; }
+  .qa-highlight { outline:2.5px solid #FBBF24; border-radius:9px; animation:qa-glow 1.8s ease-out forwards; }
+  @keyframes qa-glow { 0%{background-color:#FEF08A;} 60%{background-color:#FFFBEB;} 100%{background-color:transparent;} }
+  /* Q&A Index Panel */
+  .qa-index-panel { position:fixed; bottom:20px; right:20px; width:285px; background:#fff; border:1.5px solid #FCD34D; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.13); z-index:300; overflow:hidden; }
+  .qa-index-hd { display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:#FEFCE8; cursor:pointer; }
+  .qa-index-hd-title { font-size:12.5px; font-weight:700; color:#78350F; }
+  .qa-index-toggle-btn { font-size:10.5px; color:#92400E; background:#FDE68A; border:none; border-radius:6px; padding:2px 8px; cursor:pointer; font-weight:600; }
+  .qa-index-body { max-height:280px; overflow-y:auto; }
+  .qa-index-item { display:flex; align-items:baseline; gap:6px; padding:8px 13px; font-size:12px; color:#374151; cursor:pointer; border-bottom:1px solid #F3F4F6; line-height:1.4; }
+  .qa-index-item:hover { background:#FEFCE8; color:#78350F; }
+  .qa-index-num { font-size:10.5px; font-weight:700; color:#B45309; flex-shrink:0; }
+  .qa-index-collapsed .qa-index-body { display:none; }
+  @media(max-width:680px){ .qa-index-panel { width:calc(100vw - 32px); right:16px; bottom:16px; } }
+
   </style>
 </head>
 <body>
@@ -499,6 +528,7 @@
         <button class="sim-spd" onclick="simSetSpd(900)">빠르게</button>
       </div>
     </div>
+    <div class="qa-target" data-anchor="backpropagation"></div>
   </div>
 </section>
 
@@ -621,6 +651,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Tokenizer = 텍스트 → 정수 ID 배열. token id는 단어의 의미가 아니라 vocabulary 인덱스일 뿐이다.</span>
   </div>
+  <div class="qa-target" data-anchor="tokenizer"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -659,6 +690,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Embedding = token id → 512차원 실수 벡터. 학습 가능한 lookup table. 같은 id = 같은 벡터.</span>
   </div>
+  <div class="qa-target" data-anchor="embedding-lookup"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -712,6 +744,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">PE = 위치마다 다른 sin/cos 패턴. Embedding에 더해 순서 정보를 모델에 전달한다. 학습 파라미터 없음.</span>
   </div>
+  <div class="qa-target" data-anchor="positional-encoding"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -750,6 +783,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Encoder(×6) → H_enc → Decoder(×6). Encoder는 source를 압축하고, Decoder는 그것을 참고해 target을 생성한다.</span>
   </div>
+  <div class="qa-target" data-anchor="encoder-decoder-overview"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -785,6 +819,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Encoder Layer = Multi-Head Self-Attention → Add&Norm → FFN → Add&Norm. 이 구조가 ×6 쌓여 H_enc를 만든다.</span>
   </div>
+  <div class="qa-target" data-anchor="encoder-layer"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -847,6 +882,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Q, K, V = 같은 X를 다른 W로 선형 변환. 역할은 학습으로 결정된다. Q는 무엇을 찾는가, K는 어떤 특징인가, V는 실제로 전달할 내용.</span>
   </div>
+  <div class="qa-target" data-anchor="qkv-projection"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -888,6 +924,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Score = QKᵀ, shape (seq_len, seq_len). score_ij = q_i · k_j = i번째가 j번째를 얼마나 참고할지의 원시 점수.</span>
   </div>
+  <div class="qa-target" data-anchor="attention-score-matrix"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -933,6 +970,9 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Attention = softmax(QKᵀ/√d_k)·V. 점수 계산 → 스케일링 → 확률화 → Value 가중합. 이 4단계가 전부다.</span>
   </div>
+  <div class="qa-target" data-anchor="scaled-dot-product"></div>
+  <div class="qa-target" data-anchor="softmax-attention-weight"></div>
+  <div class="qa-target" data-anchor="value-weighted-sum"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -980,6 +1020,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Multi-Head = d_model 차원을 h등분 → 각 head가 독립 Attention → Concat → W^O. 다양한 관계 패턴을 동시에 학습한다.</span>
   </div>
+  <div class="qa-target" data-anchor="multi-head-attention"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1023,6 +1064,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Add = 원본 x를 더해 gradient 흐름 보장. Norm = 학습 안정화. x + SubLayer(x)의 shape이 같아야 하므로 d_model이 일정하게 유지된다.</span>
   </div>
+  <div class="qa-target" data-anchor="residual-layernorm"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1068,6 +1110,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">FFN = 각 token을 독립적으로 512→2048→512 MLP 변환. token 간 정보를 새로 섞지 않는다.</span>
   </div>
+  <div class="qa-target" data-anchor="ffn-position-wise"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1134,6 +1177,7 @@
     <span class="tag dec">한 줄 요약</span>
     <span class="body">학습 시 Decoder 입력 = 정답 문장을 &lt;SOS&gt; 추가 후 right-shift. 전체를 병렬 계산하되, Mask로 미래는 차단한다.</span>
   </div>
+  <div class="qa-target" data-anchor="decoder-shifted-target"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1258,6 +1302,7 @@
     <span class="tag dec">한 줄 요약</span>
     <span class="body">Look-Ahead Mask = 하삼각 행렬(0 or −∞). Score Matrix에 더해 미래 token의 Attention Weight를 0으로 만든다.</span>
   </div>
+  <div class="qa-target" data-anchor="look-ahead-mask"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1300,6 +1345,7 @@
     <span class="tag dec">한 줄 요약</span>
     <span class="body">Cross-Attention = Decoder(Q)가 Encoder(K, V)를 참고. "지금 생성할 번역 단어를 위해 source 문장 어디를 참고할지" 결정한다.</span>
   </div>
+  <div class="qa-target" data-anchor="cross-attention"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1347,6 +1393,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Padding Mask = &lt;PAD&gt; 위치 Score를 −∞로. Look-Ahead Mask = 미래 위치 차단. 둘 다 Score Matrix에 더해 작동한다.</span>
   </div>
+  <div class="qa-target" data-anchor="padding-mask"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1415,6 +1462,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">Linear = d_model → vocabulary 크기 logit. Softmax = 각 token 확률. 가장 높은 확률 token을 선택하거나 beam search 사용.</span>
   </div>
+  <div class="qa-target" data-anchor="linear-softmax"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1488,6 +1536,7 @@
     <span class="tag">한 줄 요약</span>
     <span class="body">학습 = 정답 전체 병렬 입력 + Mask로 미래 차단. 추론 = &lt;SOS&gt;부터 token 한 개씩 자기회귀 생성.</span>
   </div>
+  <div class="qa-target" data-anchor="training-vs-inference"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -1533,6 +1582,15 @@
   Vaswani et al., "Attention Is All You Need", NeurIPS 2017 (arXiv:1706.03762)<br>
   <span style="margin-top:4px; display:block; font-size:11px;">이 자료의 모든 도식은 논문 기반으로 재도식화한 것입니다.</span>
 </footer>
+
+<!-- ══ Q&A Index Panel ══ -->
+<div class="qa-index-panel" id="qa-index-panel">
+  <div class="qa-index-hd" onclick="qaIndexToggle()">
+    <span class="qa-index-hd-title" id="qa-index-title">Q&amp;A 목록</span>
+    <button class="qa-index-toggle-btn">접기 / 펼치기</button>
+  </div>
+  <div class="qa-index-body" id="qa-index-list"></div>
+</div>
 
 <script>
 /* Scrollspy */
@@ -1834,6 +1892,111 @@ function simSetSpd(ms){simSpd=ms;document.querySelectorAll('.sim-spd').forEach(b
 
 simRender(0);
 simSched();
+
+/* ── Q&A Annotation System ─────────────────────────────── */
+const qaItems = [
+  {
+    anchor: 'qkv-projection',
+    id: 'qa-qkv-projection-001',
+    q: 'Q/K/V의 역할("검색어", "태그", "내용")은 처음부터 설계자가 정하나요?',
+    short: '아니오. Q/K/V의 역할은 학습의 결과입니다. 처음에는 랜덤입니다.',
+    detail: '학습 초기에 W^Q, W^K, W^V는 랜덤으로 초기화됩니다. 이 상태에서 Q, K, V는 아무런 의미가 없습니다. 학습이 진행되면서 loss를 줄이기 위해 gradient가 각 weight를 조정하고, 결과적으로 Q는 "무엇을 찾는가", K는 "어떤 특징인가", V는 "실제로 전달할 내용"의 방향으로 수렴합니다. 즉 역할은 설계가 아니라 학습 압력(loss)으로 자동 분화됩니다.',
+    summary: 'W^Q, W^K, W^V는 랜덤 초기화 → gradient로 역할 자동 분화. 비유("검색어/태그/내용")는 학습 후 사후해석입니다.'
+  },
+  {
+    anchor: 'attention-score-matrix',
+    id: 'qa-attention-score-matrix-001',
+    q: 'Score Matrix의 (i, j) 값은 구체적으로 무엇을 의미하나요?',
+    short: 'score_ij = q_i · k_j. i번째 token이 j번째 token을 얼마나 참고할지의 raw 점수입니다.',
+    detail: 'Score = QKᵀ 계산 결과, score_ij는 i번째 Query 벡터와 j번째 Key 벡터의 내적입니다. 두 벡터가 비슷한 방향을 가리킬수록 내적이 크고, 이는 "i번째 token이 j번째 token에 주목해야 한다"는 신호입니다. 이 값은 아직 정규화 전(raw)이므로 √d_k로 나누고 Softmax를 거쳐야 최종 Attention Weight가 됩니다. Softmax 이전에는 절댓값보다 상대적 크기 비교가 중요합니다.',
+    summary: 'score_ij = q_i · k_j. 값 크다 = i가 j를 더 참고. Softmax 전 raw 점수이므로 절댓값 자체는 의미 없음.'
+  },
+  {
+    anchor: 'look-ahead-mask',
+    id: 'qa-look-ahead-mask-001',
+    q: 'Look-Ahead Mask는 왜 Q/K/V가 아닌 Score Matrix에 적용하나요?',
+    short: 'Score에 −∞를 더해야 Softmax 후 weight가 정확히 0이 됩니다. Q/K/V를 직접 바꾸면 부작용이 생깁니다.',
+    detail: 'Mask의 목적은 "미래 token의 Value 정보가 출력에 포함되지 않도록" 하는 것입니다. Attention Output = Softmax(Score) × V이므로, 특정 j 위치의 Attention Weight를 0으로 만들면 V_j의 기여가 사라집니다. Score에 −∞를 더하면 exp(−∞) = 0 → Softmax 후 해당 weight = 0이 되어 목적이 정확히 달성됩니다. Q/K/V를 0으로 만들면 내적 계산 자체가 오염되고 다른 위치 weight까지 왜곡될 수 있습니다.',
+    summary: 'MaskedScore = Score + Mask(0 or −∞). Softmax(−∞) = 0 → 해당 V 제외. Q/K/V 직접 수정은 부작용 있음.'
+  },
+  {
+    anchor: 'ffn-position-wise',
+    id: 'qa-ffn-position-wise-001',
+    q: 'FFN도 token들 사이의 정보를 교환하나요?',
+    short: '아니오. FFN은 각 token 위치를 독립적으로 처리합니다. token 간 정보 교환은 Attention의 역할입니다.',
+    detail: 'FFN(x) = max(0, xW₁ + b₁)W₂ + b₂. 이 연산은 각 token의 벡터 x에 대해 완전히 독립적으로 적용됩니다. "cat" 위치의 FFN 출력은 같은 레이어 내 "The"나 "mat"의 현재 벡터와 전혀 무관하게 계산됩니다. token 간 정보 혼합은 이미 Attention 단계에서 이루어졌으며, FFN은 그 결과를 각 위치에서 독립적으로 비선형 변환하는 역할입니다. 그래서 FFN을 "position-wise"라고 부릅니다.',
+    summary: 'FFN = position-wise 독립 변환. token 혼합은 Attention이 담당. FFN은 각 위치에서 512→2048→512 MLP만 수행.'
+  },
+  {
+    anchor: 'backpropagation',
+    id: 'qa-backpropagation-001',
+    q: 'Backpropagation이 Transformer에서 어떻게 흐르나요? 어떤 weight가 업데이트되나요?',
+    short: 'Loss에서 시작해 출력층 → Decoder → Attention → Embedding 방향(역방향)으로 Chain rule로 gradient가 전파됩니다.',
+    detail: 'Forward pass가 Input → Embedding → Encoder → Decoder → Logits → Loss 순이라면, Backward pass는 반대 방향입니다. ∂L/∂W_vocab → ∂L/∂H_dec → ∂L/∂W^Q, W^K, W^V → ∂L/∂W_emb 순으로 gradient가 계산됩니다. 각 weight는 W ← W − η·(∂L/∂W)로 업데이트됩니다. 핵심은 "정답 token의 확률을 높이는 방향"으로 모든 weight가 동시에 조정된다는 것입니다. 어떤 weight가 얼마나 기여했는지를 Chain rule이 정확히 추적합니다.',
+    summary: 'Backprop = Loss → W_vocab → W^Q/K/V → W_emb 방향 chain rule. 모든 weight를 W ← W−η∂L/∂W로 동시 업데이트.'
+  },
+];
+
+function qaInit() {
+  document.querySelectorAll('[data-anchor]').forEach(target => {
+    const anchor = target.getAttribute('data-anchor');
+    const items = qaItems.filter(it => it.anchor === anchor);
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'qa-note';
+      div.id = item.id;
+      div.innerHTML =
+        `<div class="qa-toggle" onclick="qaToggle(this.parentElement)">` +
+          `<span class="qa-badge">Q&amp;A</span>` +
+          `<span class="qa-title">${item.q}</span>` +
+          `<span class="qa-chevron">▸</span>` +
+        `</div>` +
+        `<div class="qa-body">` +
+          `<div class="qa-answer-short">▶ ${item.short}</div>` +
+          `<div class="qa-answer-detail">${item.detail}</div>` +
+          `<div class="qa-answer-summary">💡 ${item.summary}</div>` +
+        `</div>`;
+      target.parentNode.insertBefore(div, target.nextSibling);
+    });
+  });
+
+  const listEl = document.getElementById('qa-index-list');
+  if (listEl) {
+    qaItems.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'qa-index-item';
+      el.innerHTML = `<span class="qa-index-num">#${i+1}</span>${item.q}`;
+      el.onclick = () => qaScrollTo(item.id);
+      listEl.appendChild(el);
+    });
+  }
+  const titleEl = document.getElementById('qa-index-title');
+  if (titleEl) titleEl.textContent = `Q&A 목록 (${qaItems.length})`;
+
+  if (window.location.hash) {
+    const id = window.location.hash.slice(1);
+    if (id.startsWith('qa-')) setTimeout(() => qaScrollTo(id), 400);
+  }
+}
+
+function qaToggle(note) { note.classList.toggle('open'); }
+
+function qaScrollTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('open');
+  el.scrollIntoView({ behavior:'smooth', block:'center' });
+  el.classList.remove('qa-highlight');
+  void el.offsetWidth;
+  el.classList.add('qa-highlight');
+  setTimeout(() => el.classList.remove('qa-highlight'), 1800);
+}
+
+function qaIndexToggle() {
+  document.getElementById('qa-index-panel').classList.toggle('qa-index-collapsed');
+}
+
+qaInit();
 </script>
 </body>
 </html>
