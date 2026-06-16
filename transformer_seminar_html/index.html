@@ -341,91 +341,70 @@
     .sec-anchor { display: block; height: 0; overflow: hidden; }
 
     /* ══════════════════════════════════════════
-       HERO ANIMATION
+       INTERACTIVE SIMULATOR
     ══════════════════════════════════════════ */
-    #hero-anim {
-      background: linear-gradient(180deg, #F8FAFC 0%, #fff 100%);
-      border-bottom: 2px solid var(--border);
-      padding: 36px 24px 32px;
-    }
-    .ha-inner { max-width: 960px; margin: 0 auto; }
-    .ha-title {
-      font-size: 20px; font-weight: 800; text-align: center;
-      color: var(--text); margin-bottom: 8px;
-    }
-    .ha-sub {
-      text-align: center; color: var(--muted); font-size: 13px;
-      margin-bottom: 24px; max-width: 640px; margin-left: auto; margin-right: auto;
-    }
-    .ha-steps {
-      display: flex; gap: 10px; overflow-x: auto;
-      padding: 8px 4px 14px; margin-bottom: 14px;
-      scrollbar-width: thin;
-    }
-    .ha-card {
-      min-width: 150px; max-width: 162px;
-      background: var(--white); border: 2px solid var(--border);
-      border-radius: 12px; padding: 14px 12px;
-      text-align: center; flex-shrink: 0;
-      transition: all .35s ease;
-      opacity: .38; transform: scale(.95);
-      position: relative; cursor: default;
-    }
-    .ha-card.active {
-      opacity: 1; transform: scale(1.02);
-      box-shadow: 0 6px 24px rgba(0,0,0,.11);
-    }
-    .ha-card.done { opacity: .65; transform: scale(.96); }
-    .ha-num  { font-size: 24px; margin-bottom: 6px; line-height: 1; }
-    .ha-ttl  { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--sub); }
-    .ha-cnt  { font-size: 11.5px; color: var(--muted); line-height: 1.55; min-height: 38px; }
-    .ha-card.c0 { --ac:#2563EB; --acl:#EFF6FF; }
-    .ha-card.c1 { --ac:#4B5563; --acl:#F3F4F6; }
-    .ha-card.c2 { --ac:#7C3AED; --acl:#F5F3FF; }
-    .ha-card.c3 { --ac:#2563EB; --acl:#DBEAFE; }
-    .ha-card.c4 { --ac:#7C3AED; --acl:#F5F3FF; }
-    .ha-card.c5 { --ac:#059669; --acl:#ECFDF5; }
-    .ha-card.active { border-color: var(--ac); background: var(--acl); }
-    .ha-card.active .ha-ttl { color: var(--ac); }
-    .ha-tip {
-      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
-      transform: translateX(-50%);
-      background: #1F2937; color: #F9FAFB;
-      font-size: 11.5px; line-height: 1.6;
-      padding: 9px 13px; border-radius: 8px;
-      width: 220px; text-align: left;
-      z-index: 99; pointer-events: none;
-    }
-    .ha-tip::after {
-      content: ''; position: absolute; top: 100%; left: 50%;
-      transform: translateX(-50%);
-      border: 5px solid transparent; border-top-color: #1F2937;
-    }
-    .ha-card:hover .ha-tip { display: block; }
-    .ha-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
-    .ha-dot {
-      width: 9px; height: 9px; border-radius: 50%;
-      background: var(--border); transition: background .3s, transform .3s;
-    }
-    .ha-dot.on   { background: #2563EB; transform: scale(1.4); }
-    .ha-dot.done { background: #BFDBFE; }
-    .ha-phrases {
-      background: #EFF6FF; border-radius: 10px;
-      padding: 14px 20px; margin-bottom: 18px;
-      font-size: 13px; color: #1E40AF; line-height: 1.9;
-    }
-    .ha-phrases span { display: block; }
-    .ha-phrases span::before { content: "✦ "; }
-    #ha-replay {
-      display: block; margin: 0 auto;
-      background: #2563EB; color: #fff;
-      border: none; border-radius: 8px;
-      padding: 9px 22px; font-size: 13px; font-weight: 600;
-      cursor: pointer; transition: background .15s;
-    }
-    #ha-replay:hover { background: #1D4ED8; }
-    .ha-dec-steps { font-size: 10.5px; line-height: 1.9; text-align: left; }
-    .ha-dec-steps span { display: block; }
+    #sim-section { background:#fff; border-bottom:2px solid var(--border); padding:28px 18px 32px; }
+    .sim-inner { max-width:960px; margin:0 auto; }
+    .sim-title { font-size:18px; font-weight:800; text-align:center; color:var(--text); margin-bottom:7px; }
+    .sim-sub { text-align:center; color:var(--muted); font-size:12.5px; margin-bottom:16px; max-width:680px; margin-left:auto; margin-right:auto; }
+    .sim-mode-bar { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+    .sim-mode-btn { padding:5px 15px; border-radius:20px; font-size:12px; font-weight:600; border:2px solid var(--border); background:var(--white); color:var(--sub); cursor:pointer; transition:all .15s; }
+    .sim-mode-btn.active { background:#2563EB; border-color:#2563EB; color:#fff; }
+    .sim-toy-note { font-size:11px; color:var(--muted); }
+    .sim-prog-wrap { background:#F3F4F6; border-radius:6px; height:5px; margin:0 0 5px; }
+    .sim-prog-bar { height:100%; background:#2563EB; border-radius:6px; transition:width .4s ease; width:7.14%; }
+    .sim-step-lbl { text-align:right; font-size:11px; color:var(--muted); margin-bottom:10px; }
+    /* 3-col layout */
+    .sim-layout { display:grid; grid-template-columns:130px 1fr 250px; gap:12px; min-height:320px; margin-bottom:12px; }
+    @media(max-width:680px){ .sim-layout { grid-template-columns:1fr; } }
+    /* Left pipeline */
+    .sim-left { display:flex; flex-direction:column; align-items:center; gap:0; }
+    .sim-node { width:116px; padding:5px 7px; border-radius:7px; background:#F3F4F6; border:2px solid var(--border); font-size:10.5px; font-weight:600; text-align:center; color:var(--sub); transition:all .3s; white-space:nowrap; }
+    .sim-node.active { background:#EFF6FF; border-color:#2563EB; color:#1D4ED8; box-shadow:0 2px 10px rgba(37,99,235,.18); }
+    .sim-node-back.active { background:#FFF1F2!important; border-color:#EF4444!important; color:#DC2626!important; }
+    .sim-arr-v { font-size:12px; color:#D1D5DB; line-height:1.3; font-weight:700; }
+    /* Center viz */
+    .sim-center { background:#FAFAFA; border:1.5px solid var(--border); border-radius:10px; padding:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:280px; overflow:hidden; }
+    .sim-center h4 { font-size:11.5px; font-weight:700; color:var(--muted); text-align:center; margin-bottom:10px; }
+    /* Right panel */
+    .sim-right { display:flex; flex-direction:column; gap:7px; }
+    .sim-steptitle { font-size:13px; font-weight:800; color:var(--text); line-height:1.4; }
+    .sim-desc { font-size:12px; color:var(--sub); line-height:1.7; }
+    .sim-fc { background:#FFFBEB; border:2px solid #FCD34D; border-radius:7px; padding:8px 11px; font-family:'Courier New',monospace; font-size:11.5px; font-weight:700; color:#78350F; line-height:1.7; white-space:pre-line; }
+    .sim-sc { background:#F0F9FF; border:1.5px solid #BAE6FD; border-radius:6px; padding:7px 11px; font-family:'Courier New',monospace; font-size:11px; color:#0C4A6E; line-height:1.7; white-space:pre-line; }
+    .sim-dc { background:#F5F3FF; border:1.5px solid #C4B5FD; border-radius:6px; padding:8px 11px; font-family:'Courier New',monospace; font-size:10.5px; color:#4C1D95; line-height:1.8; white-space:pre-line; }
+    /* Controls */
+    .sim-controls { display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:center; margin-top:4px; }
+    .sim-ctrl { padding:6px 14px; border-radius:7px; font-size:12px; font-weight:600; border:2px solid var(--border); background:var(--white); color:var(--sub); cursor:pointer; transition:all .15s; }
+    .sim-ctrl:hover { background:#F3F4F6; }
+    .sim-ctrl-play { background:#2563EB; border-color:#2563EB; color:#fff; }
+    .sim-ctrl-play:hover { background:#1D4ED8; }
+    .sim-spd-wrap { display:flex; align-items:center; gap:4px; margin-left:6px; }
+    .sim-spd-lbl { font-size:11px; color:var(--muted); }
+    .sim-spd { padding:3px 9px; border-radius:5px; font-size:11px; border:1.5px solid var(--border); background:var(--white); color:var(--sub); cursor:pointer; }
+    .sim-spd.on { background:#374151; color:#fff; border-color:#374151; }
+    /* Viz helpers */
+    .vt { display:inline-block; padding:4px 10px; border-radius:6px; font-size:12.5px; font-weight:700; margin:3px; }
+    .vt-w { background:#F3F4F6; border:1.5px solid #D1D5DB; color:#374151; }
+    .vt-i { background:#DBEAFE; border:1.5px solid #93C5FD; color:#1E3A8A; }
+    .vv { display:flex; gap:3px; margin:4px 0; align-items:center; }
+    .vv-l { font-size:10px; color:var(--muted); width:52px; text-align:right; margin-right:3px; }
+    .vc { width:40px; height:26px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:10.5px; font-weight:700; border:1.5px solid transparent; }
+    .vc-q { background:#FEF2F2; border-color:#FECACA; color:#991B1B; }
+    .vc-k { background:#EFF6FF; border-color:#BFDBFE; color:#1E3A8A; }
+    .vc-v { background:#DCFCE7; border-color:#BBF7D0; color:#14532D; }
+    .vc-x { background:#F0F9FF; border-color:#BAE6FD; color:#0C4A6E; }
+    .vc-s { background:#F5F3FF; border-color:#C4B5FD; color:#4C1D95; }
+    .vc-g { background:#F3F4F6; border-color:#D1D5DB; color:#374151; }
+    .vbar { display:flex; align-items:center; gap:5px; margin:3px 0; }
+    .vbar-n { font-size:10.5px; color:var(--sub); width:36px; text-align:right; }
+    .vbar-bg { background:#F3F4F6; border-radius:3px; height:14px; flex:1; overflow:hidden; }
+    .vbar-f { height:100%; border-radius:3px; transition:width .5s; }
+    .vbar-v { font-size:10px; color:var(--muted); width:32px; }
+    .vbk { background:#FFF1F2; border:2px dashed #FCA5A5; border-radius:7px; padding:7px 10px; margin:3px 0; display:flex; align-items:center; gap:7px; font-size:11px; font-weight:600; color:#991B1B; }
+    .vbk-arr { color:#EF4444; font-size:14px; }
+    .vbadge { display:inline-block; background:#FEE2E2; border:1px solid #FECACA; border-radius:4px; padding:1px 5px; font-size:9.5px; font-weight:700; color:#DC2626; margin:1px; animation:vpulse 1.2s ease infinite; }
+    @keyframes vpulse { 0%,100%{opacity:1} 50%{opacity:.4} }
   </style>
 </head>
 <body>
@@ -453,74 +432,73 @@
   </span>
 </header>
 
-<!-- ══════ HERO ANIMATION ══════ -->
-<section id="hero-anim">
-  <div class="ha-inner">
-    <h2 class="ha-title">LLM은 입력을 받아 어떻게 출력을 만들까?</h2>
-    <p class="ha-sub">입력 문장이 token으로 바뀌고, 문맥을 반영한 뒤, Decoder가 다음 token을 하나씩 예측해 출력 문장을 만듭니다.</p>
+<!-- ══════ INTERACTIVE SIMULATOR ══════ -->
+<section id="sim-section">
+  <div class="sim-inner">
+    <h2 class="sim-title">Forward Pass부터 Backpropagation까지 한눈에 보기</h2>
+    <p class="sim-sub">문장이 vector로 바뀌고, attention 계산을 거쳐 다음 token 확률이 만들어진 뒤, loss가 다시 weight를 업데이트하는 방향을 시각화합니다.</p>
 
-    <div class="ha-steps" id="ha-steps">
-      <div class="ha-card c0 active" id="ha-0">
-        <div class="ha-num">📥</div>
-        <div class="ha-ttl">① 입력 문장</div>
-        <div class="ha-cnt">"The cat is on<br>the mat."</div>
-        <div class="ha-tip">사용자가 입력한 문장입니다. Transformer는 이 문장을 번역하기 위해 여러 단계를 거칩니다.</div>
+    <div class="sim-mode-bar">
+      <button class="sim-mode-btn active" id="smbeg" onclick="simSetMode('beginner')">Beginner</button>
+      <button class="sim-mode-btn" id="smdet" onclick="simSetMode('detail')">Detail</button>
+      <span class="sim-toy-note">※ toy example — d_model=4, d_k=3, vocab=7 (illustrative values)</span>
+    </div>
+
+    <div class="sim-prog-wrap"><div class="sim-prog-bar" id="sim-prog"></div></div>
+    <div class="sim-step-lbl" id="sim-lbl">Step 1 / 14</div>
+
+    <div class="sim-layout">
+      <!-- Left: pipeline nodes -->
+      <div class="sim-left">
+        <div class="sim-node" id="sn0">📥 입력</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn1">✂️ Tokenizer</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn2">🔤 Embedding</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn3">📍 Pos.Enc</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn4">Q / K / V</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn5">Score / Scale</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn6">Softmax / Attn</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn7">FFN</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn8">Logits → P</div>
+        <div class="sim-arr-v">↓</div>
+        <div class="sim-node" id="sn9">Loss</div>
+        <div class="sim-arr-v" style="color:#EF4444;">↑</div>
+        <div class="sim-node sim-node-back" id="sn10">∂L Backprop</div>
       </div>
-      <div class="ha-card c1" id="ha-1">
-        <div class="ha-num">✂️</div>
-        <div class="ha-ttl">② Tokenizer</div>
-        <div class="ha-cnt">["The","cat","is"<br>,"on","the","mat"]<br>→ [1,5,2,6,1,10]</div>
-        <div class="ha-tip">문장을 token으로 나누고, 각 token을 vocabulary 정수 index로 바꿉니다.</div>
-      </div>
-      <div class="ha-card c2" id="ha-2">
-        <div class="ha-num">🔢</div>
-        <div class="ha-ttl">③ Embedding<br>+ Position</div>
-        <div class="ha-cnt">token id → vector<br>+ 위치 정보</div>
-        <div class="ha-tip">각 token id는 d_model 차원 vector로 바뀌고, Positional Encoding이 더해집니다.</div>
-      </div>
-      <div class="ha-card c3" id="ha-3">
-        <div class="ha-num">🧠</div>
-        <div class="ha-ttl">④ Encoder</div>
-        <div class="ha-cnt">Source memory<br>H_enc 생성</div>
-        <div class="ha-tip">Encoder는 입력 문장 전체를 읽고, 각 token에 문맥이 반영된 H_enc(source memory)를 만듭니다.</div>
-      </div>
-      <div class="ha-card c4" id="ha-4">
-        <div class="ha-num">🔄</div>
-        <div class="ha-ttl">⑤ Decoder</div>
-        <div class="ha-cnt">
-          <div class="ha-dec-steps">
-            <span>&lt;SOS&gt; → Le</span>
-            <span>&lt;SOS&gt;,Le → chat</span>
-            <span>&lt;SOS&gt;,Le,chat → est</span>
-            <span>...</span>
-          </div>
-        </div>
-        <div class="ha-tip">Decoder는 이전까지 생성한 token과 H_enc를 참고해 다음 token을 하나씩 예측합니다. 한 번에 전부 알지 않습니다.</div>
-      </div>
-      <div class="ha-card c5" id="ha-5">
-        <div class="ha-num">✅</div>
-        <div class="ha-ttl">⑥ 출력 완성</div>
-        <div class="ha-cnt" style="font-weight:700;color:#059669;">"Le chat est<br>sur le tapis."</div>
-        <div class="ha-tip">다음 token 예측을 반복해 최종 번역 문장이 완성됩니다. &lt;EOS&gt; token이 나오면 생성을 멈춥니다.</div>
+
+      <!-- Center: visualization -->
+      <div class="sim-center" id="sim-viz"></div>
+
+      <!-- Right: description panel -->
+      <div class="sim-right">
+        <div class="sim-steptitle" id="sim-ttl"></div>
+        <div class="sim-desc" id="sim-desc"></div>
+        <div class="sim-fc" id="sim-fc" style="display:none;"></div>
+        <div class="sim-sc" id="sim-sc" style="display:none;"></div>
+        <div class="sim-dc" id="sim-dc" style="display:none;"></div>
       </div>
     </div>
 
-    <div class="ha-dots">
-      <div class="ha-dot on"  id="hd-0"></div>
-      <div class="ha-dot"     id="hd-1"></div>
-      <div class="ha-dot"     id="hd-2"></div>
-      <div class="ha-dot"     id="hd-3"></div>
-      <div class="ha-dot"     id="hd-4"></div>
-      <div class="ha-dot"     id="hd-5"></div>
+    <!-- Controls -->
+    <div class="sim-controls">
+      <button class="sim-ctrl" onclick="simGo(-1)">◀ 이전</button>
+      <button class="sim-ctrl sim-ctrl-play" id="sim-playbtn" onclick="simToggle()">⏸ 일시정지</button>
+      <button class="sim-ctrl" onclick="simGo(1)">다음 ▶</button>
+      <button class="sim-ctrl" onclick="simRestart()">↺ 처음부터</button>
+      <div class="sim-spd-wrap">
+        <span class="sim-spd-lbl">속도:</span>
+        <button class="sim-spd" onclick="simSetSpd(2600)">느리게</button>
+        <button class="sim-spd on" id="spd-mid" onclick="simSetSpd(1800)">보통</button>
+        <button class="sim-spd" onclick="simSetSpd(900)">빠르게</button>
+      </div>
     </div>
-
-    <div class="ha-phrases">
-      <span>Transformer는 입력 문장을 한 번에 읽고, Decoder가 출력 문장을 한 token씩 생성합니다.</span>
-      <span>Encoder는 입력 문장의 문맥을 이해하고, Decoder는 그 정보를 참고해 다음 token을 예측합니다.</span>
-      <span>즉, 입력 → 이해 → 한 token씩 생성의 흐름으로 동작합니다.</span>
-    </div>
-
-    <button id="ha-replay" onclick="haRestart()">↺ 다시 보기</button>
   </div>
 </section>
 
@@ -1586,47 +1564,276 @@ function updateNav() {
 window.addEventListener('scroll', updateNav, { passive: true });
 updateNav();
 
-/* ═════════════════════════════════
-   Hero Animation
-═════════════════════════════════ */
-const HA_TOTAL = 6;
-const HA_DELAY = [1800, 1700, 1700, 1900, 2200, 2800]; // ms per step
-let haStep = 0, haTimer = null;
+/* ═══════════════════════════════════════════════════
+   INTERACTIVE FORWARD/BACKPROP SIMULATOR  (14 steps)
+   toy example — d_model=4, d_k=3, vocab=7
+   All numbers are illustrative values, not real weights.
+═══════════════════════════════════════════════════ */
+const TOK = ['The','cat','mat'];
+const VT = (t,cls)=>`<span class="vt ${cls}">${t}</span>`;
+const VC = (v,cls)=>`<div class="vc ${cls}">${v}</div>`;
+const VV = (label,vals,cls,extra)=>`<div class="vv">${label?`<span class="vv-l">${label}</span>`:''}${vals.map(v=>VC(v,cls)).join('')}${extra||''}</div>`;
+const BAR = (name,val,max,color,note)=>`<div class="vbar"><span class="vbar-n">${name}</span><div class="vbar-bg"><div class="vbar-f" style="width:${(val/max*100).toFixed(1)}%;background:${color};"></div></div><span class="vbar-v">${typeof val==='number'?val.toFixed(2):val}</span>${note||''}</div>`;
+const MAT_CELL=(v,bg,bc,tc)=>`<td style="background:${bg};border:1px solid ${bc};color:${tc};font-weight:700;font-size:11.5px;padding:4px 8px;text-align:center;">${v}</td>`;
+const TH=(v,bg,tc)=>`<th style="background:${bg};color:${tc};font-size:11px;padding:4px 8px;">${v}</th>`;
 
-function haActivate(step) {
-  for (let i = 0; i < HA_TOTAL; i++) {
-    const card = document.getElementById('ha-' + i);
-    const dot  = document.getElementById('hd-' + i);
-    if (!card) continue;
-    card.classList.remove('active', 'done');
-    dot.classList.remove('on', 'done');
-    if (i < step) {
-      card.classList.add('done');
-      dot.classList.add('done');
-    } else if (i === step) {
-      card.classList.add('active');
-      dot.classList.add('on');
-      try { card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e){}
-    }
-  }
-  haStep = step;
+const SIM_STEPS=[
+{ni:'sn0',
+ t:'Step 1 / 14 — 문장이 입력된다',
+ b:'모델은 자연어 문장을 바로 계산할 수 없습니다. 먼저 문장을 token으로 나누어야 합니다.',
+ d:'입력 문장은 아직 tensor가 아닙니다. 이 시뮬레이터는 toy example로 3개 token ["The","cat","mat"]만 사용합니다.',
+ f:'',s:'',dc:'',
+ viz:`<h4>입력 문장</h4>
+  <div style="font-size:19px;font-weight:800;color:#2563EB;text-align:center;margin:18px 0;padding:14px;background:#EFF6FF;border-radius:10px;border:2px solid #BFDBFE;">"The cat is on the mat."</div>
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;">↓ Tokenizer로 전달<br><em>시뮬레이터에서는 ["The","cat","mat"] 3 token 사용</em></div>`},
+
+{ni:'sn1',
+ t:'Step 2 / 14 — 문장이 token id로 바뀐다',
+ b:'token id는 의미가 아니라 vocabulary에서의 index입니다. 모델이 계산하는 대상은 아직 vector가 아닙니다.',
+ d:'Tokenizer는 문장을 subword 단위로 분리합니다. 여기서는 이해를 위해 단어 단위로 단순화했습니다.',
+ f:'',s:'input→output: ["The","cat","mat"] → [4,5,6]',dc:'',
+ viz:`<h4>Tokenizer</h4>
+  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0;">${TOK.map(t=>VT(t,'vt-w')).join('')}</div>
+  <div style="font-size:16px;color:var(--muted);text-align:center;margin:6px 0;">↓ vocab index</div>
+  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0;">${['id 4','id 5','id 6'].map(t=>VT(t,'vt-i')).join('')}</div>
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;">token id는 vocabulary에서의 정수 index입니다</div>`},
+
+{ni:'sn2',
+ t:'Step 3 / 14 — token id가 embedding vector로 바뀐다',
+ b:'Embedding Layer는 lookup table입니다. token id는 이 table의 row를 선택하는 index 역할을 합니다.',
+ d:'W_emb ∈ R^{V×d_model}. id 5("cat")은 W_emb[5]를 가져옵니다. W_emb의 값은 학습 중 업데이트됩니다.',
+ f:'W_emb ∈ R^{V × d_model}\nE_cat = W_emb[5] = [0.2, 0.7, -0.1, 0.4]',
+ s:'W_emb: 7 × 4   (V=7, d_model=4)\nE_cat : 1 × 4',
+ dc:'* 숫자는 toy example illustrative values',
+ viz:`<h4>Embedding Lookup</h4>
+  <div style="display:flex;align-items:flex-start;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <div>${[['id 0','&lt;SOS&gt;','#FEF3C7','#92400E'],['id 4','The','#DBEAFE','#1E3A8A'],['id 5','cat','#DCFCE7','#14532D'],['id 6','mat','#EDE9FE','#4C1D95']].map(([id,tok,bg,tc],i)=>`
+      <div style="display:flex;align-items:center;gap:4px;margin:2px 0;${i===2?'outline:2px solid #16A34A;border-radius:4px;':''}">
+        <span style="font-size:9.5px;color:var(--muted);width:30px;text-align:right;">${id}</span>
+        <span class="vt" style="background:${bg};color:${tc};border:1.5px solid ${tc}44;font-size:11px;padding:3px 8px;">${tok}</span>
+        ${i===2?'<span style="font-size:9px;color:#16A34A;">← 선택</span>':''}
+      </div>`).join('')}
+    <div style="font-size:10px;color:var(--muted);text-align:center;">…</div></div>
+    <div style="margin-top:20px;font-size:18px;color:var(--muted);">→</div>
+    <div style="margin-top:18px;"><div style="font-size:10px;color:var(--muted);margin-bottom:3px;">E_cat =</div>
+    ${VV('',['0.2','0.7','-0.1','0.4'],'vc-x')}<div style="font-size:10px;color:var(--muted);text-align:center;">d_model=4</div></div>
+  </div>`},
+
+{ni:'sn3',
+ t:'Step 4 / 14 — 위치 정보가 더해진다',
+ b:'Transformer는 문장을 순서대로 읽는 RNN이 아니므로, 위치 정보를 vector에 더해줘야 합니다.',
+ d:'Positional Encoding은 sin/cos 함수로 생성됩니다. 같은 단어라도 위치가 다르면 다른 PE가 더해집니다.',
+ f:'Input = Embedding + PositionalEncoding',
+ s:'E_cat: [0.2,  0.7, -0.1, 0.4]\nPE(1): [0.0,  0.1,  0.0, 0.1]\nX_cat: [0.2,  0.8, -0.1, 0.5]',
+ dc:'',
+ viz:`<h4>Positional Encoding 덧셈</h4>
+  ${[['E_cat',['0.2','0.7','-0.1','0.4'],'vc-x',''],['PE(1)',['0.0','0.1','0.0','0.1'],'vc-g','+'],['X_cat',['0.2','0.8','-0.1','0.5'],'vc-x','=']].map(([l,v,c,pre],i)=>`
+    <div class="vv" style="${i===2?'border-top:2px solid #BFDBFE;padding-top:6px;':''}">
+      <span class="vv-l" style="${i===2?'font-weight:700;color:#1D4ED8;':''}">${pre} ${l}</span>
+      ${v.map(x=>VC(x,c)).join('')}
+    </div>`).join('')}
+  <div style="font-size:11px;color:var(--muted);margin-top:10px;text-align:center;">3개 token 각각 동일 과정 → X ∈ R^{3×4}</div>`},
+
+{ni:'sn4',
+ t:'Step 5 / 14 — X에서 Q, K, V를 만든다',
+ b:'같은 X에서 출발하지만 서로 다른 weight matrix를 곱하기 때문에 Q, K, V는 서로 다른 역할로 학습됩니다.',
+ d:'Q=XW^Q, K=XW^K, V=XW^V. X는 공유되지만 W^Q, W^K, W^V는 독립적으로 학습됩니다.',
+ f:'Q = XW^Q\nK = XW^K\nV = XW^V',
+ s:'X: 3×4  W^Q,W^K: 4×3  W^V: 4×4\nQ,K: 3×3   V: 3×4',
+ dc:'',
+ viz:`<h4>Q / K / V 생성</h4>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:7px;">
+    <div style="background:#F0F9FF;border:2px solid #BAE6FD;border-radius:7px;padding:7px 18px;font-size:13px;font-weight:700;color:#0C4A6E;">X (3 × 4)</div>
+    <div style="font-size:11px;color:var(--muted);">× W^Q &nbsp;&nbsp;&nbsp; × W^K &nbsp;&nbsp;&nbsp; × W^V</div>
+    <div style="display:flex;gap:10px;">
+      <div style="background:#FEF2F2;border:2px solid #FECACA;border-radius:7px;padding:8px 14px;font-weight:800;color:#991B1B;text-align:center;font-size:13px;">Q<br><span style="font-size:9.5px;font-weight:400;">(3×3) Query</span></div>
+      <div style="background:#EFF6FF;border:2px solid #BFDBFE;border-radius:7px;padding:8px 14px;font-weight:800;color:#1E3A8A;text-align:center;font-size:13px;">K<br><span style="font-size:9.5px;font-weight:400;">(3×3) Key</span></div>
+      <div style="background:#DCFCE7;border:2px solid #BBF7D0;border-radius:7px;padding:8px 14px;font-weight:800;color:#14532D;text-align:center;font-size:13px;">V<br><span style="font-size:9.5px;font-weight:400;">(3×4) Value</span></div>
+    </div>
+    <div style="font-size:10.5px;color:var(--muted);text-align:center;">역할은 처음부터 설계가 아니라 학습 과정에서 분화됩니다</div>
+  </div>`},
+
+{ni:'sn5',
+ t:'Step 6 / 14 — Q와 K를 내적해 score를 만든다',
+ b:'Score Matrix의 i번째 row는 i번째 token이 다른 token들을 얼마나 참고할지를 나타냅니다.',
+ d:'score[i][j] = q_i · k_j. row=Query 위치, col=Key 위치. QK^T shape=(seq_len×seq_len).',
+ f:'Score = Q K^T\nscore_ij = q_i · k_j',
+ s:'Q: 3×3  K^T: 3×3  Score: 3×3',
+ dc:'q_cat=[0.4,0.1,0.7]  k_The=[0.2,0.5,0.1]\n= 0.4×0.2 + 0.1×0.5 + 0.7×0.1\n= 0.08+0.05+0.07 = 0.20',
+ viz:(()=>{
+  const sc=[[' 1.80',' 0.20',' 0.60'],[' 0.20',' 1.60',' 0.40'],[' 0.60',' 0.40',' 1.40']];
+  return `<h4>Score = Q K^T &nbsp;(3 × 3)</h4>
+    <table style="border-collapse:collapse;margin:0 auto;">
+      <thead><tr><th style="background:transparent;border:none;"></th>${TOK.map(t=>TH(t,'#EFF6FF','#1D4ED8')).join('')}</tr></thead>
+      <tbody>${TOK.map((rt,i)=>`<tr>${TH(rt,'#FEF2F2','#991B1B')}${[0,1,2].map(j=>MAT_CELL(sc[i][j],'#F5F3FF','#C4B5FD','#4C1D95')).join('')}</tr>`).join('')}</tbody>
+    </table>
+    <div style="font-size:10px;color:var(--muted);margin-top:7px;text-align:center;">row = Query 위치 &nbsp;|&nbsp; column = Key 위치</div>`;
+ })()},
+
+{ni:'sn5',
+ t:'Step 7 / 14 — score를 √d_k로 나누어 안정화한다',
+ b:'Q와 K 내적은 d_k개의 항을 더하는 연산입니다. d_k가 커질수록 분산이 커져 softmax가 한쪽으로 치우칠 수 있습니다.',
+ d:'score의 분산 ≈ d_k. √d_k로 나누면 분산 ≈ 1로 안정화됩니다. seq_len이 아닌 d_k 때문입니다.',
+ f:'ScaledScore = Score / √d_k\n√d_k = √3 ≈ 1.73',
+ s:'Score, ScaledScore: 3 × 3',
+ dc:'Before: 1.80/1.73≈1.04  0.20/1.73≈0.12\nAfter:  softmax 입력이 완만해짐',
+ viz:(()=>{
+  const sc=[['1.04','0.12','0.35'],['0.12','0.92','0.23'],['0.35','0.23','0.81']];
+  return `<h4>ScaledScore = Score / √3</h4>
+    <table style="border-collapse:collapse;margin:0 auto;">
+      <thead><tr><th style="background:transparent;border:none;"></th>${TOK.map(t=>TH(t,'#EFF6FF','#1D4ED8')).join('')}</tr></thead>
+      <tbody>${TOK.map((rt,i)=>`<tr>${TH(rt,'#FEF2F2','#991B1B')}${[0,1,2].map(j=>MAT_CELL(sc[i][j],'#F5F3FF','#C4B5FD','#4C1D95')).join('')}</tr>`).join('')}</tbody>
+    </table>
+    <div style="font-size:10.5px;color:#D97706;font-weight:600;margin-top:7px;text-align:center;">√d_k로 나누는 이유는 seq_len이 아닌 d_k 차원의 분산 때문입니다</div>`;
+ })()},
+
+{ni:'sn6',
+ t:'Step 8 / 14 — softmax로 참고 비율을 만든다',
+ b:'softmax는 score를 합이 1인 비율로 바꿉니다. 이 비율은 "어디를 얼마나 참고할지"를 의미합니다.',
+ d:'softmax(x_i)=exp(x_i)/Σexp(x_j). 각 row 합=1. AttentionWeight 행렬 shape=3×3.',
+ f:'AttWeight = softmax(ScaledScore)',
+ s:'ScaledScore: 3×3  →  AttWeight: 3×3',
+ dc:'cat row: [0.12,0.92,0.23]\nsoftmax → [0.16, 0.65, 0.19]\n(합 = 1.00 ✓)',
+ viz:(()=>{
+  const rows=[[0.55,0.28,0.17],[0.16,0.65,0.19],[0.27,0.24,0.49]];
+  const cols=['#60A5FA','#34D399','#F59E0B'];
+  return `<h4>AttentionWeight = softmax(ScaledScore)</h4>
+    ${rows.map((row,i)=>`<div style="margin:5px 0;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">Query: ${TOK[i]}</div>
+    ${row.map((v,j)=>BAR(TOK[j],v,1,cols[j],'')).join('')}</div>`).join('')}`;
+ })()},
+
+{ni:'sn6',
+ t:'Step 9 / 14 — AttentionOutput = AttentionWeight × V',
+ b:'Q와 K는 어디를 얼마나 참고할지 결정하고, Value는 실제로 전달될 정보를 담습니다.',
+ d:'AttentionOutput = AttentionWeight × V. context vector = weighted sum of V rows.',
+ f:'AttentionOutput = AttentionWeight × V',
+ s:'AttWeight: 3×3  V: 3×4  →  AttOutput: 3×4',
+ dc:'out_cat = 0.16·V_The + 0.65·V_cat + 0.19·V_mat',
+ viz:`<h4>Weighted Sum with V — "cat" 위치</h4>
+  ${VV('<span style="color:#60A5FA;">0.16 ×</span>',['0.1','0.2','0.3','0.1'],'vc-x','<span style="font-size:9.5px;color:var(--muted);margin-left:3px;">(V_The)</span>')}
+  ${VV('<span style="color:#34D399;">0.65 ×</span>',['0.2','0.7','-0.1','0.4'],'vc-v','<span style="font-size:9.5px;color:var(--muted);margin-left:3px;">(V_cat)</span>')}
+  ${VV('<span style="color:#F59E0B;">0.19 ×</span>',['0.3','0.5','0.0','0.2'],'vc-x','<span style="font-size:9.5px;color:var(--muted);margin-left:3px;">(V_mat)</span>')}
+  <div style="font-size:12px;color:var(--muted);text-align:center;margin:3px 0;">= (가중합)</div>
+  ${VV('<b style="color:#1D4ED8;">out_cat</b>',['0.20','0.60','-0.01','0.30'],'vc-k')}
+  <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:5px;">Forward pass: 입력→출력 방향 ✓</div>`},
+
+{ni:'sn7',
+ t:'Step 10 / 14 — FFN이 각 token vector를 독립적으로 가공한다',
+ b:'Attention은 token 간 정보를 섞고, FFN은 섞인 각 token vector를 독립적으로 가공합니다.',
+ d:'FFN은 position-wise입니다. W₁, W₂를 보면 token 간 연결이 없음을 알 수 있습니다.',
+ f:'FFN(x) = max(0, xW₁+b₁) W₂+b₂',
+ s:'x: 1×4  W₁: 4×8  W₂: 8×4\n(toy: d_model=4, d_ff=8)',
+ dc:'token 간 화살표 없음 → 독립 처리\nResidual: LayerNorm(x + FFN(x))',
+ viz:`<h4>Position-wise FFN (token 간 독립)</h4>
+  <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:10px 0;">
+    ${[['The','#EFF6FF','#93C5FD'],['cat','#DCFCE7','#86EFAC'],['mat','#FEF3C7','#FDE68A']].map(([t,bg,bd])=>`
+      <div style="text-align:center;">
+        <div style="background:${bg};border:2px solid ${bd};border-radius:6px;padding:5px 9px;font-size:11.5px;font-weight:700;">${t}</div>
+        <div style="font-size:14px;color:var(--muted);">↓</div>
+        <div style="background:#FFF7ED;border:2px solid #FED7AA;border-radius:6px;padding:4px 9px;font-size:10px;color:#92400E;">MLP</div>
+        <div style="font-size:14px;color:var(--muted);">↓</div>
+        <div style="background:${bg};border:2px solid ${bd};border-radius:6px;padding:5px 9px;font-size:11.5px;font-weight:700;">${t}′</div>
+      </div>`).join('')}
+  </div>
+  <div style="font-size:10.5px;color:#D97706;font-weight:600;text-align:center;margin-top:5px;">↕ token 간 연결 없음 — 각 token 독립 처리</div>`},
+
+{ni:'sn8',
+ t:'Step 11 / 14 — Decoder가 다음 token 후보 점수를 만든다',
+ b:'Decoder output은 vocabulary 전체에 대한 점수인 logits로 변환됩니다.',
+ d:'Logits=H_dec·W_vocab+b. W_vocab ∈ R^{d_model×V}.',
+ f:'Logits = H_dec W_vocab + b',
+ s:'H_dec: 1×4  W_vocab: 4×7  →  Logits: 1×7',
+ dc:'',
+ viz:(()=>{
+  const tks=['<SOS>','Le','chat','est','The','cat','mat'];
+  const lg=[0.1,0.3,3.2,1.1,0.4,0.2,0.1];
+  return `<h4>Logits (vocab 전체 점수)</h4>
+    ${tks.map((t,i)=>BAR(t,lg[i],3.2,i===2?'#059669':'#93C5FD',i===2?'<span style="font-size:9px;color:#059669;">← 최고</span>':'')).join('')}`;
+ })()},
+
+{ni:'sn8',
+ t:'Step 12 / 14 — softmax로 다음 token 확률을 만든다',
+ b:'모델은 vocabulary의 모든 token 중 다음 token일 확률을 계산합니다.',
+ d:'P(y_t|y_<t,x)=softmax(Logits). 확률의 합=1.',
+ f:'P(next token) = softmax(Logits)',
+ s:'Logits: 1×7  →  Prob: 1×7  (합=1)',
+ dc:'P(chat)=0.82 → 가장 높은 확률',
+ viz:(()=>{
+  const tks=['<SOS>','Le','chat','est','The','cat','mat'];
+  const pr=[0.01,0.04,0.82,0.07,0.02,0.03,0.01];
+  return `<h4>P(next token) = softmax(Logits)</h4>
+    ${tks.map((t,i)=>BAR(t,pr[i],1,i===2?'#059669':'#93C5FD',i===2?'<span style="font-size:9px;color:#059669;">← 정답!</span>':'')).join('')}`;
+ })()},
+
+{ni:'sn9',
+ t:'Step 13 / 14 — 정답 token과 비교해 loss를 계산한다',
+ b:'정답 token의 확률이 낮으면 loss가 커지고, 높으면 loss가 작아집니다.',
+ d:'Cross-Entropy Loss: L=-log P(target). P(chat)=0.82이면 Loss≈0.20.',
+ f:'Target = "chat"\nLoss = -log P(chat)',
+ s:'Loss = -log(0.82) ≈ 0.20',
+ dc:'완벽 예측(P=1.0) → Loss=0\nP=0.5 → Loss≈0.69\nP=0.1 → Loss≈2.30',
+ viz:`<h4>Loss 계산</h4>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin:8px 0;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="text-align:center;"><div style="font-size:10px;color:var(--muted);">P(chat)</div><div style="font-size:28px;font-weight:900;color:#059669;">0.82</div></div>
+      <div style="font-size:18px;color:var(--muted);">vs</div>
+      <div style="text-align:center;"><div style="font-size:10px;color:var(--muted);">정답 Target</div><div style="background:#DCFCE7;border:2px solid #86EFAC;border-radius:6px;padding:5px 12px;font-size:13px;font-weight:800;color:#14532D;">chat ✓</div></div>
+    </div>
+    <div style="text-align:center;background:#FFF1F2;border:2px solid #FECACA;border-radius:8px;padding:10px 18px;">
+      <div style="font-size:10px;color:var(--muted);">Cross-Entropy Loss</div>
+      <div style="font-size:24px;font-weight:900;color:#EF4444;">L ≈ 0.20</div>
+      <div style="font-size:10px;color:var(--muted);">= −log(0.82)</div>
+    </div>
+    <div style="font-size:10.5px;color:var(--muted);text-align:center;">P → 1.0일수록 Loss → 0 &nbsp;|&nbsp; P → 0일수록 Loss → ∞</div>
+  </div>`},
+
+{ni:'sn10',
+ t:'Step 14 / 14 — Backpropagation: gradient가 weight를 업데이트한다',
+ b:'모델은 loss를 줄이는 방향으로 weight를 조금씩 수정합니다. 정답 예측에 도움이 된 경로는 더 강화될 수 있습니다.',
+ d:'Chain rule로 gradient가 output→decoder→attention→embedding 방향으로 역전파됩니다.',
+ f:'W ← W - η ∂L/∂W\nη = learning rate',
+ s:'Forward: 입력→출력\nBackward: Loss→weight (역방향)',
+ dc:'W_vocab: 정답 logit 높이는 방향으로 조정될 수 있음\nW^Q,W^K: 유용 attention score가 커지는 방향으로 조정될 수 있음\nW^V: 정답 예측에 유리한 정보 방향으로 조정될 수 있음\nW_emb: 더 유용한 표현이 되는 방향으로 조정될 수 있음',
+ viz:`<h4>Backpropagation 방향 (역방향)</h4>
+  <div style="font-size:10.5px;color:var(--muted);text-align:center;margin-bottom:7px;">Loss에서 시작해 output → decoder → attention → embedding 방향으로 흐름</div>
+  <div style="display:flex;flex-direction:column;gap:3px;">
+    <div class="vbk" style="border-color:#EF4444;background:#FFF1F2;"><span class="vbk-arr">←</span> Loss = 0.20</div>
+    ${['W_vocab','W^Q','W^K','W^V','W_emb'].map(w=>`<div class="vbk"><span class="vbk-arr">←</span> ∂L/∂${w}<span class="vbadge">${w} 업데이트</span></div>`).join('')}
+  </div>
+  <div style="font-size:10px;color:#92400E;background:#FEF3C7;border-radius:6px;padding:6px 10px;margin-top:7px;line-height:1.6;">
+    "정답 예측에 도움이 되는 방향으로 조정됩니다"<br>gradient 방향은 loss landscape에 따라 달라지며, 단정할 수 없습니다.
+  </div>`},
+];
+
+let simSt=0,simTmr=null,simPaused=false,simSpd=1800,simMode='beginner';
+
+function simRender(i){
+  const s=SIM_STEPS[i];
+  document.getElementById('sim-prog').style.width=((i+1)/SIM_STEPS.length*100).toFixed(1)+'%';
+  document.getElementById('sim-lbl').textContent=`Step ${i+1} / ${SIM_STEPS.length}`;
+  document.getElementById('sim-ttl').textContent=s.t;
+  document.getElementById('sim-desc').innerHTML=(simMode==='beginner'?s.b:s.d)||s.b;
+  const fc=document.getElementById('sim-fc');
+  fc.textContent=s.f||''; fc.style.display=s.f?'block':'none';
+  const sc=document.getElementById('sim-sc');
+  sc.innerHTML=s.s?('<b>Shape:</b> '+s.s.replace(/\n/g,'<br>')):''; sc.style.display=(s.s&&simMode!=='beginner')?'block':'none';
+  const dc=document.getElementById('sim-dc');
+  dc.innerHTML=s.dc?s.dc.replace(/\n/g,'<br>'):''; dc.style.display=(s.dc&&simMode==='detail')?'block':'none';
+  document.getElementById('sim-viz').innerHTML=typeof s.viz==='function'?s.viz():s.viz;
+  document.querySelectorAll('.sim-node').forEach(n=>n.classList.remove('active'));
+  const nd=document.getElementById(s.ni);
+  if(nd)nd.classList.add('active');
+  simSt=i;
 }
+function simGo(d){clearTimeout(simTmr);simRender(Math.max(0,Math.min(SIM_STEPS.length-1,simSt+d)));if(!simPaused)simSched();}
+function simSched(){clearTimeout(simTmr);if(simSt>=SIM_STEPS.length-1){simPaused=true;const b=document.getElementById('sim-playbtn');b.textContent='▶ 재생';b.classList.remove('sim-ctrl-play');return;}simTmr=setTimeout(()=>{simRender(simSt+1);simSched();},simSpd);}
+function simToggle(){simPaused=!simPaused;const b=document.getElementById('sim-playbtn');if(simPaused){clearTimeout(simTmr);b.textContent='▶ 재생';b.classList.remove('sim-ctrl-play');}else{b.textContent='⏸ 일시정지';b.classList.add('sim-ctrl-play');simSched();}}
+function simRestart(){clearTimeout(simTmr);simPaused=false;const b=document.getElementById('sim-playbtn');b.textContent='⏸ 일시정지';b.classList.add('sim-ctrl-play');simRender(0);simSched();}
+function simSetMode(m){simMode=m;document.getElementById('smbeg').classList.toggle('active',m==='beginner');document.getElementById('smdet').classList.toggle('active',m==='detail');simRender(simSt);}
+function simSetSpd(ms){simSpd=ms;document.querySelectorAll('.sim-spd').forEach(b=>b.classList.remove('on'));const idx=ms===2600?0:ms===1800?1:2;document.querySelectorAll('.sim-spd')[idx]?.classList.add('on');if(!simPaused){clearTimeout(simTmr);simSched();}}
 
-function haNext() {
-  const next = (haStep + 1) % HA_TOTAL;
-  haActivate(next);
-  const delay = next === 0 ? 2800 : HA_DELAY[next];
-  haTimer = setTimeout(haNext, delay);
-}
-
-function haRestart() {
-  clearTimeout(haTimer);
-  haActivate(0);
-  haTimer = setTimeout(haNext, HA_DELAY[0]);
-}
-
-haActivate(0);
-haTimer = setTimeout(haNext, HA_DELAY[0]);
+simRender(0);
+simSched();
 </script>
 </body>
 </html>

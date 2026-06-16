@@ -85,6 +85,19 @@ transformer_seminar_html/
 | 19 | 학습 시점 vs 추론 시점 | 학습 vs 추론 |
 | 20 | 전체 요약 | |
 
+## Interactive Simulator
+
+이 HTML에는 **Forward Pass부터 Backpropagation까지** 보여주는 toy Transformer 시뮬레이터가 포함되어 있습니다.
+
+시뮬레이터는 실제 대형 모델의 수치를 재현하는 것이 아니라,
+입력 token이 vector로 바뀌고, attention/FFN/decoder를 거쳐 확률과 loss가 만들어진 뒤,
+gradient가 weight를 업데이트하는 방향을 시각적으로 이해하기 위한 교육용 예시입니다.
+
+- toy example: d_model=4, d_k=3, vocab=7 (illustrative values)
+- 14 step 구성: 입력 → Tokenizer → Embedding → PE → Q/K/V → Score → Softmax → AttOutput → FFN → Logits → Prob → Loss → Backprop
+- Beginner / Detail 모드 전환
+- 재생 / 일시정지 / 이전 / 다음 / 속도 조절
+
 ## 기술 정확성 체크리스트
 
 - [x] Look-Ahead Mask는 Q/K/V가 아닌 Score Matrix에 적용 (MaskedScore = Score + Mask)
