@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 600" width="920" height="600"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#4A5568"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C53030"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2B6CB0"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#276749"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="600" fill="#FAFAFA" rx="8"/>
+
+  <text x="460" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1A202C">Q / K / V 행렬 연산 흐름</text>
+  <text x="460" y="47" text-anchor="middle" font-size="11" fill="#718096">어떤 X와 W에서 만들어지는가? QK^T의 shape은 무엇인가?</text>
+
+  <!-- ===== LEFT SECTION: X and Weight Matrices ===== -->
+
+  <!-- X matrix -->
+  <rect x="20" y="68" width="140" height="80" rx="6" fill="#F7FAFC" stroke="#CBD5E0" stroke-width="2"/>
+  <text x="90" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#2D3748">X</text>
+  <text x="90" y="112" text-anchor="middle" font-size="10" fill="#4A5568">seq_len × d_model</text>
+  <text x="90" y="128" text-anchor="middle" font-size="9" fill="#A0AEC0">예: 4 × 512</text>
+  <text x="90" y="145" text-anchor="middle" font-size="9" fill="#718096">[&lt;SOS&gt;, Le, chat, est]</text>
+
+  <!-- Three paths from X -->
+
+  <!-- Path to Q -->
+  <line x1="160" y1="95" x2="220" y2="95" stroke="#C53030" stroke-width="1.5" marker-end="url(#arr-red)"/>
+
+  <!-- W^Q box -->
+  <rect x="222" y="68" width="108" height="52" rx="5" fill="#FFF5F5" stroke="#FC8181" stroke-width="1.5"/>
+  <text x="276" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#C53030">W</text>
+  <text x="286" y="82" font-size="9" fill="#C53030">Q</text>
+  <text x="276" y="108" text-anchor="middle" font-size="9" fill="#E53E3E">d_model × d_k</text>
+
+  <line x1="330" y1="94" x2="390" y2="94" stroke="#C53030" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <text x="360" y="88" text-anchor="middle" font-size="9" fill="#C53030">XW^Q</text>
+
+  <!-- Q result -->
+  <rect x="392" y="60" width="120" height="60" rx="6" fill="#FFF5F5" stroke="#FC8181" stroke-width="2"/>
+  <text x="452" y="85" text-anchor="middle" font-size="16" font-weight="700" fill="#C53030">Q</text>
+  <text x="452" y="104" text-anchor="middle" font-size="10" fill="#E53E3E">seq_len × d_k</text>
+  <text x="452" y="116" text-anchor="middle" font-size="9" fill="#FC8181">Query (찾는 쪽)</text>
+
+  <!-- Path to K (middle) -->
+  <line x1="160" y1="108" x2="178" y2="108" stroke="#2B6CB0" stroke-width="1.5"/>
+  <line x1="178" y1="108" x2="178" y2="152" stroke="#2B6CB0" stroke-width="1.5"/>
+  <line x1="178" y1="152" x2="220" y2="152" stroke="#2B6CB0" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+  <!-- W^K box -->
+  <rect x="222" y="128" width="108" height="52" rx="5" fill="#EBF8FF" stroke="#63B3ED" stroke-width="1.5"/>
+  <text x="276" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#2B6CB0">W</text>
+  <text x="286" y="142" font-size="9" fill="#2B6CB0">K</text>
+  <text x="276" y="168" text-anchor="middle" font-size="9" fill="#3182CE">d_model × d_k</text>
+
+  <line x1="330" y1="154" x2="390" y2="154" stroke="#2B6CB0" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <text x="360" y="148" text-anchor="middle" font-size="9" fill="#2B6CB0">XW^K</text>
+
+  <!-- K result -->
+  <rect x="392" y="128" width="120" height="60" rx="6" fill="#EBF8FF" stroke="#63B3ED" stroke-width="2"/>
+  <text x="452" y="153" text-anchor="middle" font-size="16" font-weight="700" fill="#2B6CB0">K</text>
+  <text x="452" y="172" text-anchor="middle" font-size="10" fill="#3182CE">seq_len × d_k</text>
+  <text x="452" y="184" text-anchor="middle" font-size="9" fill="#63B3ED">Key (찾아지는 쪽)</text>
+
+  <!-- Path to V (lower) -->
+  <line x1="160" y1="122" x2="168" y2="122" stroke="#276749" stroke-width="1.5"/>
+  <line x1="168" y1="122" x2="168" y2="212" stroke="#276749" stroke-width="1.5"/>
+  <line x1="168" y1="212" x2="220" y2="212" stroke="#276749" stroke-width="1.5" marker-end="url(#arr-green)"/>
+
+  <!-- W^V box -->
+  <rect x="222" y="188" width="108" height="52" rx="5" fill="#F0FFF4" stroke="#68D391" stroke-width="1.5"/>
+  <text x="276" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#276749">W</text>
+  <text x="286" y="202" font-size="9" fill="#276749">V</text>
+  <text x="276" y="228" text-anchor="middle" font-size="9" fill="#38A169">d_model × d_v</text>
+
+  <line x1="330" y1="214" x2="390" y2="214" stroke="#276749" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <text x="360" y="208" text-anchor="middle" font-size="9" fill="#276749">XW^V</text>
+
+  <!-- V result -->
+  <rect x="392" y="195" width="120" height="60" rx="6" fill="#F0FFF4" stroke="#68D391" stroke-width="2"/>
+  <text x="452" y="220" text-anchor="middle" font-size="16" font-weight="700" fill="#276749">V</text>
+  <text x="452" y="239" text-anchor="middle" font-size="10" fill="#38A169">seq_len × d_v</text>
+  <text x="452" y="251" text-anchor="middle" font-size="9" fill="#68D391">Value (전달할 정보)</text>
+
+  <!-- Divider -->
+  <line x1="530" y1="55" x2="530" y2="580" stroke="#E2E8F0" stroke-width="1.5"/>
+
+  <!-- ===== RIGHT SECTION: Score Matrix ===== -->
+
+  <!-- Score = QK^T -->
+  <text x="565" y="74" font-size="13" font-weight="700" fill="#1A202C">Score Matrix = QK</text>
+  <text x="710" y="67" font-size="10" fill="#1A202C">T</text>
+  <text x="730" y="74" font-size="13" fill="#1A202C">/ √d_k</text>
+  <text x="565" y="90" font-size="10" fill="#718096">shape: seq_len × seq_len  (예: 4 × 4)</text>
+
+  <!-- Row/Column labels -->
+  <text x="636" y="122" text-anchor="middle" font-size="10" fill="#718096">Key (j)</text>
+
+  <!-- Column headers (Key positions) -->
+  <text x="656" y="140" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">&lt;SOS&gt;</text>
+  <text x="716" y="140" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">Le</text>
+  <text x="776" y="140" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">chat</text>
+  <text x="836" y="140" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">est</text>
+
+  <!-- Row header label -->
+  <text x="553" y="200" text-anchor="middle" font-size="10" fill="#718096" transform="rotate(-90,553,240)">Query (i)</text>
+
+  <!-- Row headers (Query positions) -->
+  <text x="614" y="178" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">&lt;SOS&gt;</text>
+  <text x="614" y="238" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">Le</text>
+  <text x="614" y="298" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">chat</text>
+  <text x="614" y="358" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">est</text>
+
+  <!-- Score matrix cells (4x4, each 60x60, starting at x=620, y=148) -->
+  <!-- Row 0: <SOS> query -->
+  <rect x="621" y="148" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="656" y="175" text-anchor="middle" font-size="10" fill="#744210">q₀·k₀</text>
+  <text x="656" y="189" text-anchor="middle" font-size="9" fill="#A0AEC0">score₀₀</text>
+
+  <rect x="691" y="148" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="726" y="175" text-anchor="middle" font-size="10" fill="#744210">q₀·k₁</text>
+  <text x="726" y="189" text-anchor="middle" font-size="9" fill="#A0AEC0">score₀₁</text>
+
+  <rect x="761" y="148" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="796" y="175" text-anchor="middle" font-size="10" fill="#744210">q₀·k₂</text>
+  <text x="796" y="189" text-anchor="middle" font-size="9" fill="#A0AEC0">score₀₂</text>
+
+  <rect x="831" y="148" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="866" y="175" text-anchor="middle" font-size="10" fill="#744210">q₀·k₃</text>
+  <text x="866" y="189" text-anchor="middle" font-size="9" fill="#A0AEC0">score₀₃</text>
+
+  <!-- Row 1: Le query -->
+  <rect x="621" y="208" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="656" y="235" text-anchor="middle" font-size="10" fill="#744210">q₁·k₀</text>
+  <text x="656" y="249" text-anchor="middle" font-size="9" fill="#A0AEC0">score₁₀</text>
+
+  <rect x="691" y="208" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="726" y="235" text-anchor="middle" font-size="10" fill="#744210">q₁·k₁</text>
+  <text x="726" y="249" text-anchor="middle" font-size="9" fill="#A0AEC0">score₁₁</text>
+
+  <rect x="761" y="208" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="796" y="235" text-anchor="middle" font-size="10" fill="#744210">q₁·k₂</text>
+  <text x="796" y="249" text-anchor="middle" font-size="9" fill="#A0AEC0">score₁₂</text>
+
+  <rect x="831" y="208" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="866" y="235" text-anchor="middle" font-size="10" fill="#744210">q₁·k₃</text>
+  <text x="866" y="249" text-anchor="middle" font-size="9" fill="#A0AEC0">score₁₃</text>
+
+  <!-- Row 2: chat query -->
+  <rect x="621" y="268" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="656" y="295" text-anchor="middle" font-size="10" fill="#744210">q₂·k₀</text>
+  <text x="656" y="309" text-anchor="middle" font-size="9" fill="#A0AEC0">score₂₀</text>
+
+  <rect x="691" y="268" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="726" y="295" text-anchor="middle" font-size="10" fill="#744210">q₂·k₁</text>
+  <text x="726" y="309" text-anchor="middle" font-size="9" fill="#A0AEC0">score₂₁</text>
+
+  <rect x="761" y="268" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="796" y="295" text-anchor="middle" font-size="10" fill="#744210">q₂·k₂</text>
+  <text x="796" y="309" text-anchor="middle" font-size="9" fill="#A0AEC0">score₂₂</text>
+
+  <rect x="831" y="268" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="866" y="295" text-anchor="middle" font-size="10" fill="#744210">q₂·k₃</text>
+  <text x="866" y="309" text-anchor="middle" font-size="9" fill="#A0AEC0">score₂₃</text>
+
+  <!-- Row 3: est query -->
+  <rect x="621" y="328" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="656" y="355" text-anchor="middle" font-size="10" fill="#744210">q₃·k₀</text>
+  <text x="656" y="369" text-anchor="middle" font-size="9" fill="#A0AEC0">score₃₀</text>
+
+  <rect x="691" y="328" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="726" y="355" text-anchor="middle" font-size="10" fill="#744210">q₃·k₁</text>
+  <text x="726" y="369" text-anchor="middle" font-size="9" fill="#A0AEC0">score₃₁</text>
+
+  <rect x="761" y="328" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="796" y="355" text-anchor="middle" font-size="10" fill="#744210">q₃·k₂</text>
+  <text x="796" y="369" text-anchor="middle" font-size="9" fill="#A0AEC0">score₃₂</text>
+
+  <rect x="831" y="328" width="70" height="58" rx="3" fill="#FFF5E0" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="866" y="355" text-anchor="middle" font-size="10" fill="#744210">q₃·k₃</text>
+  <text x="866" y="369" text-anchor="middle" font-size="9" fill="#A0AEC0">score₃₃</text>
+
+  <!-- score_ij formula annotation -->
+  <text x="620" y="410" font-size="11" fill="#4A5568">score</text>
+  <text x="661" y="405" font-size="9" fill="#4A5568">ij</text>
+  <text x="668" y="410" font-size="11" fill="#4A5568"> = q</text>
+  <text x="698" y="405" font-size="9" fill="#C53030">i</text>
+  <text x="703" y="410" font-size="11" fill="#4A5568"> · k</text>
+  <text x="726" y="405" font-size="9" fill="#2B6CB0">j</text>
+  <text x="732" y="410" font-size="11" fill="#4A5568">     (내적 = 유사도)</text>
+
+  <!-- Row interpretation -->
+  <text x="620" y="435" font-size="10" fill="#C53030" font-weight="600">row i:</text>
+  <text x="660" y="435" font-size="10" fill="#4A5568"> i번째 Query가 모든 Key 위치에 대해 attention 가중치를 결정</text>
+
+  <!-- Col interpretation -->
+  <text x="620" y="455" font-size="10" fill="#2B6CB0" font-weight="600">col j:</text>
+  <text x="657" y="455" font-size="10" fill="#4A5568"> j번째 Key가 모든 Query에 의해 "얼마나 참고될지" 경쟁</text>
+
+  <!-- Attention formula -->
+  <rect x="540" y="470" width="370" height="50" rx="6" fill="#FFFBEB" stroke="#F6E05E" stroke-width="1.5"/>
+  <text x="725" y="490" text-anchor="middle" font-size="11" font-weight="600" fill="#744210">Attention(Q,K,V) = softmax(QKᵀ / √d_k) · V</text>
+  <text x="725" y="508" text-anchor="middle" font-size="10" fill="#744210">√d_k로 나누는 이유: d_k가 클수록 dot product 분산이 커져 softmax gradient가 작아지기 때문</text>
+
+  <!-- Caption -->
+  <text x="460" y="584" text-anchor="middle" font-size="9" fill="#A0AEC0" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+</svg>

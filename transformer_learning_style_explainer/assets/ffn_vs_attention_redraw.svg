@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#4A5568"/>
+    </marker>
+    <marker id="arr-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C05621"/>
+    </marker>
+    <marker id="arr-cross" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#3182CE"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="460" fill="#FAFAFA" rx="8"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1A202C">FFN vs Attention — 무엇이 다른가?</text>
+
+  <!-- ===== LEFT: Attention ===== -->
+
+  <rect x="20" y="42" width="400" height="368" rx="10" fill="#EBF8FF" stroke="#3182CE" stroke-width="2" fill-opacity="0.4"/>
+  <text x="220" y="64" text-anchor="middle" font-size="13" font-weight="700" fill="#2B6CB0">Attention</text>
+  <text x="220" y="81" text-anchor="middle" font-size="11" fill="#3182CE">token 간 정보를 섞는다</text>
+
+  <!-- Token boxes (left side, 4 tokens) -->
+  <rect x="50" y="100" width="80" height="36" rx="6" fill="#BEE3F8" stroke="#4299E1" stroke-width="1.5"/>
+  <text x="90" y="122" text-anchor="middle" font-size="12" font-weight="600" fill="#2C5282">x₀</text>
+
+  <rect x="50" y="160" width="80" height="36" rx="6" fill="#BEE3F8" stroke="#4299E1" stroke-width="1.5"/>
+  <text x="90" y="182" text-anchor="middle" font-size="12" font-weight="600" fill="#2C5282">x₁</text>
+
+  <rect x="50" y="220" width="80" height="36" rx="6" fill="#BEE3F8" stroke="#4299E1" stroke-width="1.5"/>
+  <text x="90" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#2C5282">x₂</text>
+
+  <rect x="50" y="280" width="80" height="36" rx="6" fill="#BEE3F8" stroke="#4299E1" stroke-width="1.5"/>
+  <text x="90" y="302" text-anchor="middle" font-size="12" font-weight="600" fill="#2C5282">x₃</text>
+
+  <!-- Cross-token attention arrows (not all, just illustrative) -->
+  <!-- x₀ attends to x₁, x₂, x₃ -->
+  <path d="M 130 118 C 190 118, 190 178, 240 178" stroke="#3182CE" stroke-width="1.5" fill="none" stroke-opacity="0.6" marker-end="url(#arr-cross)"/>
+  <path d="M 130 118 C 195 118, 195 238, 240 238" stroke="#3182CE" stroke-width="1.5" fill="none" stroke-opacity="0.4" marker-end="url(#arr-cross)"/>
+  <path d="M 130 118 C 200 118, 200 298, 240 298" stroke="#3182CE" stroke-width="1.5" fill="none" stroke-opacity="0.3" marker-end="url(#arr-cross)"/>
+  <!-- x₂ attends to x₀, x₁ -->
+  <path d="M 130 238 C 185 238, 185 178, 240 178" stroke="#3182CE" stroke-width="1.2" fill="none" stroke-opacity="0.5" marker-end="url(#arr-cross)"/>
+  <path d="M 130 238 C 180 238, 180 118, 240 118" stroke="#3182CE" stroke-width="1.2" fill="none" stroke-opacity="0.4" marker-end="url(#arr-cross)"/>
+
+  <!-- Output token boxes (right side) -->
+  <rect x="240" y="100" width="80" height="36" rx="6" fill="#90CDF4" stroke="#3182CE" stroke-width="1.5"/>
+  <text x="280" y="122" text-anchor="middle" font-size="12" font-weight="600" fill="#1A365D">h₀</text>
+
+  <rect x="240" y="160" width="80" height="36" rx="6" fill="#90CDF4" stroke="#3182CE" stroke-width="1.5"/>
+  <text x="280" y="182" text-anchor="middle" font-size="12" font-weight="600" fill="#1A365D">h₁</text>
+
+  <rect x="240" y="220" width="80" height="36" rx="6" fill="#90CDF4" stroke="#3182CE" stroke-width="1.5"/>
+  <text x="280" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#1A365D">h₂</text>
+
+  <rect x="240" y="280" width="80" height="36" rx="6" fill="#90CDF4" stroke="#3182CE" stroke-width="1.5"/>
+  <text x="280" y="302" text-anchor="middle" font-size="12" font-weight="600" fill="#1A365D">h₃</text>
+
+  <!-- Shape annotation -->
+  <text x="220" y="340" text-anchor="middle" font-size="10" fill="#4A5568">Input:  (seq_len, d_model)</text>
+  <text x="220" y="358" text-anchor="middle" font-size="10" fill="#4A5568">Output: (seq_len, d_model)</text>
+  <text x="220" y="376" text-anchor="middle" font-size="10" fill="#3182CE" font-weight="600">h_i = f(x₀, x₁, ..., x_{T-1})  ← 모든 token 참조</text>
+  <text x="220" y="395" text-anchor="middle" font-size="10" fill="#2B6CB0">Attention Score = QKᵀ ∈ ℝ^{seq_len × seq_len}</text>
+
+  <!-- ===== RIGHT: FFN ===== -->
+
+  <rect x="480" y="42" width="400" height="368" rx="10" fill="#FFFAF0" stroke="#DD6B20" stroke-width="2" fill-opacity="0.4"/>
+  <text x="680" y="64" text-anchor="middle" font-size="13" font-weight="700" fill="#C05621">Feed Forward Network (FFN)</text>
+  <text x="680" y="81" text-anchor="middle" font-size="11" fill="#DD6B20">각 token을 독립적으로 변환한다</text>
+
+  <!-- Input tokens (left of FFN) -->
+  <rect x="500" y="100" width="80" height="36" rx="6" fill="#FEEBC8" stroke="#ECC94B" stroke-width="1.5"/>
+  <text x="540" y="122" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">h₀</text>
+
+  <rect x="500" y="160" width="80" height="36" rx="6" fill="#FEEBC8" stroke="#ECC94B" stroke-width="1.5"/>
+  <text x="540" y="182" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">h₁</text>
+
+  <rect x="500" y="220" width="80" height="36" rx="6" fill="#FEEBC8" stroke="#ECC94B" stroke-width="1.5"/>
+  <text x="540" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">h₂</text>
+
+  <rect x="500" y="280" width="80" height="36" rx="6" fill="#FEEBC8" stroke="#ECC94B" stroke-width="1.5"/>
+  <text x="540" y="302" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">h₃</text>
+
+  <!-- Parallel arrows (each token independently) -->
+  <line x1="580" y1="118" x2="662" y2="118" stroke="#C05621" stroke-width="2" marker-end="url(#arr-orange)"/>
+  <line x1="580" y1="178" x2="662" y2="178" stroke="#C05621" stroke-width="2" marker-end="url(#arr-orange)"/>
+  <line x1="580" y1="238" x2="662" y2="238" stroke="#C05621" stroke-width="2" marker-end="url(#arr-orange)"/>
+  <line x1="580" y1="298" x2="662" y2="298" stroke="#C05621" stroke-width="2" marker-end="url(#arr-orange)"/>
+
+  <!-- FFN label in the middle -->
+  <text x="621" y="105" text-anchor="middle" font-size="9" fill="#C05621">MLP</text>
+  <text x="621" y="165" text-anchor="middle" font-size="9" fill="#C05621">MLP</text>
+  <text x="621" y="225" text-anchor="middle" font-size="9" fill="#C05621">MLP</text>
+  <text x="621" y="285" text-anchor="middle" font-size="9" fill="#C05621">MLP</text>
+  <text x="621" y="140" text-anchor="middle" font-size="8" fill="#A0AEC0">(동일한 W₁,W₂)</text>
+
+  <!-- Output tokens (right of FFN) -->
+  <rect x="664" y="100" width="80" height="36" rx="6" fill="#F6AD55" stroke="#DD6B20" stroke-width="1.5"/>
+  <text x="704" y="122" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">o₀</text>
+
+  <rect x="664" y="160" width="80" height="36" rx="6" fill="#F6AD55" stroke="#DD6B20" stroke-width="1.5"/>
+  <text x="704" y="182" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">o₁</text>
+
+  <rect x="664" y="220" width="80" height="36" rx="6" fill="#F6AD55" stroke="#DD6B20" stroke-width="1.5"/>
+  <text x="704" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">o₂</text>
+
+  <rect x="664" y="280" width="80" height="36" rx="6" fill="#F6AD55" stroke="#DD6B20" stroke-width="1.5"/>
+  <text x="704" y="302" text-anchor="middle" font-size="12" font-weight="600" fill="#744210">o₃</text>
+
+  <!-- Shape annotation -->
+  <text x="680" y="336" text-anchor="middle" font-size="10" fill="#4A5568">Input:  (seq_len, d_model=512)</text>
+  <text x="680" y="354" text-anchor="middle" font-size="10" fill="#4A5568">Hidden: (seq_len, d_ff=2048)  ← 4×</text>
+  <text x="680" y="372" text-anchor="middle" font-size="10" fill="#4A5568">Output: (seq_len, d_model=512)  ← residual 때문</text>
+  <text x="680" y="394" text-anchor="middle" font-size="10" fill="#C05621" font-weight="600">FFN(x) = max(0, xW₁+b₁)W₂+b₂</text>
+
+  <!-- "No cross-token mixing" annotation -->
+  <text x="680" y="412" text-anchor="middle" font-size="9" fill="#718096">각 token은 같은 W₁, W₂를 사용하되 독립적으로 처리</text>
+
+  <!-- Bottom comparison bar -->
+  <rect x="20" y="420" width="860" height="32" rx="6" fill="#FFFBEB" stroke="#F6E05E" stroke-width="1.5"/>
+  <text x="450" y="440" text-anchor="middle" font-size="11" font-weight="600" fill="#744210">
+    Attention: "어떤 token을 참고할지" 결정  →  FFN: "참고 정보를 반영한 표현을 더 유용한 feature로 변환"
+  </text>
+
+  <!-- Caption -->
+  <text x="450" y="457" text-anchor="middle" font-size="9" fill="#A0AEC0" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+</svg>

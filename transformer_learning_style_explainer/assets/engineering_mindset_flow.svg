@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" width="800" height="460"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+
+  <rect width="800" height="460" fill="#FAFAFA" rx="8"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1A202C">실무적 이해 깊이 전략 — 3단계</text>
+  <text x="400" y="47" text-anchor="middle" font-size="11" fill="#718096">"지금 목표가 무엇인지"에 따라 이해 깊이를 다르게 잡는다</text>
+
+  <!-- ===== LEVEL 1 ===== -->
+
+  <rect x="30" y="65" width="220" height="310" rx="12" fill="#F0FFF4" stroke="#38A169" stroke-width="2"/>
+
+  <!-- Level badge -->
+  <rect x="50" y="82" width="180" height="34" rx="8" fill="#38A169"/>
+  <text x="140" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="white">Level 1</text>
+  <text x="140" y="112" text-anchor="middle" font-size="10" fill="#C6F6D5">사용만 하면 됨</text>
+
+  <text x="140" y="140" text-anchor="middle" font-size="11" fill="#276749">도구를 쓰는 단계</text>
+
+  <!-- Items -->
+  <rect x="48" y="152" width="184" height="28" rx="5" fill="#C6F6D5" stroke="#68D391" stroke-width="1"/>
+  <text x="52" y="170" font-size="11" fill="#276749">  tokenizer 설정</text>
+
+  <rect x="48" y="186" width="184" height="28" rx="5" fill="#C6F6D5" stroke="#68D391" stroke-width="1"/>
+  <text x="52" y="204" font-size="11" fill="#276749">  vocab 로딩</text>
+
+  <rect x="48" y="220" width="184" height="28" rx="5" fill="#C6F6D5" stroke="#68D391" stroke-width="1"/>
+  <text x="52" y="238" font-size="11" fill="#276749">  API / HuggingFace 호출</text>
+
+  <rect x="48" y="254" width="184" height="28" rx="5" fill="#C6F6D5" stroke="#68D391" stroke-width="1"/>
+  <text x="52" y="272" font-size="11" fill="#276749">  inference 파이프라인</text>
+
+  <rect x="48" y="288" width="184" height="28" rx="5" fill="#C6F6D5" stroke="#68D391" stroke-width="1"/>
+  <text x="52" y="306" font-size="11" fill="#276749">  prompt engineering</text>
+
+  <!-- Target audience -->
+  <rect x="38" y="328" width="204" height="36" rx="6" fill="#E6FFFA" stroke="#38B2AC" stroke-width="1"/>
+  <text x="140" y="344" text-anchor="middle" font-size="10" fill="#234E52">대상: 빠른 제품화, API 통합,</text>
+  <text x="140" y="358" text-anchor="middle" font-size="10" fill="#234E52">PoC, 비개발직군</text>
+
+  <!-- ===== LEVEL 2 ===== -->
+
+  <rect x="290" y="65" width="220" height="310" rx="12" fill="#EBF8FF" stroke="#3182CE" stroke-width="2.5"/>
+
+  <!-- Level badge -->
+  <rect x="310" y="82" width="180" height="34" rx="8" fill="#3182CE"/>
+  <text x="400" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="white">Level 2</text>
+  <text x="400" y="112" text-anchor="middle" font-size="10" fill="#BEE3F8">구조 이해 필요</text>
+
+  <text x="400" y="140" text-anchor="middle" font-size="11" fill="#2B6CB0">내부 연산을 아는 단계</text>
+
+  <!-- Items -->
+  <rect x="308" y="152" width="184" height="28" rx="5" fill="#BEE3F8" stroke="#63B3ED" stroke-width="1"/>
+  <text x="312" y="170" font-size="11" fill="#2C5282">  Attention (Q, K, V, Score)</text>
+
+  <rect x="308" y="186" width="184" height="28" rx="5" fill="#BEE3F8" stroke="#63B3ED" stroke-width="1"/>
+  <text x="312" y="204" font-size="11" fill="#2C5282">  Look-Ahead Mask 위치</text>
+
+  <rect x="308" y="220" width="184" height="28" rx="5" fill="#BEE3F8" stroke="#63B3ED" stroke-width="1"/>
+  <text x="312" y="238" font-size="11" fill="#2C5282">  FFN (독립 변환, d_ff)</text>
+
+  <rect x="308" y="254" width="184" height="28" rx="5" fill="#BEE3F8" stroke="#63B3ED" stroke-width="1"/>
+  <text x="312" y="272" font-size="11" fill="#2C5282">  Residual &amp; shape 일치</text>
+
+  <rect x="308" y="288" width="184" height="28" rx="5" fill="#BEE3F8" stroke="#63B3ED" stroke-width="1"/>
+  <text x="312" y="306" font-size="11" fill="#2C5282">  Cross-Attention (Q/K,V 출처)</text>
+
+  <!-- Target audience -->
+  <rect x="298" y="328" width="204" height="36" rx="6" fill="#E0F7FA" stroke="#0097A7" stroke-width="1"/>
+  <text x="400" y="344" text-anchor="middle" font-size="10" fill="#006064">대상: fine-tuning, 커스텀 학습,</text>
+  <text x="400" y="358" text-anchor="middle" font-size="10" fill="#006064">버그 디버깅, 논문 구현</text>
+
+  <!-- ===== LEVEL 3 ===== -->
+
+  <rect x="550" y="65" width="220" height="310" rx="12" fill="#FAF5FF" stroke="#805AD5" stroke-width="2"/>
+
+  <!-- Level badge -->
+  <rect x="570" y="82" width="180" height="34" rx="8" fill="#805AD5"/>
+  <text x="660" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="white">Level 3</text>
+  <text x="660" y="112" text-anchor="middle" font-size="10" fill="#E9D8FD">구현 / 최적화까지</text>
+
+  <text x="660" y="140" text-anchor="middle" font-size="11" fill="#553C9A">Graph 수준을 아는 단계</text>
+
+  <!-- Items -->
+  <rect x="568" y="152" width="184" height="28" rx="5" fill="#E9D8FD" stroke="#B794F4" stroke-width="1"/>
+  <text x="572" y="170" font-size="11" fill="#44337A">  KV cache (prefill/decode)</text>
+
+  <rect x="568" y="186" width="184" height="28" rx="5" fill="#E9D8FD" stroke="#B794F4" stroke-width="1"/>
+  <text x="572" y="204" font-size="11" fill="#44337A">  quantization (int8/int4)</text>
+
+  <rect x="568" y="220" width="184" height="28" rx="5" fill="#E9D8FD" stroke="#B794F4" stroke-width="1"/>
+  <text x="572" y="238" font-size="11" fill="#44337A">  graph export (ONNX/TFLite)</text>
+
+  <rect x="568" y="254" width="184" height="28" rx="5" fill="#E9D8FD" stroke="#B794F4" stroke-width="1"/>
+  <text x="572" y="272" font-size="11" fill="#44337A">  NPU/GPU offload 전략</text>
+
+  <rect x="568" y="288" width="184" height="28" rx="5" fill="#E9D8FD" stroke="#B794F4" stroke-width="1"/>
+  <text x="572" y="306" font-size="11" fill="#44337A">  operator fusion, layout opt.</text>
+
+  <!-- Target audience -->
+  <rect x="558" y="328" width="204" height="36" rx="6" fill="#F3E8FF" stroke="#9F7AEA" stroke-width="1"/>
+  <text x="660" y="344" text-anchor="middle" font-size="10" fill="#44337A">대상: 모델 경량화, on-device,</text>
+  <text x="660" y="358" text-anchor="middle" font-size="10" fill="#44337A">inference 엔지니어링, 연구</text>
+
+  <!-- Arrows between levels -->
+  <text x="258" y="225" text-anchor="middle" font-size="22" fill="#CBD5E0">→</text>
+  <text x="519" y="225" text-anchor="middle" font-size="22" fill="#CBD5E0">→</text>
+
+  <!-- Bottom callout -->
+  <rect x="30" y="390" width="740" height="55" rx="8" fill="#FFFBEB" stroke="#F6E05E" stroke-width="2"/>
+  <text x="400" y="412" text-anchor="middle" font-size="12" font-weight="700" fill="#744210">균형 전략</text>
+  <text x="400" y="432" text-anchor="middle" font-size="11" fill="#744210">핵심 구조(Level 2)는 tensor/gradient 수준까지 깊게 이해하되,</text>
+  <text x="400" y="448" text-anchor="middle" font-size="11" fill="#744210">제품화 단계에서는 "지금 의사결정에 필요한 깊이"까지만 파고 다음 실험으로 넘어간다.</text>
+</svg>

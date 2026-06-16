@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 520" width="840" height="520"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+
+  <rect width="840" height="520" fill="#FAFAFA" rx="8"/>
+
+  <text x="420" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1A202C">Look-Ahead Mask: Attention Score Matrix에 적용</text>
+  <text x="420" y="46" text-anchor="middle" font-size="11" fill="#718096">Decoder input = [&lt;SOS&gt;, Le, chat, est]</text>
+
+  <!-- ===== LEFT: Mask Matrix ===== -->
+
+  <text x="210" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#1A202C">Look-Ahead Mask Matrix</text>
+
+  <!-- Column headers (Key) -->
+  <text x="210" y="96" text-anchor="middle" font-size="10" fill="#718096">Key (j) →</text>
+
+  <text x="136" y="115" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">&lt;SOS&gt;</text>
+  <text x="196" y="115" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">Le</text>
+  <text x="256" y="115" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">chat</text>
+  <text x="316" y="115" text-anchor="middle" font-size="10" font-weight="600" fill="#2B6CB0">est</text>
+
+  <!-- Row label (Query) -->
+  <text x="52" y="200" text-anchor="middle" font-size="10" fill="#718096" transform="rotate(-90,52,200)">Query (i) ↓</text>
+
+  <!-- Row headers -->
+  <text x="80" y="150" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">&lt;SOS&gt;</text>
+  <text x="80" y="210" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">Le</text>
+  <text x="80" y="270" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">chat</text>
+  <text x="80" y="330" text-anchor="end" font-size="10" font-weight="600" fill="#C53030">est</text>
+
+  <!-- Cell size: 60×58, starting at x=90, y=120 -->
+
+  <!-- Row 0: <SOS> - only <SOS> visible -->
+  <!-- (0,0) visible -->
+  <rect x="90" y="121" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="135" y="147" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="135" y="165" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <!-- (0,1) masked -->
+  <rect x="182" y="121" width="90" height="56" rx="3" fill="#2D3748" stroke="#1A202C" stroke-width="1"/>
+  <text x="227" y="147" text-anchor="middle" font-size="14" font-weight="700" fill="#E2E8F0">-∞</text>
+  <text x="227" y="165" text-anchor="middle" font-size="9" fill="#A0AEC0">(미래 token)</text>
+
+  <!-- (0,2) masked -->
+  <rect x="274" y="121" width="90" height="56" rx="3" fill="#2D3748" stroke="#1A202C" stroke-width="1"/>
+  <text x="319" y="147" text-anchor="middle" font-size="14" font-weight="700" fill="#E2E8F0">-∞</text>
+  <text x="319" y="165" text-anchor="middle" font-size="9" fill="#A0AEC0">(미래 token)</text>
+
+  <!-- (0,3) masked -->
+  <rect x="366" y="121" width="90" height="56" rx="3" fill="#2D3748" stroke="#1A202C" stroke-width="1"/>
+  <text x="411" y="147" text-anchor="middle" font-size="14" font-weight="700" fill="#E2E8F0">-∞</text>
+  <text x="411" y="165" text-anchor="middle" font-size="9" fill="#A0AEC0">(미래 token)</text>
+
+  <!-- Row 1: Le -->
+  <rect x="90" y="179" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="135" y="205" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="135" y="223" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="182" y="179" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="227" y="205" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="227" y="223" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="274" y="179" width="90" height="56" rx="3" fill="#2D3748" stroke="#1A202C" stroke-width="1"/>
+  <text x="319" y="205" text-anchor="middle" font-size="14" font-weight="700" fill="#E2E8F0">-∞</text>
+  <text x="319" y="223" text-anchor="middle" font-size="9" fill="#A0AEC0">(미래 token)</text>
+
+  <rect x="366" y="179" width="90" height="56" rx="3" fill="#2D3748" stroke="#1A202C" stroke-width="1"/>
+  <text x="411" y="205" text-anchor="middle" font-size="14" font-weight="700" fill="#E2E8F0">-∞</text>
+  <text x="411" y="223" text-anchor="middle" font-size="9" fill="#A0AEC0">(미래 token)</text>
+
+  <!-- Row 2: chat -->
+  <rect x="90" y="237" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="135" y="263" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="135" y="281" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="182" y="237" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="227" y="263" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="227" y="281" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="274" y="237" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="319" y="263" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="319" y="281" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="366" y="237" width="90" height="56" rx="3" fill="#2D3748" stroke="#1A202C" stroke-width="1"/>
+  <text x="411" y="263" text-anchor="middle" font-size="14" font-weight="700" fill="#E2E8F0">-∞</text>
+  <text x="411" y="281" text-anchor="middle" font-size="9" fill="#A0AEC0">(미래 token)</text>
+
+  <!-- Row 3: est -->
+  <rect x="90" y="295" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="135" y="321" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="135" y="339" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="182" y="295" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="227" y="321" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="227" y="339" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="274" y="295" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="319" y="321" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="319" y="339" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <rect x="366" y="295" width="90" height="56" rx="3" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="411" y="321" text-anchor="middle" font-size="14" font-weight="700" fill="#38A169">0</text>
+  <text x="411" y="339" text-anchor="middle" font-size="9" fill="#718096">(attend 가능)</text>
+
+  <!-- Legend -->
+  <rect x="90" y="365" width="18" height="14" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="116" y="377" font-size="10" fill="#4A5568">0  → attention 허용 (softmax 후 양수 weight)</text>
+
+  <rect x="90" y="384" width="18" height="14" rx="2" fill="#2D3748" stroke="#1A202C" stroke-width="1"/>
+  <text x="116" y="396" font-size="10" fill="#4A5568">-∞ → 미래 token 차단 (softmax 후 ≈ 0)</text>
+
+  <!-- Divider -->
+  <line x1="465" y1="60" x2="465" y2="510" stroke="#E2E8F0" stroke-width="1.5"/>
+
+  <!-- ===== RIGHT: Calculation Steps ===== -->
+
+  <text x="660" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#1A202C">Masked Attention 계산 순서</text>
+
+  <!-- Step 1 -->
+  <circle cx="488" cy="115" r="12" fill="#4299E1"/>
+  <text x="488" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="white">1</text>
+  <text x="510" y="113" font-size="11" fill="#4A5568">Q = XW</text>
+  <text x="566" y="107" font-size="9" fill="#C53030">Q</text>
+  <text x="570" y="113" font-size="11" fill="#4A5568">  , K = XW</text>
+  <text x="647" y="107" font-size="9" fill="#2B6CB0">K</text>
+  <text x="651" y="113" font-size="11" fill="#4A5568">  , V = XW</text>
+  <text x="726" y="107" font-size="9" fill="#276749">V</text>
+
+  <!-- Step 2 -->
+  <circle cx="488" cy="155" r="12" fill="#4299E1"/>
+  <text x="488" y="160" text-anchor="middle" font-size="11" font-weight="700" fill="white">2</text>
+  <text x="510" y="160" font-size="11" fill="#4A5568">Score = QK</text>
+  <text x="590" y="153" font-size="10" fill="#4A5568">T</text>
+  <text x="600" y="160" font-size="11" fill="#4A5568">     [seq_len × seq_len]</text>
+
+  <!-- Step 3 -->
+  <circle cx="488" cy="200" r="12" fill="#E53E3E"/>
+  <text x="488" y="205" text-anchor="middle" font-size="11" font-weight="700" fill="white">3</text>
+  <text x="510" y="200" font-size="11" font-weight="600" fill="#C53030">MaskedScore = Score + Mask</text>
+  <rect x="509" y="211" width="248" height="28" rx="4" fill="#FFF5F5" stroke="#FC8181" stroke-width="1"/>
+  <text x="633" y="229" text-anchor="middle" font-size="10" fill="#C53030">Mask ∈ {0, -∞}  (lower triangular)</text>
+
+  <!-- Step 4 -->
+  <circle cx="488" cy="258" r="12" fill="#4299E1"/>
+  <text x="488" y="263" text-anchor="middle" font-size="11" font-weight="700" fill="white">4</text>
+  <text x="510" y="258" font-size="11" fill="#4A5568">AttWeight = softmax(MaskedScore / √d</text>
+  <text x="810" y="252" font-size="9" fill="#4A5568">k</text>
+  <text x="815" y="258" font-size="11" fill="#4A5568">)</text>
+
+  <!-- Step 5 -->
+  <circle cx="488" cy="300" r="12" fill="#4299E1"/>
+  <text x="488" y="305" text-anchor="middle" font-size="11" font-weight="700" fill="white">5</text>
+  <text x="510" y="300" font-size="11" fill="#4A5568">Output = AttWeight × V</text>
+  <text x="510" y="317" font-size="10" fill="#718096">[seq_len × d_v]   ← 각 위치의 가중합</text>
+
+  <!-- Key insight callout -->
+  <rect x="475" y="340" width="350" height="90" rx="8" fill="#FFFBEB" stroke="#F6E05E" stroke-width="2"/>
+  <text x="650" y="360" text-anchor="middle" font-size="11" font-weight="700" fill="#744210">핵심</text>
+  <text x="650" y="380" text-anchor="middle" font-size="10" fill="#744210">Mask는 Q와 K 자체를 가리는 것이 아니라,</text>
+  <text x="650" y="397" text-anchor="middle" font-size="10" fill="#744210">QKᵀ로 만든 Score Matrix의 특정 위치에</text>
+  <text x="650" y="414" text-anchor="middle" font-size="10" fill="#744210">-∞를 더해 softmax 이후 ≈ 0이 되게 한다.</text>
+
+  <!-- Caption -->
+  <text x="420" y="503" text-anchor="middle" font-size="9" fill="#A0AEC0" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+</svg>
