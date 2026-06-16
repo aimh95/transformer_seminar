@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 440" width="860" height="440"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 7 3, 0 6" fill="#374151"/>
+    </marker>
+    <marker id="arr-g" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 7 3, 0 6" fill="#16A34A"/>
+    </marker>
+    <marker id="arr-p" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 7 3, 0 6" fill="#7C3AED"/>
+    </marker>
+  </defs>
+
+  <rect width="860" height="440" fill="#F8F9FB" rx="8"/>
+  <text x="430" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Decoder: 학습(Training) vs 추론(Inference)</text>
+
+  <!-- Divider -->
+  <line x1="430" y1="40" x2="430" y2="405" stroke="#E5E7EB" stroke-width="2"/>
+
+  <!-- ======= LEFT: TRAINING ======= -->
+  <text x="215" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="#16A34A">학습 (Teacher Forcing)</text>
+
+  <!-- Source sentence -->
+  <rect x="30" y="58" width="390" height="34" rx="6" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <text x="225" y="72" text-anchor="middle" font-size="10" fill="#1D4ED8" font-weight="600">Encoder 출력 (H_enc)</text>
+  <text x="225" y="84" text-anchor="middle" font-size="9" fill="#3B82F6">"The cat is on the mat." → 인코딩 완료</text>
+
+  <!-- Decoder input (shifted right) -->
+  <rect x="30" y="106" width="390" height="48" rx="6" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1.5"/>
+  <text x="225" y="122" text-anchor="middle" font-size="10" fill="#7C3AED" font-weight="600">Decoder 입력 (Shifted Right — 정답 미리 제공)</text>
+  <text x="225" y="138" text-anchor="middle" font-size="11" fill="#5B21B6" font-family="monospace">[&lt;SOS&gt;,  Le,  chat,  est,  sur]</text>
+  <text x="225" y="150" text-anchor="middle" font-size="8" fill="#7C3AED">정답 문장의 앞에 &lt;SOS&gt;를 붙여 한 칸씩 shift</text>
+
+  <!-- Parallel arrow (all at once) -->
+  <line x1="225" y1="154" x2="225" y2="178" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arr-p)"/>
+
+  <!-- Decoder block (training) -->
+  <rect x="60" y="180" width="330" height="44" rx="7" fill="#C4B5FD" stroke="#7C3AED" stroke-width="2"/>
+  <text x="225" y="199" text-anchor="middle" font-size="11" font-weight="700" fill="#4C1D95">Decoder</text>
+  <text x="225" y="214" text-anchor="middle" font-size="9" fill="#5B21B6">Masked Self-Attn → Cross-Attn (←H_enc) → FFN</text>
+
+  <!-- Output -->
+  <line x1="225" y1="224" x2="225" y2="244" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="60" y="246" width="330" height="36" rx="6" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
+  <text x="225" y="262" text-anchor="middle" font-size="10" font-weight="600" fill="#166534">예측 출력 (병렬 계산)</text>
+  <text x="225" y="276" text-anchor="middle" font-size="10" fill="#15803D" font-family="monospace">Le,  chat,  est,  sur,  le</text>
+
+  <!-- Loss calculation -->
+  <line x1="225" y1="282" x2="225" y2="302" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="90" y="304" width="270" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="225" y="320" text-anchor="middle" font-size="10" font-weight="600" fill="#78350F">정답과 비교 → Cross-Entropy Loss</text>
+  <text x="225" y="334" text-anchor="middle" font-size="9" fill="#92400E">정답: [Le, chat, est, sur, le, tapis, .]</text>
+
+  <!-- Parallel advantage note -->
+  <rect x="30" y="350" width="390" height="44" rx="7" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="225" y="368" text-anchor="middle" font-size="10" font-weight="600" fill="#15803D">핵심: 모든 위치를 동시에 병렬 계산</text>
+  <text x="225" y="383" text-anchor="middle" font-size="9" fill="#166534">Mask가 있어도 입력은 이미 전체 정답 → GPU 병렬화 가능</text>
+  <text x="225" y="395" text-anchor="middle" font-size="9" fill="#166534">학습 속도가 RNN 대비 훨씬 빠른 이유</text>
+
+  <!-- ======= RIGHT: INFERENCE ======= -->
+  <text x="645" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="#7C3AED">추론 (Autoregressive)</text>
+
+  <!-- Encoder output (same) -->
+  <rect x="440" y="58" width="390" height="34" rx="6" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <text x="635" y="72" text-anchor="middle" font-size="10" fill="#1D4ED8" font-weight="600">Encoder 출력 (H_enc)</text>
+  <text x="635" y="84" text-anchor="middle" font-size="9" fill="#3B82F6">"The cat is on the mat." → 인코딩 완료  (1회)</text>
+
+  <!-- Step 1 -->
+  <rect x="440" y="106" width="390" height="36" rx="6" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1.5"/>
+  <text x="635" y="121" text-anchor="middle" font-size="10" fill="#7C3AED" font-weight="600">Step 1 입력:  [&lt;SOS&gt;]</text>
+  <text x="635" y="135" text-anchor="middle" font-size="9" fill="#7C3AED">→ Decoder → 첫 번째 단어 예측</text>
+
+  <line x1="635" y1="142" x2="635" y2="158" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="500" y="160" width="270" height="26" rx="5" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="635" y="178" text-anchor="middle" font-size="10" fill="#166534" font-weight="600">출력: "Le"  → 다음 입력에 추가</text>
+
+  <!-- Step 2 -->
+  <line x1="635" y1="186" x2="635" y2="200" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="440" y="202" width="390" height="36" rx="6" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1.5"/>
+  <text x="635" y="217" text-anchor="middle" font-size="10" fill="#7C3AED" font-weight="600">Step 2 입력:  [&lt;SOS&gt;,  Le]</text>
+  <text x="635" y="231" text-anchor="middle" font-size="9" fill="#7C3AED">→ Decoder → 두 번째 단어 예측</text>
+
+  <line x1="635" y1="238" x2="635" y2="254" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="500" y="256" width="270" height="26" rx="5" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="635" y="274" text-anchor="middle" font-size="10" fill="#166534" font-weight="600">출력: "chat"  → 다음 입력에 추가</text>
+
+  <!-- Dots -->
+  <text x="635" y="302" text-anchor="middle" font-size="20" fill="#9CA3AF">⋯</text>
+
+  <!-- Final step -->
+  <rect x="440" y="316" width="390" height="36" rx="6" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1.5"/>
+  <text x="635" y="331" text-anchor="middle" font-size="10" fill="#7C3AED" font-weight="600">Step N:  [&lt;SOS&gt;, Le, chat, est, sur, le, tapis]</text>
+  <text x="635" y="345" text-anchor="middle" font-size="9" fill="#7C3AED">→ Decoder → 마침 토큰 예측</text>
+
+  <line x1="635" y1="352" x2="635" y2="368" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="500" y="370" width="270" height="26" rx="5" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="635" y="388" text-anchor="middle" font-size="10" fill="#DC2626" font-weight="600">출력: "&lt;EOS&gt;"  → 생성 종료</text>
+
+  <!-- Sequential note -->
+  <rect x="440" y="400" width="390" height="30" rx="6" fill="#FFF1F2" stroke="#FECDD3" stroke-width="1.5"/>
+  <text x="635" y="416" text-anchor="middle" font-size="9" font-weight="600" fill="#9F1239">한 번에 1개 토큰 생성 (순차적 → 병렬화 불가)</text>
+  <text x="635" y="428" text-anchor="middle" font-size="8" fill="#BE123C">추론 속도가 학습보다 느린 이유</text>
+
+  <text x="430" y="432" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+</svg>

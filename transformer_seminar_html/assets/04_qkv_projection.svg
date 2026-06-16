@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="800" height="380"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arr-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#DC2626"/>
+    </marker>
+    <marker id="arr-b" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#1D4ED8"/>
+    </marker>
+    <marker id="arr-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#16A34A"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="380" fill="#F8F9FB" rx="8"/>
+  <text x="400" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Q, K, V 생성: 같은 X에서 다른 Weight로 투영</text>
+
+  <!-- X box (center left) -->
+  <rect x="30" y="120" width="150" height="140" rx="10" fill="#FFFFFF" stroke="#374151" stroke-width="2"/>
+  <text x="105" y="148" text-anchor="middle" font-size="22" font-weight="700" fill="#111827">X</text>
+  <text x="105" y="170" text-anchor="middle" font-size="10" fill="#6B7280">입력 embedding</text>
+  <text x="105" y="185" text-anchor="middle" font-size="10" fill="#6B7280">(seq_len × d_model)</text>
+  <text x="105" y="200" text-anchor="middle" font-size="9" fill="#9CA3AF">예: (6, 512)</text>
+  <text x="105" y="220" text-anchor="middle" font-size="9" fill="#9CA3AF">[The, cat, is,</text>
+  <text x="105" y="233" text-anchor="middle" font-size="9" fill="#9CA3AF"> on, the, mat]</text>
+  <text x="105" y="246" text-anchor="middle" font-size="8" fill="#9CA3AF">각 행 = 한 token</text>
+
+  <!-- W^Q box -->
+  <rect x="252" y="44" width="120" height="60" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="312" y="68" text-anchor="middle" font-size="16" font-weight="700" fill="#DC2626">W</text>
+  <text x="326" y="61" font-size="11" fill="#DC2626">Q</text>
+  <text x="312" y="90" text-anchor="middle" font-size="9" fill="#EF4444">(d_model × d_k)</text>
+  <text x="312" y="102" text-anchor="middle" font-size="8" fill="#9CA3AF">(512 × 64)</text>
+
+  <!-- W^K box -->
+  <rect x="252" y="160" width="120" height="60" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="312" y="184" text-anchor="middle" font-size="16" font-weight="700" fill="#1D4ED8">W</text>
+  <text x="326" y="177" font-size="11" fill="#1D4ED8">K</text>
+  <text x="312" y="206" text-anchor="middle" font-size="9" fill="#3B82F6">(d_model × d_k)</text>
+  <text x="312" y="218" text-anchor="middle" font-size="8" fill="#9CA3AF">(512 × 64)</text>
+
+  <!-- W^V box -->
+  <rect x="252" y="276" width="120" height="60" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="312" y="300" text-anchor="middle" font-size="16" font-weight="700" fill="#16A34A">W</text>
+  <text x="326" y="293" font-size="11" fill="#16A34A">V</text>
+  <text x="312" y="322" text-anchor="middle" font-size="9" fill="#22C55E">(d_model × d_v)</text>
+  <text x="312" y="334" text-anchor="middle" font-size="8" fill="#9CA3AF">(512 × 64)</text>
+
+  <!-- Arrows X → W -->
+  <!-- X to W^Q -->
+  <line x1="105" y1="138" x2="105" y2="74" stroke="#DC2626" stroke-width="1.5"/>
+  <line x1="105" y1="74" x2="250" y2="74" stroke="#DC2626" stroke-width="1.5" marker-end="url(#arr-r)"/>
+  <!-- X to W^K -->
+  <line x1="180" y1="190" x2="250" y2="190" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#arr-b)"/>
+  <!-- X to W^V -->
+  <line x1="105" y1="242" x2="105" y2="306" stroke="#16A34A" stroke-width="1.5"/>
+  <line x1="105" y1="306" x2="250" y2="306" stroke="#16A34A" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+  <!-- = symbols -->
+  <text x="394" y="78" font-size="18" fill="#374151" font-weight="300">=</text>
+  <text x="394" y="194" font-size="18" fill="#374151" font-weight="300">=</text>
+  <text x="394" y="310" font-size="18" fill="#374151" font-weight="300">=</text>
+
+  <!-- Q result box -->
+  <rect x="420" y="44" width="154" height="66" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="2"/>
+  <text x="497" y="70" text-anchor="middle" font-size="22" font-weight="800" fill="#DC2626">Q</text>
+  <text x="497" y="88" text-anchor="middle" font-size="9" fill="#EF4444">(seq_len, d_k) = (6, 64)</text>
+  <text x="497" y="102" text-anchor="middle" font-size="8" fill="#9CA3AF">Query: 무엇을 찾는가</text>
+
+  <!-- K result box -->
+  <rect x="420" y="160" width="154" height="66" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
+  <text x="497" y="186" text-anchor="middle" font-size="22" font-weight="800" fill="#1D4ED8">K</text>
+  <text x="497" y="204" text-anchor="middle" font-size="9" fill="#3B82F6">(seq_len, d_k) = (6, 64)</text>
+  <text x="497" y="218" text-anchor="middle" font-size="8" fill="#9CA3AF">Key: 검색용 특징</text>
+
+  <!-- V result box -->
+  <rect x="420" y="276" width="154" height="66" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="2"/>
+  <text x="497" y="302" text-anchor="middle" font-size="22" font-weight="800" fill="#16A34A">V</text>
+  <text x="497" y="320" text-anchor="middle" font-size="9" fill="#22C55E">(seq_len, d_v) = (6, 64)</text>
+  <text x="497" y="334" text-anchor="middle" font-size="8" fill="#9CA3AF">Value: 전달할 정보</text>
+
+  <!-- Right annotation box -->
+  <rect x="596" y="80" width="188" height="240" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="690" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="#78350F">핵심</text>
+  <text x="690" y="120" text-anchor="middle" font-size="9" fill="#78350F">Q, K, V는 같은 X에서</text>
+  <text x="690" y="136" text-anchor="middle" font-size="9" fill="#78350F">다른 Weight를 곱해 만든다.</text>
+  <line x1="608" y1="148" x2="774" y2="148" stroke="#FCD34D" stroke-width="1"/>
+  <text x="690" y="168" text-anchor="middle" font-size="9" fill="#78350F">처음에는 W가 랜덤이므로</text>
+  <text x="690" y="184" text-anchor="middle" font-size="9" fill="#78350F">Q/K/V에 의미 없음</text>
+  <line x1="608" y1="196" x2="774" y2="196" stroke="#FCD34D" stroke-width="1"/>
+  <text x="690" y="216" text-anchor="middle" font-size="9" fill="#78350F">학습 과정(loss 감소)에서</text>
+  <text x="690" y="232" text-anchor="middle" font-size="9" fill="#78350F">각 역할에 맞는 방향으로</text>
+  <text x="690" y="248" text-anchor="middle" font-size="9" fill="#78350F">W가 업데이트된다.</text>
+  <line x1="608" y1="260" x2="774" y2="260" stroke="#FCD34D" stroke-width="1"/>
+  <text x="690" y="278" text-anchor="middle" font-size="9" fill="#78350F">→ 역할은 설계가 아니라</text>
+  <text x="690" y="294" text-anchor="middle" font-size="9" fill="#78350F">학습의 결과</text>
+
+  <text x="400" y="370" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+</svg>

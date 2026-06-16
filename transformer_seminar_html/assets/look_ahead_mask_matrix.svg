@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 480" width="760" height="480"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+
+  <rect width="760" height="480" fill="#F8F9FB" rx="8"/>
+  <text x="380" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Look-Ahead Mask (Decoder 학습용)</text>
+  <text x="380" y="42" text-anchor="middle" font-size="10" fill="#6B7280">디코더는 미래 토큰을 볼 수 없다 — 이미 생성한 토큰만 참고</text>
+
+  <!-- Decoder input tokens: <SOS> Le chat est -->
+  <!-- 4 tokens, 4×4 matrix -->
+  <!-- Cell size: 78×52, starting at x=124, y=72 -->
+
+  <!-- Column headers (Key) -->
+  <text x="380" y="62" text-anchor="middle" font-size="10" fill="#1D4ED8" font-weight="600">Key (j) →  참고 가능한 토큰</text>
+  <text x="163" y="70" text-anchor="middle" font-size="11" font-weight="700" fill="#1D4ED8">&lt;SOS&gt;</text>
+  <text x="241" y="70" text-anchor="middle" font-size="11" font-weight="700" fill="#1D4ED8">Le</text>
+  <text x="319" y="70" text-anchor="middle" font-size="11" font-weight="700" fill="#1D4ED8">chat</text>
+  <text x="397" y="70" text-anchor="middle" font-size="11" font-weight="700" fill="#1D4ED8">est</text>
+
+  <!-- Row headers (Query) -->
+  <text x="52" y="250" text-anchor="middle" font-size="10" fill="#DC2626" font-weight="600" transform="rotate(-90,52,250)">Query (i) ↓  현재 생성 위치</text>
+  <text x="90" y="102" text-anchor="end" font-size="10" font-weight="700" fill="#DC2626">&lt;SOS&gt;</text>
+  <text x="90" y="154" text-anchor="end" font-size="10" font-weight="700" fill="#DC2626">Le</text>
+  <text x="90" y="206" text-anchor="end" font-size="10" font-weight="700" fill="#DC2626">chat</text>
+  <text x="90" y="258" text-anchor="end" font-size="10" font-weight="700" fill="#DC2626">est</text>
+
+  <!-- 4×4 matrix cells -->
+  <!-- Row 0: <SOS> can only see <SOS> -->
+  <!-- [0,0] allowed -->
+  <rect x="96" y="74" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="135" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="135" y="114" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <!-- [0,1] masked -->
+  <rect x="174" y="74" width="78" height="52" rx="0" fill="#FEE2E2"/>
+  <text x="213" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#DC2626">−∞</text>
+  <text x="213" y="114" text-anchor="middle" font-size="8" fill="#EF4444">미래 차단</text>
+  <!-- [0,2] masked -->
+  <rect x="252" y="74" width="78" height="52" rx="0" fill="#FEE2E2"/>
+  <text x="291" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#DC2626">−∞</text>
+  <text x="291" y="114" text-anchor="middle" font-size="8" fill="#EF4444">미래 차단</text>
+  <!-- [0,3] masked -->
+  <rect x="330" y="74" width="78" height="52" rx="0" fill="#FEE2E2"/>
+  <text x="369" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#DC2626">−∞</text>
+  <text x="369" y="114" text-anchor="middle" font-size="8" fill="#EF4444">미래 차단</text>
+
+  <!-- Row 1: Le can see <SOS>, Le -->
+  <rect x="96" y="126" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="135" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="135" y="166" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="174" y="126" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="213" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="213" y="166" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="252" y="126" width="78" height="52" rx="0" fill="#FEE2E2"/>
+  <text x="291" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="#DC2626">−∞</text>
+  <text x="291" y="166" text-anchor="middle" font-size="8" fill="#EF4444">미래 차단</text>
+  <rect x="330" y="126" width="78" height="52" rx="0" fill="#FEE2E2"/>
+  <text x="369" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="#DC2626">−∞</text>
+  <text x="369" y="166" text-anchor="middle" font-size="8" fill="#EF4444">미래 차단</text>
+
+  <!-- Row 2: chat can see <SOS>, Le, chat -->
+  <rect x="96" y="178" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="135" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="135" y="218" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="174" y="178" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="213" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="213" y="218" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="252" y="178" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="291" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="291" y="218" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="330" y="178" width="78" height="52" rx="0" fill="#FEE2E2"/>
+  <text x="369" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#DC2626">−∞</text>
+  <text x="369" y="218" text-anchor="middle" font-size="8" fill="#EF4444">미래 차단</text>
+
+  <!-- Row 3: est can see all -->
+  <rect x="96" y="230" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="135" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="135" y="270" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="174" y="230" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="213" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="213" y="270" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="252" y="230" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="291" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="291" y="270" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+  <rect x="330" y="230" width="78" height="52" rx="0" fill="#DCFCE7"/>
+  <text x="369" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">0</text>
+  <text x="369" y="270" text-anchor="middle" font-size="8" fill="#15803D">참고 가능</text>
+
+  <!-- Grid lines (white) -->
+  <rect x="96" y="74" width="312" height="208" fill="none" stroke="white" stroke-width="2"/>
+  <line x1="96" y1="126" x2="408" y2="126" stroke="white" stroke-width="2"/>
+  <line x1="96" y1="178" x2="408" y2="178" stroke="white" stroke-width="2"/>
+  <line x1="96" y1="230" x2="408" y2="230" stroke="white" stroke-width="2"/>
+  <line x1="174" y1="74" x2="174" y2="282" stroke="white" stroke-width="2"/>
+  <line x1="252" y1="74" x2="252" y2="282" stroke="white" stroke-width="2"/>
+  <line x1="330" y1="74" x2="330" y2="282" stroke="white" stroke-width="2"/>
+
+  <!-- Diagonal annotation line -->
+  <line x1="96" y1="74" x2="408" y2="282" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.5"/>
+  <text x="450" y="200" font-size="9" fill="#6B7280">하삼각행렬</text>
+  <text x="450" y="212" font-size="9" fill="#6B7280">(lower triangular)</text>
+
+  <!-- Right panel: mechanism explanation -->
+  <rect x="440" y="74" width="300" height="208" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="590" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#78350F">작동 원리</text>
+  <line x1="452" y1="104" x2="728" y2="104" stroke="#FCD34D" stroke-width="1"/>
+  <text x="590" y="122" text-anchor="middle" font-size="10" fill="#78350F">① Score = QKᵀ / √d_k 계산</text>
+  <text x="590" y="140" text-anchor="middle" font-size="10" fill="#78350F">② Mask 행렬을 더한다:</text>
+  <text x="590" y="157" text-anchor="middle" font-size="10" fill="#78350F">    Score += Mask</text>
+  <text x="590" y="177" text-anchor="middle" font-size="9" fill="#6B7280">0  → Score 그대로 유지</text>
+  <text x="590" y="193" text-anchor="middle" font-size="9" fill="#6B7280">−∞ → Softmax에서 ≈ 0</text>
+  <line x1="452" y1="204" x2="728" y2="204" stroke="#FCD34D" stroke-width="1"/>
+  <text x="590" y="222" text-anchor="middle" font-size="10" fill="#78350F">③ Softmax(Score + Mask)</text>
+  <text x="590" y="240" text-anchor="middle" font-size="10" fill="#78350F">    → 미래 위치 weight ≈ 0</text>
+  <text x="590" y="258" text-anchor="middle" font-size="9" fill="#6B7280">마치 미래가 존재하지 않는 것처럼</text>
+
+  <!-- Bottom: what mask looks like numerically -->
+  <rect x="30" y="300" width="700" height="80" rx="8" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5"/>
+  <text x="380" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">Mask 행렬 (4×4, 값으로 표현)</text>
+  <text x="380" y="344" text-anchor="middle" font-size="12" fill="#374151" font-family="monospace">
+  </text>
+  <text x="88" y="340" font-size="11" fill="#166534" font-family="monospace">[ 0    −∞   −∞   −∞ ]</text>
+  <text x="88" y="356" font-size="11" fill="#166534" font-family="monospace">[ 0     0   −∞   −∞ ]</text>
+  <text x="88" y="372" font-size="11" fill="#166534" font-family="monospace">[ 0     0    0   −∞ ]</text>
+  <text x="88" y="388" font-size="11" fill="#166534" font-family="monospace">[ 0     0    0    0 ]</text>
+  <text x="390" y="344" font-size="10" fill="#6B7280">← &lt;SOS&gt; 생성 시: 자기만 참고</text>
+  <text x="390" y="360" font-size="10" fill="#6B7280">← Le 생성 시: &lt;SOS&gt;, Le 참고</text>
+  <text x="390" y="376" font-size="10" fill="#6B7280">← chat 생성 시: 3개 참고</text>
+  <text x="390" y="392" font-size="10" fill="#6B7280">← est 생성 시: 전체 참고</text>
+
+  <!-- Legend -->
+  <rect x="30" y="392" width="18" height="14" rx="2" fill="#DCFCE7"/>
+  <text x="56" y="404" font-size="9" fill="#374151">참고 가능 (Score에 0 더함)</text>
+  <rect x="230" y="392" width="18" height="14" rx="2" fill="#FEE2E2"/>
+  <text x="256" y="404" font-size="9" fill="#374151">차단됨 (Score에 −∞ 더함 → softmax ≈ 0)</text>
+
+  <text x="380" y="462" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+</svg>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 700" width="980" height="700"
+     font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#374151"/>
+    </marker>
+    <marker id="arr-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#16A34A"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="700" fill="#F8F9FB" rx="10"/>
+  <text x="490" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">Transformer Encoder-Decoder 전체 구조</text>
+
+  <!-- ====== ENCODER (center x=195) ====== -->
+  <text x="195" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#2563EB">ENCODER</text>
+
+  <!-- Source -->
+  <rect x="85" y="58" width="220" height="36" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="195" y="81" text-anchor="middle" font-size="12" fill="#1D4ED8" font-weight="600">Source 문장</text>
+  <line x1="195" y1="94" x2="195" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="210" y="106" font-size="9" fill="#9CA3AF">(T,)</text>
+
+  <!-- Embedding -->
+  <rect x="85" y="114" width="220" height="36" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="195" y="137" text-anchor="middle" font-size="12" fill="#1D4ED8">Embedding</text>
+  <line x1="195" y1="150" x2="195" y2="168" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="210" y="162" font-size="9" fill="#9CA3AF">(T, d_model)</text>
+
+  <!-- PE -->
+  <rect x="85" y="170" width="220" height="36" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="195" y="193" text-anchor="middle" font-size="12" fill="#1D4ED8">Positional Encoding</text>
+  <line x1="195" y1="206" x2="195" y2="224" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Encoder Layer ×6 block -->
+  <rect x="64" y="226" width="262" height="212" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2" stroke-dasharray="8,3" fill-opacity="0.45"/>
+  <text x="195" y="246" text-anchor="middle" font-size="11" font-weight="700" fill="#2563EB">Encoder Layer × 6</text>
+
+  <rect x="80" y="251" width="230" height="36" rx="6" fill="#BFDBFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <text x="195" y="273" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">Multi-Head Self-Attention</text>
+  <line x1="195" y1="287" x2="195" y2="301" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="115" y="303" width="160" height="26" rx="5" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1"/>
+  <text x="195" y="320" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+  <line x1="195" y1="329" x2="195" y2="343" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="80" y="345" width="230" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="195" y="367" text-anchor="middle" font-size="11" font-weight="600" fill="#78350F">Feed Forward Network</text>
+  <line x1="195" y1="381" x2="195" y2="395" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="115" y="397" width="160" height="26" rx="5" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1"/>
+  <text x="195" y="414" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+
+  <!-- Arrow out + H_enc -->
+  <line x1="195" y1="438" x2="195" y2="454" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="80" y="456" width="230" height="42" rx="8" fill="#DCFCE7" stroke="#16A34A" stroke-width="2"/>
+  <text x="195" y="474" text-anchor="middle" font-size="13" font-weight="700" fill="#15803D">H_enc</text>
+  <text x="195" y="490" text-anchor="middle" font-size="9" fill="#16A34A">Encoder Output ∈ ℝ^{T × d_model}</text>
+
+  <!-- ====== DECODER (center x=730) ====== -->
+  <text x="730" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#7C3AED">DECODER</text>
+
+  <!-- Target (shifted) -->
+  <rect x="610" y="58" width="240" height="42" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="730" y="76" text-anchor="middle" font-size="12" fill="#6D28D9" font-weight="600">Target 문장 (shifted right)</text>
+  <text x="730" y="93" text-anchor="middle" font-size="10" fill="#8B5CF6">[&lt;SOS&gt;, Le, chat, est, ...]</text>
+  <line x1="730" y1="100" x2="730" y2="118" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Embedding -->
+  <rect x="610" y="120" width="240" height="36" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="730" y="143" text-anchor="middle" font-size="12" fill="#6D28D9">Embedding</text>
+  <line x1="730" y1="156" x2="730" y2="174" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- PE -->
+  <rect x="610" y="176" width="240" height="36" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="730" y="199" text-anchor="middle" font-size="12" fill="#6D28D9">Positional Encoding</text>
+  <line x1="730" y1="212" x2="730" y2="230" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Decoder Layer ×6 block -->
+  <rect x="594" y="232" width="272" height="310" rx="10" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2" stroke-dasharray="8,3" fill-opacity="0.45"/>
+  <text x="730" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED">Decoder Layer × 6</text>
+
+  <!-- Masked MHA -->
+  <rect x="610" y="257" width="240" height="40" rx="6" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1.5"/>
+  <text x="730" y="273" text-anchor="middle" font-size="11" font-weight="600" fill="#4C1D95">Masked Multi-Head Self-Attention</text>
+  <text x="730" y="289" text-anchor="middle" font-size="9" fill="#7C3AED">Look-Ahead Mask 적용</text>
+  <line x1="730" y1="297" x2="730" y2="311" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="650" y="313" width="160" height="26" rx="5" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="1"/>
+  <text x="730" y="330" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+  <line x1="730" y1="339" x2="730" y2="353" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Cross-Attention -->
+  <rect x="610" y="355" width="240" height="42" rx="6" fill="#DCFCE7" stroke="#16A34A" stroke-width="2"/>
+  <text x="730" y="373" text-anchor="middle" font-size="11" font-weight="700" fill="#15803D">Cross-Attention</text>
+  <text x="730" y="389" text-anchor="middle" font-size="9" fill="#16A34A">Q←Decoder  /  K,V←H_enc</text>
+  <line x1="730" y1="397" x2="730" y2="411" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="650" y="413" width="160" height="26" rx="5" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="1"/>
+  <text x="730" y="430" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+  <line x1="730" y1="439" x2="730" y2="453" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- FFN -->
+  <rect x="610" y="455" width="240" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="730" y="477" text-anchor="middle" font-size="11" font-weight="600" fill="#78350F">Feed Forward Network</text>
+  <line x1="730" y1="491" x2="730" y2="505" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="650" y="507" width="160" height="26" rx="5" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="1"/>
+  <text x="730" y="524" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+
+  <!-- After Decoder -->
+  <line x1="730" y1="542" x2="730" y2="560" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="746" y="554" font-size="9" fill="#9CA3AF">(T', d_model)</text>
+  <rect x="620" y="562" width="220" height="34" rx="7" fill="#FEE2E2" stroke="#F87171" stroke-width="1.5"/>
+  <text x="730" y="583" text-anchor="middle" font-size="12" fill="#991B1B">Linear (d_model → vocab_size)</text>
+  <line x1="730" y1="596" x2="730" y2="612" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="620" y="614" width="220" height="34" rx="7" fill="#FEE2E2" stroke="#F87171" stroke-width="1.5"/>
+  <text x="730" y="635" text-anchor="middle" font-size="12" fill="#991B1B">Softmax</text>
+  <line x1="730" y1="648" x2="730" y2="664" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="610" y="666" width="240" height="36" rx="8" fill="#FFF7ED" stroke="#FB923C" stroke-width="2"/>
+  <text x="730" y="683" text-anchor="middle" font-size="13" font-weight="700" fill="#9A3412">번역 token 확률</text>
+  <text x="730" y="697" text-anchor="middle" font-size="9" fill="#C2410C">P(next token) ∈ ℝ^{vocab_size}</text>
+
+  <!-- Cross-connection H_enc → Cross-Attention -->
+  <path d="M 310 477 C 450 477, 450 376, 610 376"
+        stroke="#16A34A" stroke-width="2" fill="none" stroke-dasharray="7,3"
+        marker-end="url(#arr-g)"/>
+  <text x="424" y="467" text-anchor="middle" font-size="10" font-weight="600" fill="#15803D">K, V ← H_enc</text>
+  <text x="424" y="480" text-anchor="middle" font-size="9" fill="#16A34A">6개 Decoder Layer에 공유</text>
+
+  <!-- Caption -->
+  <text x="490" y="686" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+</svg>

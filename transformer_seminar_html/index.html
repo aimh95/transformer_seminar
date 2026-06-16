@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transformer는 문장을 어떻게 번역하는가?</title>
+  <style>
+    :root {
+      --enc: #2563EB;
+      --enc-light: #EFF6FF;
+      --enc-mid: #BFDBFE;
+      --dec: #7C3AED;
+      --dec-light: #F5F3FF;
+      --dec-mid: #C4B5FD;
+      --q: #DC2626;
+      --q-light: #FEF2F2;
+      --k: #1D4ED8;
+      --k-light: #DBEAFE;
+      --v: #16A34A;
+      --v-light: #DCFCE7;
+      --ffn: #D97706;
+      --ffn-light: #FEF3C7;
+      --mask: #374151;
+      --mask-light: #F3F4F6;
+      --out: #059669;
+      --out-light: #ECFDF5;
+      --text: #111827;
+      --sub: #374151;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+      --bg: #F9FAFB;
+      --white: #FFFFFF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 15px; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    /* ── Nav ── */
+    #topnav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--white);
+      border-bottom: 2px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 20px; height: 50px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+      gap: 2px; overflow-x: auto;
+    }
+    #topnav .brand {
+      font-weight: 800; font-size: 13px;
+      color: var(--text); white-space: nowrap;
+      margin-right: 16px; flex-shrink: 0;
+    }
+    #topnav a {
+      text-decoration: none; white-space: nowrap;
+      font-size: 12.5px; color: var(--muted);
+      padding: 0 12px; height: 50px;
+      display: flex; align-items: center;
+      border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s;
+      flex-shrink: 0;
+    }
+    #topnav a:hover { color: var(--text); border-bottom-color: var(--enc); }
+    #topnav a.on { color: var(--enc); font-weight: 600; border-bottom-color: var(--enc); }
+
+    /* ── Page Wrapper ── */
+    .page { max-width: 960px; margin: 0 auto; padding: 0 22px 100px; }
+
+    /* ── Hero ── */
+    #hero {
+      background: linear-gradient(135deg, #EFF6FF 0%, #F5F3FF 60%, #ECFDF5 100%);
+      padding: 56px 32px 44px;
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+    }
+    #hero h1 { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+    #hero .sub { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+    #hero .eg {
+      display: inline-block; background: var(--white);
+      border: 1.5px solid var(--border); border-radius: 30px;
+      padding: 7px 22px; font-size: 14px; color: var(--sub);
+    }
+    #hero .eg strong { color: var(--enc); }
+
+    /* ── Section ── */
+    .sec { padding-top: 60px; }
+    .sec-hd { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .sec-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--sub); color: #fff;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .sec-num.e { background: var(--enc); }
+    .sec-num.d { background: var(--dec); }
+    .sec-num.a { background: var(--q); }
+    .sec-num.f { background: var(--ffn); }
+    .sec-num.o { background: var(--out); }
+    .sec h2 { font-size: 19px; font-weight: 700; }
+    .sec p { color: var(--sub); margin-bottom: 12px; }
+    .sec p:last-of-type { margin-bottom: 0; }
+
+    hr.div { border: none; border-top: 1.5px solid var(--border); margin: 0; }
+
+    /* ── SVG wrap ── */
+    .svg-box {
+      margin: 18px 0; border-radius: 10px; overflow: hidden;
+      background: var(--white); border: 1.5px solid var(--border);
+    }
+    .svg-box img { display: block; width: 100%; height: auto; }
+
+    /* ── Formula card (LIGHT) ── */
+    .fc {
+      background: #FFFBEB; border: 2px solid #FCD34D; border-radius: 10px;
+      padding: 14px 20px; margin: 16px 0;
+    }
+    .fc-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: #92400E; margin-bottom: 6px;
+    }
+    .fc-body {
+      font-family: 'Courier New', Consolas, monospace;
+      font-size: 15px; font-weight: 700; color: #78350F; line-height: 1.7;
+    }
+    .fc-note { font-size: 11.5px; color: #B45309; margin-top: 8px; }
+
+    /* ── Callout (yellow) ── */
+    .callout {
+      background: #FFFBEB; border-left: 4px solid #F59E0B;
+      border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 14px 0;
+      font-size: 13.5px; color: var(--sub);
+    }
+    .callout strong { color: #92400E; }
+
+    /* ── Note box ── */
+    .note {
+      background: #F0F9FF; border: 1.5px solid #BAE6FD;
+      border-radius: 8px; padding: 12px 18px; margin: 14px 0;
+      font-size: 13px; color: #0C4A6E;
+    }
+    .note strong { color: #0369A1; }
+
+    /* ── Warn box ── */
+    .warn {
+      background: #FFF1F2; border: 1.5px solid #FECDD3;
+      border-radius: 8px; padding: 12px 18px; margin: 14px 0;
+      font-size: 13px; color: #881337;
+    }
+    .warn strong { color: #BE123C; }
+
+    /* ── Summary stripe ── */
+    .summary {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: var(--white); border-left: 4px solid var(--enc);
+      border-radius: 0 8px 8px 0; padding: 11px 16px; margin: 18px 0;
+    }
+    .summary.d { border-left-color: var(--dec); }
+    .summary.f { border-left-color: var(--ffn); }
+    .summary.o { border-left-color: var(--out); }
+    .summary .tag {
+      font-size: 10px; font-weight: 700; white-space: nowrap; margin-top: 2px;
+      background: var(--enc-mid); color: #1E3A8A;
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .summary.d .tag { background: var(--dec-mid); color: #4C1D95; }
+    .summary.f .tag { background: #FDE68A; color: #78350F; }
+    .summary.o .tag { background: #A7F3D0; color: #064E3B; }
+    .summary .body { font-size: 13.5px; color: var(--sub); }
+
+    /* ── Two columns ── */
+    .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+    @media (max-width: 620px) { .cols2 { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 16px;
+    }
+    .card h4 { font-size: 13.5px; font-weight: 700; margin-bottom: 8px; }
+    .card p, .card li { font-size: 13px; color: var(--sub); }
+
+    /* ── Token pills ── */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; align-items: center; }
+    .pill {
+      display: inline-block; padding: 4px 12px; border-radius: 20px;
+      font-size: 13px; font-weight: 600;
+      background: var(--enc-mid); color: #1E3A8A;
+    }
+    .pill.d { background: var(--dec-mid); color: #4C1D95; }
+    .pill.g { background: var(--v-light); color: #166534; }
+    .pill.sos { background: #FEF3C7; color: #78350F; font-size: 12px; }
+
+    /* ── Step list ── */
+    .steps { list-style: none; margin: 12px 0; counter-reset: st; }
+    .steps li {
+      counter-increment: st; display: flex; gap: 10px;
+      align-items: flex-start; margin-bottom: 10px;
+    }
+    .steps li::before {
+      content: counter(st);
+      display: flex; align-items: center; justify-content: center;
+      min-width: 22px; height: 22px; border-radius: 50%;
+      background: var(--enc); color: #fff;
+      font-size: 11px; font-weight: 700; margin-top: 2px;
+    }
+    .steps.d li::before { background: var(--dec); }
+    .steps li span { font-size: 13.5px; color: var(--sub); }
+
+    /* ── Shape badge ── */
+    .sh {
+      display: inline-block; background: #F3F4F6; border: 1px solid #D1D5DB;
+      border-radius: 5px; padding: 1px 7px;
+      font-size: 12px; font-family: 'Courier New', monospace; color: var(--sub);
+    }
+
+    /* ── Color text helpers ── */
+    .te { color: var(--enc); font-weight: 700; }
+    .td { color: var(--dec); font-weight: 700; }
+    .tq { color: var(--q); font-weight: 700; }
+    .tk { color: var(--k); font-weight: 700; }
+    .tv { color: var(--v); font-weight: 700; }
+    .tf { color: var(--ffn); font-weight: 700; }
+    .to { color: var(--out); font-weight: 700; }
+
+    /* ── Q/K/V hover cards ── */
+    .qkv-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 16px 0; }
+    .qkv-card {
+      border-radius: 10px; padding: 16px; cursor: default;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .qkv-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+    .qkv-card.q { background: var(--q-light); border: 2px solid #FECACA; }
+    .qkv-card.k { background: var(--k-light); border: 2px solid #93C5FD; }
+    .qkv-card.v { background: var(--v-light); border: 2px solid #86EFAC; }
+    .qkv-card .big { font-size: 30px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+    .qkv-card.q .big { color: var(--q); }
+    .qkv-card.k .big { color: var(--k); }
+    .qkv-card.v .big { color: var(--v); }
+    .qkv-card .ql { font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
+    .qkv-card .qd { font-size: 12px; color: var(--sub); }
+    .qkv-card .qa {
+      margin-top: 9px; font-size: 11px; color: var(--muted);
+      border-top: 1px solid rgba(0,0,0,.07); padding-top: 7px;
+    }
+
+    /* ── Advanced toggle ── */
+    details.adv {
+      background: var(--mask-light); border: 1.5px solid #D1D5DB;
+      border-radius: 8px; margin: 14px 0;
+    }
+    details.adv summary {
+      padding: 10px 16px; cursor: pointer; font-size: 13px;
+      font-weight: 600; color: var(--sub); list-style: none;
+    }
+    details.adv summary::before { content: "▶ "; font-size: 10px; }
+    details.adv[open] summary::before { content: "▼ "; }
+    .adv-body { padding: 14px 18px; border-top: 1px solid #D1D5DB; }
+
+    /* ── Look-Ahead Mask interactive table ── */
+    .mask-wrap { overflow-x: auto; margin: 18px 0; }
+    .mask-tbl { border-collapse: collapse; font-size: 13px; min-width: 380px; }
+    .mask-tbl th, .mask-tbl td {
+      border: 2px solid #fff;
+      width: 78px; height: 50px;
+      text-align: center; vertical-align: middle;
+    }
+    .mask-tbl .corner { background: transparent; }
+    .mask-tbl .ch { background: #EFF6FF; color: #1D4ED8; font-weight: 700; font-size: 12px; }
+    .mask-tbl .rh { background: #FEF2F2; color: #DC2626; font-weight: 700; font-size: 12px; }
+    .mask-tbl .ok { background: #DCFCE7; color: #166534; font-weight: 700; cursor: pointer; transition: background .12s; }
+    .mask-tbl .no { background: #FEE2E2; color: #DC2626; font-weight: 700; cursor: pointer; transition: background .12s; }
+    .mask-tbl .ok:hover { background: #BBF7D0; }
+    .mask-tbl .no:hover { background: #FECACA; }
+    .mc { position: relative; }
+    .mc .tip {
+      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%); background: #1F2937; color: #F9FAFB;
+      font-size: 11px; padding: 6px 10px; border-radius: 6px;
+      white-space: nowrap; z-index: 50; pointer-events: none; line-height: 1.5;
+    }
+    .mc .tip::after {
+      content: ''; position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%); border: 5px solid transparent;
+      border-top-color: #1F2937;
+    }
+    .mc:hover .tip { display: block; }
+
+    /* ── Big comparison table ── */
+    .cmp-tbl { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13.5px; }
+    .cmp-tbl th { padding: 10px 16px; text-align: left; font-weight: 700; font-size: 13px; }
+    .cmp-tbl td { padding: 9px 16px; vertical-align: top; }
+    .cmp-tbl tr:nth-child(odd) td { background: var(--white); }
+    .cmp-tbl tr:nth-child(even) td { background: var(--bg); }
+    .cmp-tbl thead th:first-child { background: #F3F4F6; }
+    .cmp-tbl thead th:nth-child(2) { background: var(--enc-light); color: var(--enc); }
+    .cmp-tbl thead th:nth-child(3) { background: var(--dec-light); color: var(--dec); }
+
+    /* ── Token prob table ── */
+    .prob-tbl { border-collapse: collapse; margin: 14px 0; font-size: 13.5px; }
+    .prob-tbl th { padding: 8px 18px; background: #F3F4F6; font-weight: 700; text-align: left; }
+    .prob-tbl td { padding: 8px 18px; border-top: 1px solid var(--border); }
+    .prob-bar { display: inline-block; height: 12px; background: var(--enc); border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+    .prob-bar.hi { background: var(--v); }
+
+    /* ── Flow diagram (hero section) ── */
+    .flow-diagram {
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 6px; margin: 20px 0; padding: 20px;
+      background: var(--white); border: 1.5px solid var(--border); border-radius: 12px;
+    }
+    .flow-box {
+      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      text-align: center; white-space: nowrap;
+    }
+    .flow-arr { font-size: 18px; color: var(--muted); }
+    .fb-src { background: #DBEAFE; color: #1E3A8A; border: 1.5px solid #93C5FD; }
+    .fb-tok { background: #F3F4F6; color: var(--sub); border: 1.5px solid #D1D5DB; }
+    .fb-emb { background: #F3F4F6; color: var(--sub); border: 1.5px solid #D1D5DB; }
+    .fb-pe  { background: #F3F4F6; color: var(--sub); border: 1.5px solid #D1D5DB; }
+    .fb-enc { background: var(--enc-light); color: var(--enc); border: 2px solid var(--enc); }
+    .fb-dec { background: var(--dec-light); color: var(--dec); border: 2px solid var(--dec); }
+    .fb-ls  { background: var(--out-light); color: var(--out); border: 2px solid var(--out); }
+    .fb-tgt { background: #DCFCE7; color: #166534; border: 1.5px solid #86EFAC; }
+
+    /* ── Overall flow SVG ── */
+    .svg-cap {
+      font-size: 11px; color: var(--muted); text-align: right;
+      padding: 6px 12px 8px; background: var(--white); border-top: 1px solid var(--border);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #1F2937; color: #9CA3AF;
+      text-align: center; padding: 26px 20px; font-size: 12px;
+    }
+    footer strong { color: #F9FAFB; }
+
+    /* ── Scrollspy highlight ── */
+    .sec-anchor { display: block; height: 0; overflow: hidden; }
+
+    /* ══════════════════════════════════════════
+       HERO ANIMATION
+    ══════════════════════════════════════════ */
+    #hero-anim {
+      background: linear-gradient(180deg, #F8FAFC 0%, #fff 100%);
+      border-bottom: 2px solid var(--border);
+      padding: 36px 24px 32px;
+    }
+    .ha-inner { max-width: 960px; margin: 0 auto; }
+    .ha-title {
+      font-size: 20px; font-weight: 800; text-align: center;
+      color: var(--text); margin-bottom: 8px;
+    }
+    .ha-sub {
+      text-align: center; color: var(--muted); font-size: 13px;
+      margin-bottom: 24px; max-width: 640px; margin-left: auto; margin-right: auto;
+    }
+    .ha-steps {
+      display: flex; gap: 10px; overflow-x: auto;
+      padding: 8px 4px 14px; margin-bottom: 14px;
+      scrollbar-width: thin;
+    }
+    .ha-card {
+      min-width: 150px; max-width: 162px;
+      background: var(--white); border: 2px solid var(--border);
+      border-radius: 12px; padding: 14px 12px;
+      text-align: center; flex-shrink: 0;
+      transition: all .35s ease;
+      opacity: .38; transform: scale(.95);
+      position: relative; cursor: default;
+    }
+    .ha-card.active {
+      opacity: 1; transform: scale(1.02);
+      box-shadow: 0 6px 24px rgba(0,0,0,.11);
+    }
+    .ha-card.done { opacity: .65; transform: scale(.96); }
+    .ha-num  { font-size: 24px; margin-bottom: 6px; line-height: 1; }
+    .ha-ttl  { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--sub); }
+    .ha-cnt  { font-size: 11.5px; color: var(--muted); line-height: 1.55; min-height: 38px; }
+    .ha-card.c0 { --ac:#2563EB; --acl:#EFF6FF; }
+    .ha-card.c1 { --ac:#4B5563; --acl:#F3F4F6; }
+    .ha-card.c2 { --ac:#7C3AED; --acl:#F5F3FF; }
+    .ha-card.c3 { --ac:#2563EB; --acl:#DBEAFE; }
+    .ha-card.c4 { --ac:#7C3AED; --acl:#F5F3FF; }
+    .ha-card.c5 { --ac:#059669; --acl:#ECFDF5; }
+    .ha-card.active { border-color: var(--ac); background: var(--acl); }
+    .ha-card.active .ha-ttl { color: var(--ac); }
+    .ha-tip {
+      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%);
+      background: #1F2937; color: #F9FAFB;
+      font-size: 11.5px; line-height: 1.6;
+      padding: 9px 13px; border-radius: 8px;
+      width: 220px; text-align: left;
+      z-index: 99; pointer-events: none;
+    }
+    .ha-tip::after {
+      content: ''; position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent; border-top-color: #1F2937;
+    }
+    .ha-card:hover .ha-tip { display: block; }
+    .ha-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
+    .ha-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--border); transition: background .3s, transform .3s;
+    }
+    .ha-dot.on   { background: #2563EB; transform: scale(1.4); }
+    .ha-dot.done { background: #BFDBFE; }
+    .ha-phrases {
+      background: #EFF6FF; border-radius: 10px;
+      padding: 14px 20px; margin-bottom: 18px;
+      font-size: 13px; color: #1E40AF; line-height: 1.9;
+    }
+    .ha-phrases span { display: block; }
+    .ha-phrases span::before { content: "✦ "; }
+    #ha-replay {
+      display: block; margin: 0 auto;
+      background: #2563EB; color: #fff;
+      border: none; border-radius: 8px;
+      padding: 9px 22px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background .15s;
+    }
+    #ha-replay:hover { background: #1D4ED8; }
+    .ha-dec-steps { font-size: 10.5px; line-height: 1.9; text-align: left; }
+    .ha-dec-steps span { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ══════ NAV ══════ -->
+<nav id="topnav">
+  <span class="brand">🤖 Transformer 세미나</span>
+  <a href="#nav-flow"      id="l-flow">전체 흐름</a>
+  <a href="#nav-tokenizer" id="l-tok">Tokenizer/Embedding</a>
+  <a href="#nav-encoder"   id="l-enc">Encoder</a>
+  <a href="#nav-attention" id="l-attn">Attention</a>
+  <a href="#nav-ffn"       id="l-ffn">FFN</a>
+  <a href="#nav-decoder"   id="l-dec">Decoder</a>
+  <a href="#nav-mask"      id="l-mask">Mask</a>
+  <a href="#nav-output"    id="l-out">Output</a>
+  <a href="#nav-train"     id="l-train">학습 vs 추론</a>
+</nav>
+
+<!-- ══════ HERO ══════ -->
+<header id="hero">
+  <h1>Transformer는 문장을 어떻게 번역하는가?</h1>
+  <p class="sub">LLM을 처음 보는 팀원을 위한 Encoder-Decoder 구조 설명</p>
+  <span class="eg">
+    예제: <strong>"The cat is on the mat."</strong> → <strong>"Le chat est sur le tapis."</strong>
+  </span>
+</header>
+
+<!-- ══════ HERO ANIMATION ══════ -->
+<section id="hero-anim">
+  <div class="ha-inner">
+    <h2 class="ha-title">LLM은 입력을 받아 어떻게 출력을 만들까?</h2>
+    <p class="ha-sub">입력 문장이 token으로 바뀌고, 문맥을 반영한 뒤, Decoder가 다음 token을 하나씩 예측해 출력 문장을 만듭니다.</p>
+
+    <div class="ha-steps" id="ha-steps">
+      <div class="ha-card c0 active" id="ha-0">
+        <div class="ha-num">📥</div>
+        <div class="ha-ttl">① 입력 문장</div>
+        <div class="ha-cnt">"The cat is on<br>the mat."</div>
+        <div class="ha-tip">사용자가 입력한 문장입니다. Transformer는 이 문장을 번역하기 위해 여러 단계를 거칩니다.</div>
+      </div>
+      <div class="ha-card c1" id="ha-1">
+        <div class="ha-num">✂️</div>
+        <div class="ha-ttl">② Tokenizer</div>
+        <div class="ha-cnt">["The","cat","is"<br>,"on","the","mat"]<br>→ [1,5,2,6,1,10]</div>
+        <div class="ha-tip">문장을 token으로 나누고, 각 token을 vocabulary 정수 index로 바꿉니다.</div>
+      </div>
+      <div class="ha-card c2" id="ha-2">
+        <div class="ha-num">🔢</div>
+        <div class="ha-ttl">③ Embedding<br>+ Position</div>
+        <div class="ha-cnt">token id → vector<br>+ 위치 정보</div>
+        <div class="ha-tip">각 token id는 d_model 차원 vector로 바뀌고, Positional Encoding이 더해집니다.</div>
+      </div>
+      <div class="ha-card c3" id="ha-3">
+        <div class="ha-num">🧠</div>
+        <div class="ha-ttl">④ Encoder</div>
+        <div class="ha-cnt">Source memory<br>H_enc 생성</div>
+        <div class="ha-tip">Encoder는 입력 문장 전체를 읽고, 각 token에 문맥이 반영된 H_enc(source memory)를 만듭니다.</div>
+      </div>
+      <div class="ha-card c4" id="ha-4">
+        <div class="ha-num">🔄</div>
+        <div class="ha-ttl">⑤ Decoder</div>
+        <div class="ha-cnt">
+          <div class="ha-dec-steps">
+            <span>&lt;SOS&gt; → Le</span>
+            <span>&lt;SOS&gt;,Le → chat</span>
+            <span>&lt;SOS&gt;,Le,chat → est</span>
+            <span>...</span>
+          </div>
+        </div>
+        <div class="ha-tip">Decoder는 이전까지 생성한 token과 H_enc를 참고해 다음 token을 하나씩 예측합니다. 한 번에 전부 알지 않습니다.</div>
+      </div>
+      <div class="ha-card c5" id="ha-5">
+        <div class="ha-num">✅</div>
+        <div class="ha-ttl">⑥ 출력 완성</div>
+        <div class="ha-cnt" style="font-weight:700;color:#059669;">"Le chat est<br>sur le tapis."</div>
+        <div class="ha-tip">다음 token 예측을 반복해 최종 번역 문장이 완성됩니다. &lt;EOS&gt; token이 나오면 생성을 멈춥니다.</div>
+      </div>
+    </div>
+
+    <div class="ha-dots">
+      <div class="ha-dot on"  id="hd-0"></div>
+      <div class="ha-dot"     id="hd-1"></div>
+      <div class="ha-dot"     id="hd-2"></div>
+      <div class="ha-dot"     id="hd-3"></div>
+      <div class="ha-dot"     id="hd-4"></div>
+      <div class="ha-dot"     id="hd-5"></div>
+    </div>
+
+    <div class="ha-phrases">
+      <span>Transformer는 입력 문장을 한 번에 읽고, Decoder가 출력 문장을 한 token씩 생성합니다.</span>
+      <span>Encoder는 입력 문장의 문맥을 이해하고, Decoder는 그 정보를 참고해 다음 token을 예측합니다.</span>
+      <span>즉, 입력 → 이해 → 한 token씩 생성의 흐름으로 동작합니다.</span>
+    </div>
+
+    <button id="ha-replay" onclick="haRestart()">↺ 다시 보기</button>
+  </div>
+</section>
+
+<main class="page">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 0: 전체 흐름 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<span class="sec-anchor" id="nav-flow"></span>
+<section class="sec" id="sec0">
+  <div class="sec-hd">
+    <span class="sec-num e">0</span>
+    <h2>전체 흐름 한눈에 보기</h2>
+  </div>
+  <p>Transformer는 입력 문장을 한 번에 읽고, Decoder가 번역 문장을 한 token씩 만들어내는 구조입니다.</p>
+
+  <div class="flow-diagram">
+    <div class="flow-box fb-src">The cat is on the mat.</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-box fb-tok">Tokenizer</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-box fb-emb">Embedding</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-box fb-pe">Positional<br>Encoding</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-box fb-enc">Encoder<br>× 6</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-box fb-dec">Decoder<br>× 6</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-box fb-ls">Linear +<br>Softmax</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-box fb-tgt">Le chat est<br>sur le tapis.</div>
+  </div>
+
+  <div class="svg-box">
+    <img src="assets/01_overall_flow.svg" alt="Transformer 전체 Encoder-Decoder 구조" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body"><span class="te">Encoder</span>는 입력 문장 전체를 읽어 내부 표현(H_enc)을 만든다. <span class="td">Decoder</span>는 H_enc를 참고하며 번역 문장을 한 token씩 생성한다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 1: Transformer는 왜 나왔는가? -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec1">
+  <div class="sec-hd">
+    <span class="sec-num">1</span>
+    <h2>Transformer는 왜 나왔는가?</h2>
+  </div>
+  <p>Transformer(Vaswani et al., 2017)는 기존 RNN 기반 번역 모델의 한계를 극복하기 위해 제안되었습니다.</p>
+
+  <div class="cols2">
+    <div class="card">
+      <h4>기존 RNN의 한계</h4>
+      <ul style="list-style:disc; padding-left:16px;">
+        <li style="margin-bottom:6px; font-size:13px; color:var(--sub)">문장을 <strong>왼쪽부터 한 단어씩 순서대로</strong> 처리 → 병렬화 불가</li>
+        <li style="margin-bottom:6px; font-size:13px; color:var(--sub)">멀리 떨어진 단어 간 관계가 흐려짐 (장거리 의존성 문제)</li>
+        <li style="font-size:13px; color:var(--sub)">문장이 길수록 앞쪽 정보가 점점 희석됨</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Transformer의 해결책</h4>
+      <ul style="list-style:disc; padding-left:16px;">
+        <li style="margin-bottom:6px; font-size:13px; color:var(--sub)"><strong>Attention</strong>으로 모든 token 간 관계를 <strong>직접</strong> 계산</li>
+        <li style="margin-bottom:6px; font-size:13px; color:var(--sub)">전체 문장을 한 번에 처리 → <strong>GPU 병렬 연산</strong> 가능</li>
+        <li style="font-size:13px; color:var(--sub)">멀리 떨어진 단어도 Attention 한 번으로 직접 연결</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>비유:</strong> RNN은 문장을 왼쪽부터 한 단어씩 읽는 방식에 가깝습니다.
+    Transformer는 <strong>문장 전체를 펼쳐놓고 단어들 사이의 관계를 한 번에 계산</strong>하는 방식에 가깝습니다.
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Transformer = Attention 기반 Encoder-Decoder. 순차 처리 없이 전체 문장을 병렬 처리하고, 멀리 떨어진 token도 직접 참조할 수 있다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+<span class="sec-anchor" id="nav-tokenizer"></span>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 2: Tokenizer -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec2">
+  <div class="sec-hd">
+    <span class="sec-num">2</span>
+    <h2>Tokenizer — 문장을 숫자 ID로</h2>
+  </div>
+  <p>컴퓨터는 문자를 직접 처리할 수 없습니다. Tokenizer는 문장을 token으로 나누고, 각 token을 vocabulary에서 정수 ID로 변환합니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">예시 — 단어 단위 Tokenization</div>
+    <div class="fc-body" style="font-size:13px;">
+      "The cat is on the mat."<br>
+      → ["The", "cat", "is", "on", "the", "mat"]<br>
+      → [1,     5,     2,    6,    1,     10  ]
+    </div>
+    <div class="fc-note">token id는 모델이 의미를 이해하는 값이 아니라 vocabulary에서 특정 token을 가리키는 index입니다.</div>
+  </div>
+
+  <div class="note">
+    <strong>실제 모델</strong>: 단어 단위가 아니라 BPE(Byte-Pair Encoding) 같은 <strong>subword 단위</strong>로 분할하는 경우가 많습니다. 예를 들어 "playing" → ["play", "##ing"]. 이 세미나에서는 이해를 위해 <strong>단어 단위로 단순화</strong>합니다.
+  </div>
+
+  <div class="note">
+    <strong>Padding</strong>: 배치(batch) 단위로 여러 문장을 한 번에 처리할 때, 길이가 짧은 문장 뒤에 <code>&lt;PAD&gt;</code>(id=0)를 붙여 길이를 맞춥니다. Padding Mask가 이 위치를 Attention에서 무시하도록 처리합니다.
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Tokenizer = 텍스트 → 정수 ID 배열. token id는 단어의 의미가 아니라 vocabulary 인덱스일 뿐이다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 3: Embedding -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec3">
+  <div class="sec-hd">
+    <span class="sec-num">3</span>
+    <h2>Embedding — token ID를 벡터로</h2>
+  </div>
+  <p>token id는 단순한 숫자 label이므로 모델이 의미를 이해할 수 없습니다. Embedding Layer는 각 token id를 <strong>d_model 차원의 실수 벡터</strong>로 변환합니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">Embedding Lookup</div>
+    <div class="fc-body">
+      W_emb ∈ ℝ^{V × d_model}<br>
+      E_i  = W_emb[token_id_i]
+    </div>
+    <div class="fc-note">V = vocabulary 크기, d_model = 512 (논문 기본값). Embedding은 W_emb의 특정 row를 가져오는 lookup 연산입니다.</div>
+  </div>
+
+  <div class="callout">
+    <strong>예시:</strong> token id가 [1, 5, 2, 6, 1, 10]이라면 → W_emb의 1번, 5번, 2번, 6번, 1번, 10번 row를 순서대로 가져옵니다.
+    결과 shape: <span class="sh">(6, 512)</span>
+  </div>
+
+  <p>Embedding vector는 학습 과정에서 의미적으로 유사한 단어가 비슷한 방향을 갖도록 업데이트됩니다. "cat"과 "dog"의 벡터는 가깝고, "cat"과 "Paris"의 벡터는 다른 방향에 위치하게 됩니다.</p>
+
+  <div class="note">
+    <strong>핵심:</strong> 같은 token id는 항상 같은 embedding vector를 가집니다. "The"(위치 0)와 "the"(위치 4)가 같은 id라면 같은 embedding입니다. 위치 차이는 다음 단계인 Positional Encoding에서 처리합니다.
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Embedding = token id → 512차원 실수 벡터. 학습 가능한 lookup table. 같은 id = 같은 벡터.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 4: Positional Encoding -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec4">
+  <div class="sec-hd">
+    <span class="sec-num">4</span>
+    <h2>Positional Encoding — 순서 정보 주입</h2>
+  </div>
+  <p>Transformer는 RNN처럼 순서대로 처리하지 않고 전체 sequence를 한 번에 처리합니다. 따라서 모델 스스로는 token의 위치 순서를 알 수 없습니다. <strong>Positional Encoding(PE)</strong>을 embedding에 더해 위치 정보를 전달합니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">Encoder 입력</div>
+    <div class="fc-body">Input = Embedding + PositionalEncoding</div>
+    <div class="fc-note">Embedding과 PE는 모두 shape (seq_len, d_model). 같은 shape이라 원소별 덧셈(element-wise add) 가능.</div>
+  </div>
+
+  <div class="callout">
+    <strong>예시:</strong> "The"(위치 0)와 "the"(위치 4)는 같은 token id → 같은 Embedding 벡터 E₁.<br>
+    하지만 PE(pos=0) ≠ PE(pos=4) 이므로<br>
+    → E₁ + PE(pos=0) ≠ E₁ + PE(pos=4)<br>
+    → 모델에는 <strong>다른 입력</strong>으로 들어간다.
+  </div>
+
+  <details class="adv">
+    <summary>Advanced: sin/cos Positional Encoding 수식</summary>
+    <div class="adv-body">
+      <div class="fc">
+        <div class="fc-label">논문 수식 (arXiv:1706.03762)</div>
+        <div class="fc-body" style="font-size:12.5px;">
+          PE(pos, 2i)   = sin(pos / 10000^{2i/d_model})<br>
+          PE(pos, 2i+1) = cos(pos / 10000^{2i/d_model})
+        </div>
+        <div class="fc-note">
+          pos = token 위치 (0, 1, 2...), i = 차원 인덱스 (0 ~ d_model/2-1)<br>
+          학습 파라미터 없이 수식으로 결정. 긴 문장에도 외삽(extrapolation) 가능.
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <div class="svg-box">
+    <img src="assets/02_tokenizer_embedding_position.svg" alt="Tokenizer → Embedding + Positional Encoding 흐름" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">PE = 위치마다 다른 sin/cos 패턴. Embedding에 더해 순서 정보를 모델에 전달한다. 학습 파라미터 없음.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+<span class="sec-anchor" id="nav-encoder"></span>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 5: Encoder-Decoder 전체 구조 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec5">
+  <div class="sec-hd">
+    <span class="sec-num e">5</span>
+    <h2>Encoder-Decoder 전체 구조</h2>
+  </div>
+  <p>논문 기준으로 Encoder는 6개의 Encoder Layer로 구성되고, Decoder도 6개의 Decoder Layer로 구성됩니다.</p>
+
+  <div class="cols2">
+    <div class="card">
+      <h4 style="color:var(--enc)">Encoder</h4>
+      <p>입력: "The cat is on the mat." (source)</p>
+      <p style="margin-top:6px;">역할: source 문장을 읽고 내부 표현 <strong>H_enc</strong> 생성</p>
+      <p style="margin-top:6px; font-size:12px; color:var(--muted)">H_enc shape: (src_len, d_model) = (6, 512)</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--dec)">Decoder</h4>
+      <p>입력: H_enc + 이전 target token</p>
+      <p style="margin-top:6px;">역할: H_enc를 참고하며 번역 문장 생성</p>
+      <p style="margin-top:6px; font-size:12px; color:var(--muted)">출력: 다음 token의 확률 분포</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>핵심 연결:</strong> Encoder가 만든 H_enc는 Decoder의 Cross-Attention에서 Key, Value로 사용됩니다. Encoder와 Decoder를 연결하는 유일한 경로입니다.
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Encoder(×6) → H_enc → Decoder(×6). Encoder는 source를 압축하고, Decoder는 그것을 참고해 target을 생성한다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 6: Encoder Layer -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec6">
+  <div class="sec-hd">
+    <span class="sec-num e">6</span>
+    <h2>Encoder Layer 구조</h2>
+  </div>
+  <p>각 Encoder Layer는 두 개의 sub-layer로 구성됩니다. 각 sub-layer 뒤에는 <strong>Residual Connection + Layer Normalization</strong>이 적용됩니다.</p>
+
+  <ol class="steps">
+    <li><span><strong>Multi-Head Self-Attention</strong>: source 문장의 각 token이 다른 모든 token을 참고한다. "cat"은 "mat", "is", "The" 등과 관계를 계산한다.</span></li>
+    <li><span><strong>Add &amp; Norm</strong>: Residual Connection + Layer Normalization. <code>LayerNorm(x + SubLayer(x))</code></span></li>
+    <li><span><strong>Feed Forward Network</strong>: 각 token을 독립적으로 비선형 변환한다.</span></li>
+    <li><span><strong>Add &amp; Norm</strong>: 다시 Residual + LayerNorm.</span></li>
+  </ol>
+
+  <div class="svg-box">
+    <img src="assets/03_encoder_layer.svg" alt="Encoder Layer 내부 구조" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="callout">
+    <strong>이 구조가 6번 반복됩니다.</strong> 각 레이어는 독립적인 파라미터(W^Q, W^K, W^V, W₁, W₂)를 가집니다.
+    입력부터 출력까지 shape이 <span class="sh">(seq_len, d_model)</span>로 유지됩니다.
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Encoder Layer = Multi-Head Self-Attention → Add&Norm → FFN → Add&Norm. 이 구조가 ×6 쌓여 H_enc를 만든다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+<span class="sec-anchor" id="nav-attention"></span>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 7: Q, K, V 생성 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec7">
+  <div class="sec-hd">
+    <span class="sec-num a">7</span>
+    <h2>Q, K, V 생성 — 같은 X에서 세 가지 투영</h2>
+  </div>
+  <p>Self-Attention의 시작은 입력 X에서 <span class="tq">Query(Q)</span>, <span class="tk">Key(K)</span>, <span class="tv">Value(V)</span>를 만드는 것입니다. 각각 다른 학습 가능한 weight matrix를 곱해 선형 투영합니다.</p>
+
+  <div class="qkv-grid">
+    <div class="qkv-card q">
+      <div class="big">Q</div>
+      <div class="ql">Query — 무엇을 찾는가</div>
+      <div class="qd">현재 위치가 <em>어떤 정보를 원하는지</em> 나타내는 벡터</div>
+      <div class="qa">비유: 검색어 (검색하는 쪽)</div>
+    </div>
+    <div class="qkv-card k">
+      <div class="big">K</div>
+      <div class="ql">Key — 어떤 특징을 갖는가</div>
+      <div class="qd">각 token이 <em>검색될 때 드러내는</em> 특징 벡터</div>
+      <div class="qa">비유: 문서 태그 (검색 대상)</div>
+    </div>
+    <div class="qkv-card v">
+      <div class="big">V</div>
+      <div class="ql">Value — 실제 전달할 정보</div>
+      <div class="qd">Q-K 매칭 후 <em>실제로 가져오는</em> 내용 벡터</div>
+      <div class="qa">비유: 실제 문서 내용</div>
+    </div>
+  </div>
+
+  <div class="fc">
+    <div class="fc-label">Q, K, V 수식</div>
+    <div class="fc-body">
+      Q = X W^Q,  shape: (seq_len, d_k)<br>
+      K = X W^K,  shape: (seq_len, d_k)<br>
+      V = X W^V,  shape: (seq_len, d_v)
+    </div>
+    <div class="fc-note">X ∈ ℝ^{seq_len × d_model},  W^Q, W^K ∈ ℝ^{d_model × d_k},  W^V ∈ ℝ^{d_model × d_v}<br>
+    논문 기본값: d_model=512, d_k=d_v=64 (head당)</div>
+  </div>
+
+  <div class="svg-box">
+    <img src="assets/04_qkv_projection.svg" alt="Q, K, V 생성 — W^Q W^K W^V 투영" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="warn">
+    <strong>중요:</strong> Q/K/V의 역할("검색어", "태그", "내용")은 처음부터 설계자가 정한 것이 아닙니다.
+    학습 초기의 W^Q, W^K, W^V는 <strong>랜덤 초기화</strong>이므로 Q, K, V에 아무 의미가 없습니다.
+    <strong>loss를 줄이는 학습 과정</strong>에서 Attention 수식 안의 각 위치에 맞는 역할로 수렴하게 됩니다.
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Q, K, V = 같은 X를 다른 W로 선형 변환. 역할은 학습으로 결정된다. Q는 무엇을 찾는가, K는 어떤 특징인가, V는 실제로 전달할 내용.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 8: Attention Score Matrix -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec8">
+  <div class="sec-hd">
+    <span class="sec-num a">8</span>
+    <h2>Attention Score Matrix — 토큰 간 관련도</h2>
+  </div>
+  <p><span class="tq">Q</span>와 <span class="tk">K</span>의 내적(dot product)으로 Attention Score Matrix를 계산합니다. 이 행렬은 "i번째 token이 j번째 token을 얼마나 참고해야 하는가"를 나타냅니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">Attention Score Matrix</div>
+    <div class="fc-body">
+      Score = Q · Kᵀ         shape: (seq_len, seq_len)<br>
+      score_ij = q_i · k_j
+    </div>
+    <div class="fc-note">
+      Q shape: (seq_len, d_k),  Kᵀ shape: (d_k, seq_len) → Score: (seq_len, seq_len)<br>
+      row i = "i번째 Query가 모든 Key에 대해 계산한 점수"
+    </div>
+  </div>
+
+  <div class="svg-box">
+    <img src="assets/05_attention_score_matrix.svg" alt="Attention Score Matrix (6×6)" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="callout">
+    <strong>비유:</strong> Query는 검색어, Key는 문서의 태그, Value는 실제 문서 내용에 가깝습니다.
+    검색어와 태그가 잘 맞을수록 그 문서 내용을 더 많이 가져옵니다.<br>
+    score_ij가 크다 = "i번째 token이 j번째 token에 주목한다"
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Score = QKᵀ, shape (seq_len, seq_len). score_ij = q_i · k_j = i번째가 j번째를 얼마나 참고할지의 원시 점수.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 9: Scaled Dot-Product Attention -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec9">
+  <div class="sec-hd">
+    <span class="sec-num a">9</span>
+    <h2>Scaled Dot-Product Attention</h2>
+  </div>
+
+  <div class="fc">
+    <div class="fc-label">공식 (논문 Eq. 1)</div>
+    <div class="fc-body" style="font-size:17px;">
+      Attention(Q, K, V) = softmax( QKᵀ / √d_k ) · V
+    </div>
+  </div>
+
+  <ol class="steps">
+    <li><span><strong>Q와 K 내적</strong>: Score = QKᵀ → 각 token 쌍의 관련도 점수</span></li>
+    <li><span><strong>√d_k로 나누기</strong>: Score 값의 분산을 안정화</span></li>
+    <li><span><strong>Softmax</strong>: 각 row를 확률 분포로 변환 (합 = 1.0)</span></li>
+    <li><span><strong>V와 곱하기</strong>: 확률 비율에 따라 Value 정보를 가중합</span></li>
+  </ol>
+
+  <div class="svg-box">
+    <img src="assets/06_scaled_dot_product_attention.svg" alt="Scaled Dot-Product Attention 계산 흐름" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="callout">
+    <strong>√d_k로 나누는 이유:</strong> Q와 K의 내적은 d_k개 항의 합입니다.
+    d_k가 크면 내적값의 분산이 d_k에 비례해 커집니다.
+    값이 너무 크면 Softmax가 한 위치에만 확률을 몰아주고 gradient가 사라집니다.
+    <strong>√d_k로 나누면 분산이 안정화</strong>됩니다.
+    <br><br>
+    <strong>주의:</strong> sequence 길이가 길어서 나누는 것이 아닙니다. 원인은 <em>d_k 차원 크기</em>입니다.
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Attention = softmax(QKᵀ/√d_k)·V. 점수 계산 → 스케일링 → 확률화 → Value 가중합. 이 4단계가 전부다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 10: Multi-Head Attention -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec10">
+  <div class="sec-hd">
+    <span class="sec-num a">10</span>
+    <h2>Multi-Head Attention — 여러 관점으로 보기</h2>
+  </div>
+  <p>하나의 Attention만으로는 한 가지 관점의 관계만 포착합니다. Multi-Head Attention은 d_model 차원을 h개의 head로 나누어 <strong>각 head가 서로 다른 관계 패턴</strong>을 학습하게 합니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">논문 기본값</div>
+    <div class="fc-body">
+      d_model = 512,  h = 8 heads<br>
+      d_k = d_v = d_model / h = 512 / 8 = 64<br>
+      <br>
+      head_i = Attention(Q_i, K_i, V_i)<br>
+      MultiHead(Q,K,V) = Concat(head_1,...,head_8) W^O
+    </div>
+    <div class="fc-note">W^O ∈ ℝ^{512×512}. Concat 후 W^O로 다시 d_model=512로 변환.</div>
+  </div>
+
+  <div class="svg-box">
+    <img src="assets/07_multi_head_attention.svg" alt="Multi-Head Attention 구조 (h=8)" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="warn">
+    <strong>자주 하는 오해:</strong> Multi-Head Attention이 sequence를 token 단위로 나누는 것이 아닙니다.
+    <strong>각 token representation의 d_model 차원을 head 수로 나누어</strong> 여러 Attention을 병렬 수행하는 구조입니다.
+    모든 head는 전체 sequence를 처리합니다.
+  </div>
+
+  <div class="callout">
+    <strong>비유:</strong> 같은 문장을 여러 명의 관찰자가 서로 다른 관점으로 보는 것과 비슷합니다.
+    어떤 head는 문법적 관계를, 어떤 head는 의미적 관계를, 어떤 head는 먼 token과의 관계를 포착할 수 있습니다.
+    (단, 역할이 반드시 이렇게 나뉜다는 것이 아니라, <em>그런 식으로 역할이 분화될 수 있습니다.</em>)
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Multi-Head = d_model 차원을 h등분 → 각 head가 독립 Attention → Concat → W^O. 다양한 관계 패턴을 동시에 학습한다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 11: Residual Connection & Layer Normalization -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec11">
+  <div class="sec-hd">
+    <span class="sec-num e">11</span>
+    <h2>Residual Connection과 Layer Normalization</h2>
+  </div>
+  <p>각 sub-layer(MHA, FFN) 뒤에는 반드시 <strong>Residual Connection + Layer Normalization</strong>이 적용됩니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">Add &amp; Norm 공식</div>
+    <div class="fc-body">Output = LayerNorm(x + SubLayer(x))</div>
+    <div class="fc-note">x = sub-layer 입력, SubLayer(x) = MHA 또는 FFN 출력. x와 SubLayer(x)의 shape이 반드시 같아야 합니다.</div>
+  </div>
+
+  <div class="cols2">
+    <div class="card">
+      <h4>Residual Connection</h4>
+      <p>원래 입력 x를 sub-layer 출력에 더해주는 '지름길'입니다.</p>
+      <ul style="list-style:disc; padding-left:16px; margin-top:8px;">
+        <li style="font-size:13px; color:var(--sub); margin-bottom:4px;">깊은 네트워크에서 gradient 소실 방지</li>
+        <li style="font-size:13px; color:var(--sub);">x와 SubLayer(x) shape이 같아야 더할 수 있음 → Transformer 전체에서 d_model=512가 유지되는 이유</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Layer Normalization</h4>
+      <p>각 token의 d_model 차원에 걸쳐 정규화합니다. 학습 안정화 효과.</p>
+      <ul style="list-style:disc; padding-left:16px; margin-top:8px;">
+        <li style="font-size:13px; color:var(--sub); margin-bottom:4px;">평균=0, 분산=1로 정규화</li>
+        <li style="font-size:13px; color:var(--sub);">batch 크기와 무관하게 동작 (Batch Norm과 다른 점)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Add = 원본 x를 더해 gradient 흐름 보장. Norm = 학습 안정화. x + SubLayer(x)의 shape이 같아야 하므로 d_model이 일정하게 유지된다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<span class="sec-anchor" id="nav-ffn"></span>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 12: Feed Forward Network -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec12">
+  <div class="sec-hd">
+    <span class="sec-num f">12</span>
+    <h2>Feed Forward Network — 토큰별 독립 변환</h2>
+  </div>
+  <p>Attention이 "어떤 token들을 참고할지" 결정했다면, FFN은 "각 token의 표현을 어떻게 변환할지" 결정합니다. <strong>token 간 정보 교환 없이</strong> 각 위치를 독립적으로 처리합니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">FFN 공식</div>
+    <div class="fc-body">FFN(x) = max(0,  x W₁ + b₁) W₂ + b₂</div>
+    <div class="fc-note">
+      W₁ ∈ ℝ^{512×2048},  W₂ ∈ ℝ^{2048×512}<br>
+      512 → 2048 (ReLU) → 512  (d_ff = 2048 = 4×d_model)
+    </div>
+  </div>
+
+  <div class="svg-box">
+    <img src="assets/08_ffn_position_wise.svg" alt="Position-wise FFN 구조" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="callout">
+    <strong>Attention vs FFN 역할 비교</strong><br>
+    <strong>Attention:</strong> token 간 정보를 섞는다 — "어디서 정보를 가져오는가?"<br>
+    <strong>FFN:</strong> 섞인 정보를 각 token 위치에서 독립적으로 가공한다 — "가져온 정보를 어떻게 변환하는가?"
+  </div>
+
+  <div class="note">
+    <strong>마지막에 d_model로 돌아오는 이유:</strong> Residual Connection 때문입니다.
+    <code>LayerNorm(x + FFN(x))</code>에서 x와 FFN(x)를 더하려면 shape이 같아야 합니다.
+    내부에서는 2048로 확장하더라도 최종 출력은 반드시 512로 축소합니다.
+  </div>
+
+  <div class="summary f">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">FFN = 각 token을 독립적으로 512→2048→512 MLP 변환. token 간 정보를 새로 섞지 않는다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+<span class="sec-anchor" id="nav-decoder"></span>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 13: Decoder 구조 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec13">
+  <div class="sec-hd">
+    <span class="sec-num d">13</span>
+    <h2>Decoder 구조 — 번역 문장 생성</h2>
+  </div>
+  <p>Decoder Layer는 세 개의 sub-layer로 구성됩니다. Encoder Layer보다 Cross-Attention이 하나 더 있습니다.</p>
+
+  <ol class="steps d">
+    <li><span><strong>Masked Multi-Head Self-Attention</strong>: target 문장 내부 token들이 서로 참고하되, 미래 token은 볼 수 없도록 Mask를 적용한다.</span></li>
+    <li><span><strong>Add &amp; Norm</strong></span></li>
+    <li><span><strong>Cross-Attention</strong>: Decoder의 현재 상태(Q)가 Encoder 출력 H_enc(K, V)를 참고한다. source 문장의 어디를 볼지 결정하는 단계.</span></li>
+    <li><span><strong>Add &amp; Norm</strong></span></li>
+    <li><span><strong>Feed Forward Network</strong>: 각 token을 독립 변환.</span></li>
+    <li><span><strong>Add &amp; Norm</strong></span></li>
+  </ol>
+
+  <div class="summary d">
+    <span class="tag dec">한 줄 요약</span>
+    <span class="body">Decoder = Masked Self-Attn + Cross-Attn + FFN. Encoder와 달리 Cross-Attention이 추가되어 source 문장을 참고한다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 14: 학습 시 Decoder 입력: Shifted Target -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec14">
+  <div class="sec-hd">
+    <span class="sec-num d">14</span>
+    <h2>학습 시 Decoder 입력: Shifted Target</h2>
+  </div>
+  <p>학습 시에는 정답 target 문장을 알고 있습니다. 정답 문장을 오른쪽으로 한 칸 shift하고 앞에 <code>&lt;SOS&gt;</code>를 붙여 Decoder 입력으로 사용합니다. 이를 <strong>Teacher Forcing</strong>이라 합니다.</p>
+
+  <div class="svg-box">
+    <img src="assets/09_decoder_shifted_target.svg" alt="Decoder Shifted Target 입력 구조" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="fc">
+    <div class="fc-label">Teacher Forcing 예시</div>
+    <div class="fc-body" style="font-size:13px;">
+      Target:    [Le,    chat, est, sur, le, tapis]<br>
+      입력:      [&lt;SOS&gt;, Le,   chat, est, sur, le  ]<br>
+      예측 목표: [Le,    chat, est, sur, le, tapis]
+    </div>
+    <div class="fc-note">Decoder는 현재까지의 target token을 보고 다음 token을 맞히도록 학습됩니다.</div>
+  </div>
+
+  <div class="callout">
+    <strong>핵심:</strong> 학습 시에는 전체 shifted target sequence가 한 번에 입력되어 <strong>모든 위치를 병렬 계산</strong>합니다.
+    그러나 Look-Ahead Mask 때문에 각 위치는 미래 token을 볼 수 없습니다. → 학습 속도가 RNN보다 빠른 이유.
+  </div>
+
+  <div class="summary d">
+    <span class="tag dec">한 줄 요약</span>
+    <span class="body">학습 시 Decoder 입력 = 정답 문장을 &lt;SOS&gt; 추가 후 right-shift. 전체를 병렬 계산하되, Mask로 미래는 차단한다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+<span class="sec-anchor" id="nav-mask"></span>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 15: Look-Ahead Mask -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec15">
+  <div class="sec-hd">
+    <span class="sec-num d">15</span>
+    <h2>Look-Ahead Mask — 미래 차단</h2>
+  </div>
+  <p>Decoder는 번역 문장을 생성할 때 <strong>아직 생성하지 않은 미래 token을 미리 볼 수 없습니다.</strong> Look-Ahead Mask는 이를 강제합니다.</p>
+
+  <div class="warn">
+    <strong>중요:</strong> Mask는 Q, K, V 자체에 적용하는 것이 아닙니다.
+    <strong>QKᵀ로 만든 Attention Score Matrix에 더합니다.</strong>
+  </div>
+
+  <ol class="steps d">
+    <li><span>Q = X_dec W^Q</span></li>
+    <li><span>K = X_dec W^K</span></li>
+    <li><span>V = X_dec W^V</span></li>
+    <li><span>Score = Q · Kᵀ</span></li>
+    <li><span><strong>MaskedScore = Score + Mask</strong> ← 이 단계에서 Mask 적용</span></li>
+    <li><span>AttentionWeight = softmax(MaskedScore / √d_k)</span></li>
+    <li><span>Output = AttentionWeight × V</span></li>
+  </ol>
+
+  <div class="svg-box">
+    <img src="assets/10_look_ahead_mask.svg" alt="Look-Ahead Mask 행렬" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <!-- Interactive Mask Table -->
+  <p style="font-weight:600; margin-bottom:8px;">대화형 Mask 행렬 — 셀에 마우스를 올려보세요:</p>
+  <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">Decoder 입력: [&lt;SOS&gt;, Le, chat, est]</p>
+  <div class="mask-wrap">
+    <table class="mask-tbl">
+      <thead>
+        <tr>
+          <th class="corner"></th>
+          <th class="ch">K: &lt;SOS&gt;</th>
+          <th class="ch">K: Le</th>
+          <th class="ch">K: chat</th>
+          <th class="ch">K: est</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th class="rh">Q: &lt;SOS&gt;</th>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">&lt;SOS&gt; 위치는 자기 자신만 참고 가능.<br>Le, chat, est → 미래 token → −∞로 차단</div>
+          </td>
+          <td class="no mc">−∞<br><span style="font-size:9px">차단</span>
+            <div class="tip">&lt;SOS&gt; 생성 시점에 Le는 아직 없다.<br>Score에 −∞ 더함 → Softmax 후 weight ≈ 0</div>
+          </td>
+          <td class="no mc">−∞<br><span style="font-size:9px">차단</span>
+            <div class="tip">&lt;SOS&gt; 생성 시점에 chat은 아직 없다.<br>미래 token → 차단</div>
+          </td>
+          <td class="no mc">−∞<br><span style="font-size:9px">차단</span>
+            <div class="tip">&lt;SOS&gt; 생성 시점에 est는 아직 없다.<br>미래 token → 차단</div>
+          </td>
+        </tr>
+        <tr>
+          <th class="rh">Q: Le</th>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">Le 생성 시 &lt;SOS&gt;는 이미 있다.<br>과거/현재 token → 허용 (j ≤ i)</div>
+          </td>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">Le는 자기 자신을 참고할 수 있다.<br>현재 위치 → 허용 (j = i)</div>
+          </td>
+          <td class="no mc">−∞<br><span style="font-size:9px">차단</span>
+            <div class="tip">Le 생성 시 chat은 아직 없다.<br>미래 token → 차단 (j &gt; i)</div>
+          </td>
+          <td class="no mc">−∞<br><span style="font-size:9px">차단</span>
+            <div class="tip">Le 생성 시 est는 아직 없다.<br>미래 token → 차단</div>
+          </td>
+        </tr>
+        <tr>
+          <th class="rh">Q: chat</th>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">chat 생성 시 &lt;SOS&gt; 참고 가능.</div>
+          </td>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">chat 생성 시 Le 참고 가능.</div>
+          </td>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">chat은 자기 자신을 참고할 수 있다.</div>
+          </td>
+          <td class="no mc">−∞<br><span style="font-size:9px">차단</span>
+            <div class="tip">chat 생성 시 est는 아직 없다.<br>미래 token → 차단</div>
+          </td>
+        </tr>
+        <tr>
+          <th class="rh">Q: est</th>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">est 생성 시 &lt;SOS&gt; 참고 가능.</div>
+          </td>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">est 생성 시 Le 참고 가능.</div>
+          </td>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">est 생성 시 chat 참고 가능.</div>
+          </td>
+          <td class="ok mc">0<br><span style="font-size:9px">허용</span>
+            <div class="tip">est는 자기 자신을 참고할 수 있다.<br>마지막 위치라 전체 참고 가능.</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>작동 원리:</strong> Mask의 −∞ 위치는 Score에 더해지므로 MaskedScore = −∞.
+    Softmax에서 exp(−∞) = 0 → Attention Weight = 0 → 해당 token의 Value가 출력에 포함되지 않습니다.
+    마치 미래 token이 존재하지 않는 것처럼 동작합니다.
+  </div>
+
+  <div class="summary d">
+    <span class="tag dec">한 줄 요약</span>
+    <span class="body">Look-Ahead Mask = 하삼각 행렬(0 or −∞). Score Matrix에 더해 미래 token의 Attention Weight를 0으로 만든다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 16: Cross-Attention -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec16">
+  <div class="sec-hd">
+    <span class="sec-num d">16</span>
+    <h2>Cross-Attention — Encoder와 Decoder의 연결</h2>
+  </div>
+  <p>Decoder의 두 번째 sub-layer는 Cross-Attention입니다. <span class="tq">Q</span>는 Decoder에서, <span class="tk">K</span>와 <span class="tv">V</span>는 Encoder 출력 H_enc에서 옵니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">Cross-Attention 수식</div>
+    <div class="fc-body">
+      Q_cross = H_dec  W^Q      ← Decoder hidden state<br>
+      K_cross = H_enc  W^K      ← Encoder output<br>
+      V_cross = H_enc  W^V      ← Encoder output
+    </div>
+    <div class="fc-note">
+      Score shape: (tgt_len, src_len) = (4, 6). "번역 4개 token이 원본 6개 token을 얼마나 참고하는가"
+    </div>
+  </div>
+
+  <div class="svg-box">
+    <img src="assets/11_cross_attention.svg" alt="Cross-Attention 흐름" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <div class="callout">
+    <strong>예시:</strong> "chat"을 예측해야 할 때,
+    source 문장의 "cat" 정보가 중요합니다.
+    학습이 잘 된 모델에서는 Decoder Query(chat 위치)가 Encoder의 "cat" Key와 높은 score를 가지도록 학습됩니다.<br><br>
+    → "cat" 위치의 Attention Weight가 커짐 → "cat" Value 정보가 Decoder에 더 많이 반영됨 → "chat" 예측에 도움
+  </div>
+
+  <div class="summary d">
+    <span class="tag dec">한 줄 요약</span>
+    <span class="body">Cross-Attention = Decoder(Q)가 Encoder(K, V)를 참고. "지금 생성할 번역 단어를 위해 source 문장 어디를 참고할지" 결정한다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 17: Padding Mask -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec17">
+  <div class="sec-hd">
+    <span class="sec-num">17</span>
+    <h2>Padding Mask — &lt;PAD&gt; 위치 무시</h2>
+  </div>
+  <p>배치(batch) 단위로 여러 문장을 처리할 때 길이를 맞추기 위해 짧은 문장 뒤에 <code>&lt;PAD&gt;</code>를 붙입니다. Padding Mask는 <code>&lt;PAD&gt;</code> 위치에 Attention이 분배되지 않도록 합니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">Padding Mask 예시</div>
+    <div class="fc-body" style="font-size:13px;">
+      배치 내 문장 1: [The, cat, is, on, the, mat, &lt;PAD&gt;, &lt;PAD&gt;]<br>
+      배치 내 문장 2: [A, dog, runs, fast, here, in, the, park]<br>
+      <br>
+      Mask: &lt;PAD&gt; 위치의 Score를 −∞로 설정
+    </div>
+    <div class="fc-note">&lt;PAD&gt; 토큰은 실제 의미가 없으므로 Attention에서 무시합니다.</div>
+  </div>
+
+  <div class="cols2">
+    <div class="card">
+      <h4>Padding Mask 적용 위치</h4>
+      <ul style="list-style:disc; padding-left:16px;">
+        <li style="font-size:13px; color:var(--sub); margin-bottom:4px;">Encoder Self-Attention</li>
+        <li style="font-size:13px; color:var(--sub); margin-bottom:4px;">Decoder Masked Self-Attention</li>
+        <li style="font-size:13px; color:var(--sub);">Decoder Cross-Attention</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Look-Ahead Mask와의 차이</h4>
+      <ul style="list-style:disc; padding-left:16px;">
+        <li style="font-size:13px; color:var(--sub); margin-bottom:4px;"><strong>Padding Mask</strong>: 실제 token이 아닌 &lt;PAD&gt;를 막는다</li>
+        <li style="font-size:13px; color:var(--sub);">Decoder에서는 두 Mask를 결합해서 사용한다</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Padding Mask = &lt;PAD&gt; 위치 Score를 −∞로. Look-Ahead Mask = 미래 위치 차단. 둘 다 Score Matrix에 더해 작동한다.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+<span class="sec-anchor" id="nav-output"></span>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 18: Linear + Softmax -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec18">
+  <div class="sec-hd">
+    <span class="sec-num o">18</span>
+    <h2>Linear + Softmax — 다음 token 확률 계산</h2>
+  </div>
+  <p>Decoder의 최종 출력은 <strong>Linear Layer</strong>를 거쳐 vocabulary 크기의 logit vector로 변환되고, <strong>Softmax</strong>로 각 token의 확률을 계산합니다.</p>
+
+  <div class="fc">
+    <div class="fc-label">Linear + Softmax</div>
+    <div class="fc-body">
+      Logits = H_dec · W_vocab + b    shape: (tgt_len, V)<br>
+      P(y_t | y_&lt;t, x) = softmax(Logits)
+    </div>
+    <div class="fc-note">W_vocab ∈ ℝ^{d_model × V}. V = vocabulary 크기. 가장 높은 확률의 token을 선택하거나 beam search 등을 사용.</div>
+  </div>
+
+  <p>예를 들어 "chat"을 예측해야 하는 위치에서:</p>
+
+  <table class="prob-tbl">
+    <thead>
+      <tr><th>token</th><th>확률 (예시)</th><th>bar</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Le</td><td>0.01</td>
+        <td><span class="prob-bar" style="width:10px;"></span></td>
+      </tr>
+      <tr>
+        <td><strong>chat</strong></td><td><strong>0.82</strong></td>
+        <td><span class="prob-bar hi" style="width:82px;"></span></td>
+      </tr>
+      <tr>
+        <td>est</td><td>0.05</td>
+        <td><span class="prob-bar" style="width:5px;"></span></td>
+      </tr>
+      <tr>
+        <td>tapis</td><td>0.02</td>
+        <td><span class="prob-bar" style="width:2px;"></span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cols2">
+    <div class="card">
+      <h4>학습 시</h4>
+      <p>정답 token의 확률을 높이는 방향으로 loss를 계산합니다.</p>
+      <div class="fc" style="margin-top:10px; padding:10px 14px;">
+        <div class="fc-body" style="font-size:13px;">Loss = −log P(y_t)</div>
+      </div>
+    </div>
+    <div class="card">
+      <h4>추론 시</h4>
+      <p>확률이 가장 높은 token을 선택(greedy)하거나, beam search로 더 좋은 번역을 탐색합니다.</p>
+    </div>
+  </div>
+
+  <div class="summary o">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Linear = d_model → vocabulary 크기 logit. Softmax = 각 token 확률. 가장 높은 확률 token을 선택하거나 beam search 사용.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+<span class="sec-anchor" id="nav-train"></span>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 19: 학습 시점 vs 추론 시점 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec19">
+  <div class="sec-hd">
+    <span class="sec-num">19</span>
+    <h2>학습 시점 vs 추론 시점</h2>
+  </div>
+
+  <div class="svg-box">
+    <img src="assets/12_training_vs_inference.svg" alt="학습 vs 추론 비교" loading="lazy">
+    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  </div>
+
+  <table class="cmp-tbl">
+    <thead>
+      <tr>
+        <th>항목</th>
+        <th>학습 (Training)</th>
+        <th>추론 (Inference)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>정답 정보</strong></td>
+        <td>알고 있음 (병렬 입력)</td>
+        <td>모름 (순차 생성)</td>
+      </tr>
+      <tr>
+        <td><strong>Decoder 입력</strong></td>
+        <td>Shifted target 전체 한 번에</td>
+        <td>&lt;SOS&gt;부터 시작, 생성된 token 누적</td>
+      </tr>
+      <tr>
+        <td><strong>Look-Ahead Mask</strong></td>
+        <td>적용 (미래 차단)</td>
+        <td>불필요 (미래 없음, 순차 처리)</td>
+      </tr>
+      <tr>
+        <td><strong>연산 방식</strong></td>
+        <td>병렬 (전체 위치 동시)</td>
+        <td>순차 (한 token씩)</td>
+      </tr>
+      <tr>
+        <td><strong>목표</strong></td>
+        <td>Loss 최소화 (정답 확률 최대화)</td>
+        <td>확률 높은 token 선택</td>
+      </tr>
+      <tr>
+        <td><strong>속도</strong></td>
+        <td>빠름 (GPU 병렬화)</td>
+        <td>상대적으로 느림 (순차)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>추론 시 흐름 예시:</strong><br>
+    Step 1: [&lt;SOS&gt;] → Decoder → "Le" 예측<br>
+    Step 2: [&lt;SOS&gt;, Le] → Decoder → "chat" 예측<br>
+    Step 3: [&lt;SOS&gt;, Le, chat] → Decoder → "est" 예측<br>
+    ... &lt;EOS&gt; 예측까지 반복
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">학습 = 정답 전체 병렬 입력 + Mask로 미래 차단. 추론 = &lt;SOS&gt;부터 token 한 개씩 자기회귀 생성.</span>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 20: 전체 요약 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec20">
+  <div class="sec-hd">
+    <span class="sec-num o">20</span>
+    <h2>전체 요약</h2>
+  </div>
+
+  <ol class="steps">
+    <li><span><strong>Tokenizer</strong>는 문장을 token id로 바꾼다.</span></li>
+    <li><span><strong>Embedding</strong>은 token id를 d_model 차원 벡터로 바꾼다.</span></li>
+    <li><span><strong>Positional Encoding</strong>은 위치 정보를 더한다.</span></li>
+    <li><span><strong>Encoder</strong>는 source 문장을 문맥이 반영된 표현(H_enc)으로 바꾼다.</span></li>
+    <li><span><strong>Attention</strong>은 token들이 서로를 얼마나 참고할지 계산한다.</span></li>
+    <li><span><strong>FFN</strong>은 각 token 표현을 독립적으로 가공한다.</span></li>
+    <li><span><strong>Decoder</strong>는 이전 target token과 H_enc를 참고해 다음 token을 예측한다.</span></li>
+    <li><span><strong>Mask</strong>는 미래 token이나 &lt;PAD&gt; token을 참고하지 못하게 막는다.</span></li>
+    <li><span><strong>Linear + Softmax</strong>는 다음 token 확률 분포를 만든다.</span></li>
+  </ol>
+
+  <div class="callout" style="font-size:14.5px; border-left-color:#2563EB; background:#EFF6FF;">
+    <strong>Transformer를 한 문장으로 정리하면:</strong><br>
+    Transformer는 token 간 관계를 Attention으로 계산하고, FFN으로 각 token 표현을 가공하면서,
+    입력 문장을 출력 문장으로 변환하는 Encoder-Decoder 구조입니다.
+  </div>
+
+  <div class="note" style="margin-top:18px;">
+    <strong>참고:</strong> Vaswani et al., "Attention Is All You Need", NeurIPS 2017 (arXiv:1706.03762)<br>
+    이 세미나 자료의 모든 도식과 수식은 위 논문을 기반으로 재작성되었습니다.
+  </div>
+</section>
+
+</main>
+
+<!-- ══════ FOOTER ══════ -->
+<footer>
+  <strong>Transformer Seminar</strong> — LLM을 처음 보는 팀원을 위한 Encoder-Decoder 구조 설명<br>
+  Vaswani et al., "Attention Is All You Need", NeurIPS 2017 (arXiv:1706.03762)<br>
+  <span style="margin-top:4px; display:block; font-size:11px;">이 자료의 모든 도식은 논문 기반으로 재도식화한 것입니다.</span>
+</footer>
+
+<script>
+/* Scrollspy */
+const links = {
+  'l-flow':  'sec0',
+  'l-tok':   'sec2',
+  'l-enc':   'sec5',
+  'l-attn':  'sec7',
+  'l-ffn':   'sec12',
+  'l-dec':   'sec13',
+  'l-mask':  'sec15',
+  'l-out':   'sec18',
+  'l-train': 'sec19',
+};
+
+function updateNav() {
+  const y = window.scrollY + 80;
+  let cur = 'l-flow';
+  Object.entries(links).forEach(([lid, sid]) => {
+    const el = document.getElementById(sid);
+    if (el && el.getBoundingClientRect().top + window.scrollY - 80 <= y) {
+      cur = lid;
+    }
+  });
+  document.querySelectorAll('#topnav a').forEach(a => a.classList.remove('on'));
+  const el = document.getElementById(cur);
+  if (el) el.classList.add('on');
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+updateNav();
+
+/* ═════════════════════════════════
+   Hero Animation
+═════════════════════════════════ */
+const HA_TOTAL = 6;
+const HA_DELAY = [1800, 1700, 1700, 1900, 2200, 2800]; // ms per step
+let haStep = 0, haTimer = null;
+
+function haActivate(step) {
+  for (let i = 0; i < HA_TOTAL; i++) {
+    const card = document.getElementById('ha-' + i);
+    const dot  = document.getElementById('hd-' + i);
+    if (!card) continue;
+    card.classList.remove('active', 'done');
+    dot.classList.remove('on', 'done');
+    if (i < step) {
+      card.classList.add('done');
+      dot.classList.add('done');
+    } else if (i === step) {
+      card.classList.add('active');
+      dot.classList.add('on');
+      try { card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e){}
+    }
+  }
+  haStep = step;
+}
+
+function haNext() {
+  const next = (haStep + 1) % HA_TOTAL;
+  haActivate(next);
+  const delay = next === 0 ? 2800 : HA_DELAY[next];
+  haTimer = setTimeout(haNext, delay);
+}
+
+function haRestart() {
+  clearTimeout(haTimer);
+  haActivate(0);
+  haTimer = setTimeout(haNext, HA_DELAY[0]);
+}
+
+haActivate(0);
+haTimer = setTimeout(haNext, HA_DELAY[0]);
+</script>
+</body>
+</html>
