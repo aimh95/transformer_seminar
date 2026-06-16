@@ -406,6 +406,84 @@
     .vbadge { display:inline-block; background:#FEE2E2; border:1px solid #FECACA; border-radius:4px; padding:1px 5px; font-size:9.5px; font-weight:700; color:#DC2626; margin:1px; animation:vpulse 1.2s ease infinite; }
     @keyframes vpulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
+  /* ── Pre-knowledge Section ─────────────────────────────── */
+  #prereq-section { background:linear-gradient(170deg,#F0F9FF 0%,#EFF6FF 80%); border-bottom:2px solid #BFDBFE; padding:30px 18px 42px; }
+  .prereq-inner { max-width:960px; margin:0 auto; }
+  .prereq-title { font-size:21px; font-weight:800; color:#1E3A8A; margin-bottom:8px; line-height:1.3; }
+  .prereq-sub { font-size:13.5px; color:#3B82F6; margin-bottom:20px; line-height:1.65; }
+  .prereq-mode-bar { display:flex; gap:8px; align-items:center; margin-bottom:22px; flex-wrap:wrap; }
+  .prereq-mode-btn { padding:5px 18px; border-radius:20px; border:2px solid #BFDBFE; background:#fff; color:#3B82F6; font-weight:600; font-size:12.5px; cursor:pointer; transition:all .15s; }
+  .prereq-mode-btn.active { background:#2563EB; border-color:#2563EB; color:#fff; }
+  .lesson-card { background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 7px rgba(0,0,0,.06); border-left:4px solid #2563EB; margin-bottom:14px; }
+  .lesson-card.v-card  { border-left-color:#06B6D4; }
+  .lesson-card.m-card  { border-left-color:#1E40AF; }
+  .lesson-card.w-card  { border-left-color:#7C3AED; }
+  .lesson-card.mm-card { border-left-color:#2563EB; }
+  .lesson-card.dp-card { border-left-color:#D97706; }
+  .lesson-card.sm-card { border-left-color:#CA8A04; }
+  .lesson-card.ls-card { border-left-color:#EF4444; }
+  .lesson-card.bp-card { border-left-color:#EC4899; }
+  .lesson-num { font-size:11px; font-weight:700; color:#9CA3AF; margin-bottom:3px; letter-spacing:.4px; }
+  .lesson-title { font-size:15.5px; font-weight:700; color:#1F2937; margin-bottom:8px; }
+  .lesson-where { display:inline-block; font-size:11.5px; background:#374151; color:#fff; padding:3px 10px; border-radius:10px; margin:4px 0 10px; }
+  .lesson-analogy { font-size:13px; color:#6B7280; font-style:italic; background:#F9FAFB; padding:8px 12px; border-radius:6px; margin-bottom:10px; line-height:1.6; }
+  .vbox { display:flex; gap:4px; flex-wrap:wrap; margin:8px 0; }
+  .vbox-cell { padding:6px 10px; background:#ECFEFF; border:1.5px solid #22D3EE; border-radius:5px; font-size:13px; font-weight:700; color:#164E63; min-width:44px; text-align:center; }
+  .mbox { border-collapse:collapse; margin:8px 0; font-size:12px; }
+  .mbox th,.mbox td { padding:4px 10px; border:1px solid #DBEAFE; }
+  .mbox th { background:#EFF6FF; color:#1D4ED8; font-weight:700; }
+  .mbox tr.mbox-hl td { background:#DCFCE7; font-weight:700; color:#14532D; }
+  .weight-knobs { display:flex; flex-direction:column; gap:6px; margin:10px 0; }
+  .wk-item { display:flex; align-items:center; gap:10px; }
+  .wk-label { font-size:12px; font-weight:700; color:#7C3AED; width:38px; }
+  .wk-bar { flex:1; height:14px; background:#F3E8FF; border-radius:7px; overflow:hidden; }
+  .wk-fill { height:100%; border-radius:7px; }
+  .wk-val { font-size:11px; color:#9CA3AF; }
+  .xqkv-flow { display:flex; align-items:center; gap:16px; margin:10px 0; flex-wrap:wrap; }
+  .xqkv-x { padding:10px 16px; background:#EFF6FF; border:2px solid #2563EB; border-radius:9px; font-size:13px; font-weight:700; color:#1E3A8A; text-align:center; }
+  .xqkv-branches { display:flex; flex-direction:column; gap:5px; }
+  .xqkv-branch { padding:6px 14px; border-radius:7px; font-size:13px; font-weight:600; }
+  .xqkv-branch.q { background:#FEF2F2; color:#991B1B; border:1.5px solid #FECACA; }
+  .xqkv-branch.k { background:#EFF6FF; color:#1E40AF; border:1.5px solid #BFDBFE; }
+  .xqkv-branch.v { background:#ECFDF5; color:#065F46; border:1.5px solid #A7F3D0; }
+  .dp-calc { margin:8px 0; display:flex; flex-direction:column; gap:5px; }
+  .dp-row { display:flex; align-items:center; gap:6px; }
+  .dp-v { display:flex; gap:3px; }
+  .dp-cell { padding:5px 9px; border-radius:4px; font-weight:700; font-size:12.5px; min-width:38px; text-align:center; }
+  .dp-q { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
+  .dp-k { background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE; }
+  .dp-prod { background:#FEFCE8; color:#78350F; border:1px solid #FDE68A; }
+  .dp-score { background:#FEF3C7; color:#92400E; border:1.5px solid #FCD34D; padding:7px 20px; }
+  .sm-bars { margin:8px 0; }
+  .sm-bar-row { display:flex; align-items:center; gap:6px; margin:4px 0; }
+  .sm-bar-label { font-size:11.5px; width:110px; color:#374151; font-weight:600; flex-shrink:0; }
+  .sm-bar-bg { flex:1; height:18px; background:#F3F4F6; border-radius:4px; overflow:hidden; }
+  .sm-bar-fill { height:100%; border-radius:4px; }
+  .sm-bar-val { font-size:11.5px; width:38px; text-align:right; color:#374151; flex-shrink:0; font-weight:600; }
+  .fb-flow { display:flex; flex-direction:column; gap:4px; margin:10px 0; }
+  .fb-node { padding:8px 14px; border-radius:7px; font-size:12.5px; font-weight:600; text-align:center; }
+  .fb-fwd { background:#DBEAFE; color:#1E40AF; }
+  .fb-loss { background:#FEF2F2; color:#DC2626; font-size:14px; font-weight:800; }
+  .fb-bwd { background:#FFF1F2; color:#BE185D; border:2px dashed #EC4899; }
+  .fb-arr-fwd { font-size:15px; color:#2563EB; text-align:center; }
+  .fb-arr-bwd { font-size:15px; color:#EF4444; text-align:center; }
+  .tok-flow { display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin:10px 0; }
+  .tok-box { padding:8px 16px; border-radius:8px; font-size:14px; font-weight:700; text-align:center; }
+  .tok-word { background:#DBEAFE; color:#1E3A8A; border:2px solid #93C5FD; }
+  .tok-id { background:#FEF3C7; color:#92400E; border:2px solid #FCD34D; }
+  .tok-mean { background:#F3F4F6; color:#9CA3AF; border:2px dashed #D1D5DB; font-style:italic; }
+  .tok-arr { font-size:20px; color:#9CA3AF; }
+  .fc-mini { background:#1E293B; color:#F8FAFC; padding:9px 13px; border-radius:7px; font-family:monospace; font-size:12.5px; margin:8px 0; line-height:1.65; }
+  .pq-detail { display:none; }
+  #prereq-section.prereq-detail .pq-detail { display:block; }
+  .prereq-summary { background:linear-gradient(135deg,#1E3A8A,#1D4ED8); color:#fff; border-radius:14px; padding:22px 24px; margin-top:22px; }
+  .prereq-summary h3 { font-size:15px; font-weight:700; margin-bottom:14px; color:#BFDBFE; }
+  .prereq-summary-flow { display:grid; gap:6px; }
+  .prereq-flow-row { display:flex; align-items:baseline; gap:8px; font-size:13px; }
+  .pf-left { color:#93C5FD; font-weight:600; min-width:170px; font-family:monospace; font-size:12.5px; flex-shrink:0; }
+  .pf-arr { color:#60A5FA; font-weight:700; flex-shrink:0; }
+  .pf-right { color:#fff; }
+
   /* ── Q&A Annotation System ─────────────────────────────── */
   .qa-target { display:block; height:0; overflow:visible; }
   .qa-note { margin:14px 0 18px; border:1.5px solid #FCD34D; border-radius:9px; overflow:hidden; }
@@ -460,6 +538,246 @@
     예제: <strong>"The cat is on the mat."</strong> → <strong>"Le chat est sur le tapis."</strong>
   </span>
 </header>
+
+<!-- ══════ PRE-KNOWLEDGE SECTION ══════ -->
+<section id="prereq-section">
+  <div class="prereq-inner">
+    <h2 class="prereq-title">0. Transformer를 보기 전에: 숫자, Vector, Matrix, Weight 감 잡기</h2>
+    <p class="prereq-sub">Transformer는 결국 "문장을 숫자 벡터로 바꾸고, 여러 weight matrix를 거치며, 정답에 가까워지도록 weight를 수정하는 모델"입니다.<br>
+    아래 개념들은 수학을 엄밀하게 배우는 것이 아니라, Transformer 수식을 읽기 위한 최소한의 직관을 만드는 것이 목표입니다.</p>
+
+    <div class="prereq-mode-bar">
+      <button class="prereq-mode-btn active" id="pqbeg" onclick="prereqSetMode('beginner')">Beginner</button>
+      <button class="prereq-mode-btn" id="pqdet" onclick="prereqSetMode('detail')">Detail</button>
+      <span style="font-size:12px;color:var(--muted);">※ 선형대수 사전 지식 없이 따라올 수 있습니다.</span>
+    </div>
+
+    <!-- 0-1. Token ID -->
+    <div class="lesson-card">
+      <div class="lesson-num">0-1</div>
+      <h3 class="lesson-title">숫자 하나로는 단어의 의미를 담기 어렵다</h3>
+      <span class="lesson-where">Transformer 연결: Tokenizer → token id</span>
+      <p class="lesson-analogy">비유: 주민등록번호 "5번"이 "고양이"의 성격을 알려주지 않듯이, token id도 단어의 의미를 담지 않습니다.</p>
+      <div class="tok-flow">
+        <div class="tok-box tok-word">"cat"</div>
+        <div class="tok-arr">→</div>
+        <div class="tok-box tok-id">id 5</div>
+        <div class="tok-arr">→</div>
+        <div class="tok-box tok-mean">의미 없음</div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:8px;">token id는 vocabulary에서의 번호(index)일 뿐입니다. 모델이 실제로 다루는 것은 다음 단계에서 만들어지는 <strong>embedding vector</strong>입니다.</p>
+    </div>
+
+    <!-- 0-2. Vector -->
+    <div class="lesson-card v-card">
+      <div class="lesson-num">0-2</div>
+      <h3 class="lesson-title">Vector는 여러 특징을 담은 숫자 묶음이다</h3>
+      <span class="lesson-where">Transformer 연결: Embedding — token id → d_model 차원 vector</span>
+      <p class="lesson-analogy">비유: 사람을 키 하나로만 설명하기 어렵듯이, 단어도 숫자 하나로는 부족합니다. 여러 숫자를 묶은 vector로 표현합니다.</p>
+      <div class="qa-target" data-anchor="vector-basic"></div>
+      <div class="vbox">
+        <div class="vbox-cell">0.2</div>
+        <div class="vbox-cell">0.7</div>
+        <div class="vbox-cell">-0.1</div>
+        <div class="vbox-cell">0.4</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);">cat vector — d_model=4 toy example</div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:8px;">각 숫자가 "귀여움", "동물성" 같은 이름 붙인 의미를 갖는 것은 아닙니다. 학습 과정에서 단어를 구분하고 예측하는 데 유용한 방향으로 값이 조정됩니다.</p>
+      <div class="pq-detail">
+        <div class="fc-mini">E_cat = W_emb[5] = [0.2, 0.7, -0.1, 0.4]<br>shape: (d_model,) = (512,) ← 논문 기본값</div>
+      </div>
+    </div>
+
+    <!-- 0-3. Matrix -->
+    <div class="lesson-card m-card">
+      <div class="lesson-num">0-3</div>
+      <h3 class="lesson-title">Matrix는 숫자가 들어 있는 표다</h3>
+      <span class="lesson-where">Transformer 연결: W_emb, W^Q, W^K, W^V, W_vocab — 모두 matrix</span>
+      <p class="lesson-analogy">비유: vector가 한 줄짜리 숫자 묶음이라면, matrix는 여러 줄이 쌓인 숫자 표입니다.</p>
+      <div class="qa-target" data-anchor="matrix-basic"></div>
+      <table class="mbox">
+        <thead><tr><th>id</th><th colspan="4">vector (d_model=4)</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.2</td></tr>
+          <tr><td>1</td><td>0.4</td><td>0.2</td><td>0.1</td><td>0.7</td></tr>
+          <tr class="mbox-hl"><td><strong>5 ←</strong></td><td>0.2</td><td>0.7</td><td>-0.1</td><td>0.4</td></tr>
+          <tr><td>6</td><td>0.5</td><td>0.3</td><td>0.2</td><td>0.1</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--muted);">cat(id=5) row가 선택되어 embedding vector가 됩니다 — Embedding은 table에서 해당 row를 꺼내는 lookup 연산입니다.</p>
+      <div class="pq-detail">
+        <div class="fc-mini">W_emb ∈ ℝ^{V × d_model}  (V=vocab size, d_model=512)<br>W^Q, W^K, W^V ∈ ℝ^{d_model × d_k}  (d_k=64)</div>
+      </div>
+    </div>
+
+    <!-- 0-4. Weight -->
+    <div class="lesson-card w-card">
+      <div class="lesson-num">0-4</div>
+      <h3 class="lesson-title">Weight는 모델이 학습하는 조절값이다</h3>
+      <span class="lesson-where">Transformer 연결: W^Q, W^K, W^V, W_emb, W_vocab — 모두 학습 가능한 weight</span>
+      <p class="lesson-analogy">비유: 음향 믹서의 노브처럼, 어떤 입력 특징을 얼마나 강하게 반영할지 조절하는 값입니다.</p>
+      <div class="qa-target" data-anchor="weight-basic"></div>
+      <div class="weight-knobs">
+        <div class="wk-item">
+          <span class="wk-label">W^Q</span>
+          <div class="wk-bar"><div class="wk-fill" style="width:62%;background:#7C3AED;"></div></div>
+          <span class="wk-val">학습됨</span>
+        </div>
+        <div class="wk-item">
+          <span class="wk-label">W^K</span>
+          <div class="wk-bar"><div class="wk-fill" style="width:48%;background:#7C3AED;"></div></div>
+          <span class="wk-val">학습됨</span>
+        </div>
+        <div class="wk-item">
+          <span class="wk-label">W^V</span>
+          <div class="wk-bar"><div class="wk-fill" style="width:75%;background:#7C3AED;"></div></div>
+          <span class="wk-val">학습됨</span>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:6px;">처음에는 weight가 랜덤에 가깝습니다. 학습 과정에서 정답을 더 잘 맞히도록 이 값들이 조금씩 수정됩니다. 수정 방향이 Backpropagation입니다.</p>
+      <div class="pq-detail">
+        <div class="fc-mini">초기화: W ~ N(0, σ²)  (랜덤)<br>학습 후: W ← W - η·∂L/∂W  (업데이트)</div>
+      </div>
+    </div>
+
+    <!-- 0-5. Vector × Matrix -->
+    <div class="lesson-card mm-card">
+      <div class="lesson-num">0-5</div>
+      <h3 class="lesson-title">Vector에 weight matrix를 곱하면 새로운 표현이 된다</h3>
+      <span class="lesson-where">Transformer 연결: Q = XW^Q,  K = XW^K,  V = XW^V</span>
+      <p class="lesson-analogy">비유: 같은 재료(X)로 다른 레시피(W^Q, W^K, W^V)를 쓰면 서로 다른 요리(Q, K, V)가 됩니다.</p>
+      <div class="qa-target" data-anchor="matrix-multiplication-basic"></div>
+      <div class="xqkv-flow">
+        <div class="xqkv-x">X_cat<br><span style="font-size:10.5px;color:#3B82F6;font-weight:400;">[0.2, 0.8, -0.1, 0.5]</span></div>
+        <div style="font-size:22px;color:#9CA3AF;">→</div>
+        <div class="xqkv-branches">
+          <div class="xqkv-branch q">× W^Q → <strong>Q</strong> (무엇을 찾는가)</div>
+          <div class="xqkv-branch k">× W^K → <strong>K</strong> (어떤 특징인가)</div>
+          <div class="xqkv-branch v">× W^V → <strong>V</strong> (전달할 내용)</div>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:6px;">같은 X에서 출발하지만 W^Q, W^K, W^V가 다르기 때문에 Q, K, V가 서로 다른 역할을 하게 됩니다. 역할은 학습이 결정합니다.</p>
+      <div class="pq-detail">
+        <div class="fc-mini">Q = X W^Q  shape: (seq_len=6, d_k=64)<br>K = X W^K  shape: (seq_len=6, d_k=64)<br>V = X W^V  shape: (seq_len=6, d_v=64)</div>
+      </div>
+    </div>
+
+    <!-- 0-6. Dot Product -->
+    <div class="lesson-card dp-card">
+      <div class="lesson-num">0-6</div>
+      <h3 class="lesson-title">Dot product는 두 vector가 얼마나 잘 맞는지 계산한다</h3>
+      <span class="lesson-where">Transformer 연결: score_ij = q_i · k_j  (Attention Score Matrix)</span>
+      <p class="lesson-analogy">비유: 두 사람이 서로 어울리는지 보는 것처럼, 두 vector의 같은 위치 숫자끼리 곱해서 더한 값이 클수록 "잘 맞는다"고 해석합니다.</p>
+      <div class="qa-target" data-anchor="dot-product-basic"></div>
+      <div class="dp-calc">
+        <div class="dp-row">
+          <span style="font-size:11px;color:var(--muted);width:42px;">q_cat</span>
+          <div class="dp-v">
+            <div class="dp-cell dp-q">0.4</div>
+            <div class="dp-cell dp-q">0.1</div>
+            <div class="dp-cell dp-q">0.7</div>
+          </div>
+        </div>
+        <div class="dp-row">
+          <span style="font-size:11px;color:var(--muted);width:42px;">k_mat</span>
+          <div class="dp-v">
+            <div class="dp-cell dp-k">0.3</div>
+            <div class="dp-cell dp-k">0.2</div>
+            <div class="dp-cell dp-k">0.6</div>
+          </div>
+        </div>
+        <div class="pq-detail">
+          <div class="dp-row">
+            <span style="font-size:11px;color:var(--muted);width:42px;">곱</span>
+            <div class="dp-v">
+              <div class="dp-cell dp-prod">0.12</div>
+              <div class="dp-cell dp-prod">0.02</div>
+              <div class="dp-cell dp-prod">0.42</div>
+            </div>
+            <span style="font-size:11px;color:var(--muted);">← 같은 위치끼리 곱</span>
+          </div>
+        </div>
+        <div class="dp-row" style="margin-top:4px;">
+          <span style="font-size:11px;color:var(--muted);width:42px;">합계</span>
+          <div class="dp-cell dp-score">score = 0.56</div>
+          <span style="font-size:11.5px;color:#92400E;margin-left:4px;">= 0.12 + 0.02 + 0.42</span>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:6px;">결과가 크면 두 vector가 잘 맞는다고 해석할 수 있습니다. Attention에서는 이 점수가 클수록 해당 token을 더 많이 참고합니다.</p>
+    </div>
+
+    <!-- 0-7. Softmax -->
+    <div class="lesson-card sm-card">
+      <div class="lesson-num">0-7</div>
+      <h3 class="lesson-title">Softmax는 점수를 "참고 비율"처럼 바꾼다</h3>
+      <span class="lesson-where">Transformer 연결: AttentionWeight = softmax(QK^T / √d_k)</span>
+      <p class="lesson-analogy">비유: 시험 점수를 비율로 바꾸면 어디에 더 집중할지 알 수 있듯이, softmax는 raw score를 "얼마나 참고할지 비율"로 변환합니다.</p>
+      <div class="qa-target" data-anchor="softmax-basic"></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">score = [0.2, 1.6, 0.4] → softmax 결과 (합계 = 1.0)</div>
+      <div class="sm-bars">
+        <div class="sm-bar-row">
+          <div class="sm-bar-label">token 1 (score: 0.2)</div>
+          <div class="sm-bar-bg"><div class="sm-bar-fill" style="width:16%;background:#EAB308;"></div></div>
+          <div class="sm-bar-val">0.16</div>
+        </div>
+        <div class="sm-bar-row">
+          <div class="sm-bar-label">token 2 (score: 1.6)</div>
+          <div class="sm-bar-bg"><div class="sm-bar-fill" style="width:65%;background:#F59E0B;"></div></div>
+          <div class="sm-bar-val">0.65</div>
+        </div>
+        <div class="sm-bar-row">
+          <div class="sm-bar-label">token 3 (score: 0.4)</div>
+          <div class="sm-bar-bg"><div class="sm-bar-fill" style="width:19%;background:#EAB308;"></div></div>
+          <div class="sm-bar-val">0.19</div>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:6px;">모든 결과를 더하면 1.0이 됩니다. Attention에서 이 값은 "어떤 token을 얼마나 참고할지"의 가중치로 사용됩니다.</p>
+      <div class="pq-detail">
+        <div class="fc-mini">softmax(z_i) = exp(z_i) / Σ exp(z_j)<br>softmax([0.2, 1.6, 0.4]) ≈ [0.16, 0.65, 0.19]  합 = 1.0 ✓</div>
+      </div>
+    </div>
+
+    <!-- 0-8. Loss & Backprop -->
+    <div class="lesson-card bp-card">
+      <div class="lesson-num">0-8</div>
+      <h3 class="lesson-title">Loss는 틀린 정도, Backpropagation은 고치는 방향이다</h3>
+      <span class="lesson-where">Transformer 연결: Loss → ∂L/∂W → W_vocab, W^Q, W^K, W^V, W_emb 업데이트</span>
+      <p class="lesson-analogy">비유: 과녁에서 얼마나 빗나갔는지(Loss)를 측정하고, 어떻게 조준을 바꿔야 할지(gradient) 역방향으로 계산합니다.</p>
+      <div class="qa-target" data-anchor="loss-basic"></div>
+      <div class="qa-target" data-anchor="backprop-basic"></div>
+      <div class="fb-flow">
+        <div class="fb-node fb-fwd">입력 → Embedding → Encoder → Decoder</div>
+        <div class="fb-arr-fwd">↓ Forward (파란 화살표)</div>
+        <div class="fb-node fb-fwd">Logits → softmax → P(chat) = 0.82</div>
+        <div class="fb-arr-fwd">↓</div>
+        <div class="fb-node fb-loss">Loss = −log(0.82) ≈ 0.20</div>
+        <div class="fb-arr-bwd">↑ Backpropagation (빨간 점선 화살표)</div>
+        <div class="fb-node fb-bwd">∂L/∂W_vocab → ∂L/∂W^Q,W^K,W^V → ∂L/∂W_emb</div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:8px;">모든 weight는 W ← W − η·(∂L/∂W)로 동시에 업데이트됩니다. "loss를 줄이는 방향으로 weight를 조금씩 이동" — 이것이 학습의 전부입니다.</p>
+      <div class="pq-detail">
+        <div class="fc-mini">Loss = −log P(정답 token) = −log(0.82) ≈ 0.20<br>W ← W − η ∂L/∂W  (η = learning rate)</div>
+      </div>
+    </div>
+
+    <!-- Summary Card -->
+    <div class="prereq-summary">
+      <h3>이제 Transformer 수식을 이렇게 읽으면 됩니다</h3>
+      <div class="prereq-summary-flow">
+        <div class="prereq-flow-row"><span class="pf-left">token id</span><span class="pf-arr">→</span><span class="pf-right">embedding vector</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">vector + position</span><span class="pf-arr">→</span><span class="pf-right">input X</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">X × W^Q</span><span class="pf-arr">→</span><span class="pf-right">Query</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">X × W^K</span><span class="pf-arr">→</span><span class="pf-right">Key</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">X × W^V</span><span class="pf-arr">→</span><span class="pf-right">Value</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">QK^T</span><span class="pf-arr">→</span><span class="pf-right">token 간 참고 score</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">softmax(score)</span><span class="pf-arr">→</span><span class="pf-right">참고 비율 (합 = 1)</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">참고 비율 × V</span><span class="pf-arr">→</span><span class="pf-right">문맥이 반영된 vector</span></div>
+        <div class="prereq-flow-row"><span class="pf-left">loss</span><span class="pf-arr">→</span><span class="pf-right">weight를 수정하는 신호</span></div>
+      </div>
+      <p style="font-size:13px;color:#93C5FD;margin-top:16px;line-height:1.7;">즉, Transformer는 문장을 숫자 vector로 바꾸고, weight matrix를 통해 표현을 변환하며, loss를 줄이는 방향으로 그 weight들을 학습하는 모델입니다.</p>
+    </div>
+  </div>
+</section>
 
 <!-- ══════ INTERACTIVE SIMULATOR ══════ -->
 <section id="sim-section">
@@ -1622,6 +1940,14 @@ function updateNav() {
 window.addEventListener('scroll', updateNav, { passive: true });
 updateNav();
 
+/* Pre-knowledge Beginner/Detail toggle */
+function prereqSetMode(m) {
+  const sec = document.getElementById('prereq-section');
+  sec.classList.toggle('prereq-detail', m === 'detail');
+  document.getElementById('pqbeg').classList.toggle('active', m === 'beginner');
+  document.getElementById('pqdet').classList.toggle('active', m === 'detail');
+}
+
 /* ═══════════════════════════════════════════════════
    INTERACTIVE FORWARD/BACKPROP SIMULATOR  (14 steps)
    toy example — d_model=4, d_k=3, vocab=7
@@ -1934,6 +2260,47 @@ const qaItems = [
     short: 'Loss에서 시작해 출력층 → Decoder → Attention → Embedding 방향(역방향)으로 Chain rule로 gradient가 전파됩니다.',
     detail: 'Forward pass가 Input → Embedding → Encoder → Decoder → Logits → Loss 순이라면, Backward pass는 반대 방향입니다. ∂L/∂W_vocab → ∂L/∂H_dec → ∂L/∂W^Q, W^K, W^V → ∂L/∂W_emb 순으로 gradient가 계산됩니다. 각 weight는 W ← W − η·(∂L/∂W)로 업데이트됩니다. 핵심은 "정답 token의 확률을 높이는 방향"으로 모든 weight가 동시에 조정된다는 것입니다. 어떤 weight가 얼마나 기여했는지를 Chain rule이 정확히 추적합니다.',
     summary: 'Backprop = Loss → W_vocab → W^Q/K/V → W_emb 방향 chain rule. 모든 weight를 W ← W−η∂L/∂W로 동시 업데이트.'
+  },
+  /* ── Pre-knowledge Q&As ─── */
+  {
+    anchor: 'vector-basic',
+    id: 'qa-vector-basic-001',
+    q: '단어를 왜 숫자 하나가 아니라 vector로 표현하나요?',
+    short: '숫자 하나는 단어의 다양한 특징을 담기 어렵습니다. Vector는 여러 숫자를 사용해 모델이 단어를 구분하는 데 필요한 정보를 표현합니다.',
+    detail: '"cat"이 5, "dog"이 6, "king"이 7이라면 숫자 크기 순서가 의미 순서가 돼버립니다. 또한 두 단어의 유사도를 숫자 하나로는 비교하기 어렵습니다. 반면 vector로 표현하면 "cat"과 "dog"의 vector 방향이 비슷하게 학습될 수 있고, "cat"과 "Paris"의 vector는 전혀 다른 방향으로 학습됩니다. vector의 차원(d_model=512)이 클수록 더 풍부한 표현이 가능합니다.',
+    summary: 'vector = 여러 숫자를 묶어 단어의 "방향"으로 표현. cat과 dog의 방향은 가깝고, cat과 Paris는 멉니다.'
+  },
+  {
+    anchor: 'weight-basic',
+    id: 'qa-weight-basic-001',
+    q: 'Weight는 사람이 정하는 건가요, 모델이 배우는 건가요?',
+    short: '초기값은 규칙(랜덤 초기화)으로 정해지지만, 의미 있는 값은 학습 과정에서 loss를 줄이는 방향으로 자동 업데이트됩니다.',
+    detail: '학습 시작 전 W^Q, W^K, W^V 등 모든 weight는 정규분포 또는 Xavier 초기화로 랜덤 설정됩니다. 이 상태에서는 모델이 완전히 무작위로 예측합니다. 학습이 진행되면서 각 데이터에서 나온 loss의 gradient(∂L/∂W)를 계산하고, W ← W − η∂L/∂W로 조금씩 업데이트합니다. 수백만~수십억 번 반복되면서 weight가 "언어를 이해하는" 값으로 수렴합니다.',
+    summary: '초기: 랜덤. 학습 후: loss를 줄이는 방향으로 자동 수렴. 사람이 값을 정하는 것이 아닙니다.'
+  },
+  {
+    anchor: 'matrix-multiplication-basic',
+    id: 'qa-matrix-multiplication-basic-001',
+    q: 'Vector에 matrix를 곱한다는 게 직관적으로 무슨 뜻인가요?',
+    short: '입력 vector의 여러 값을 weight 조합으로 섞어 새로운 vector를 만드는 것입니다. 표현을 변환하는 연산입니다.',
+    detail: 'x = [0.2, 0.8]이고 W = [[0.3, 0.1], [0.5, 0.7]]이라면, xW = [0.2×0.3+0.8×0.5, 0.2×0.1+0.8×0.7] = [0.46, 0.58]입니다. x의 첫 번째, 두 번째 값이 W의 각 열 weight에 따라 새로운 두 숫자로 바뀝니다. Transformer에서 X에 W^Q를 곱하면 "어떤 정보를 찾는 방향(Query)"으로 표현이 변환되고, W^K를 곱하면 "어떤 특징을 드러내는 방향(Key)"으로 변환됩니다. 같은 입력이지만 다른 weight로 곱하면 다른 표현이 나옵니다.',
+    summary: 'xW = "x의 값들을 W 조합으로 섞어 새로운 표현 만들기". Transformer에서 Q, K, V 변환이 이 원리입니다.'
+  },
+  {
+    anchor: 'dot-product-basic',
+    id: 'qa-dot-product-basic-001',
+    q: 'Dot product가 왜 유사도처럼 쓰이나요?',
+    short: '두 vector의 같은 위치 값들이 같은 방향으로 크면 곱해서 더한 값이 커집니다. 이 성질이 "비슷한 정도"와 일치합니다.',
+    detail: 'q = [0.4, 0.1, 0.7], k = [0.3, 0.2, 0.6]처럼 두 vector의 각 위치 값이 모두 양수이고 비슷한 크기라면 곱한 합이 큽니다. 반면 q = [0.4, 0.1, 0.7], k = [-0.3, -0.2, -0.6]처럼 반대 방향이면 음수가 되어 score가 작아집니다. 실제로 내적은 두 vector 사이의 각도 cosθ와 크기에 비례합니다(q·k = |q||k|cosθ). θ가 0°(같은 방향)이면 최대, 90°(직각)이면 0, 180°(반대 방향)이면 최소. Attention에서는 이 성질로 "q_i와 k_j가 얼마나 관련 있는가"를 측정합니다.',
+    summary: '내적 크다 = 같은 방향으로 벡터가 정렬. Attention에서 "i 번째 token이 j 번째 token을 얼마나 참고해야 하는지"의 점수입니다.'
+  },
+  {
+    anchor: 'backprop-basic',
+    id: 'qa-backprop-basic-001',
+    q: 'Loss가 어떻게 앞쪽 weight까지 영향을 줄 수 있나요?',
+    short: '출력은 여러 연산을 순서대로 거쳐 만들어지므로, Chain rule로 각 연산이 loss에 얼마나 기여했는지 역방향으로 추적할 수 있습니다.',
+    detail: '예를 들어 y = f(g(x))일 때 ∂y/∂x = (∂y/∂f)×(∂f/∂g)×(∂g/∂x)입니다. Transformer는 Input → Embedding → Attention → FFN → Linear → Loss 흐름이므로, Loss에서 시작해 각 단계를 거꾸로 따라가며 gradient를 계산합니다. "W_emb가 Loss에 얼마나 영향을 줬는가"는 W_emb 이후의 모든 연산을 거슬러 올라가며 Chain rule로 계산됩니다. 이것이 Backpropagation이며, 딥러닝 학습의 핵심입니다.',
+    summary: 'Chain rule = 출력에서 입력 방향으로 gradient를 거슬러 계산. Transformer의 모든 weight가 이 방식으로 업데이트됩니다.'
   },
 ];
 

@@ -98,6 +98,29 @@ gradient가 weight를 업데이트하는 방향을 시각적으로 이해하기 
 - Beginner / Detail 모드 전환
 - 재생 / 일시정지 / 이전 / 다음 / 속도 조절
 
+## 사전 지식 섹션
+
+이 HTML은 선형대수나 신경망을 모르는 팀원도 Transformer 본론으로 들어갈 수 있도록,
+Vector, Matrix, Weight, Dot Product, Softmax, Loss, Backpropagation의 최소 직관을 먼저 설명합니다.
+
+이 섹션은 수학적 엄밀성을 목표로 하기보다,
+Transformer의 Embedding, Q/K/V, Attention Score, Softmax, Loss 흐름을 이해하기 위한 준비 단계입니다.
+
+### 사전 지식 섹션 구성 (8개 mini lesson)
+
+| 번호 | 제목 | Q&A anchor |
+|------|------|-----------|
+| 0-1 | 숫자 하나로는 단어의 의미를 담기 어렵다 | — |
+| 0-2 | Vector는 여러 특징을 담은 숫자 묶음이다 | vector-basic ★ |
+| 0-3 | Matrix는 숫자가 들어 있는 표다 | matrix-basic |
+| 0-4 | Weight는 모델이 학습하는 조절값이다 | weight-basic ★ |
+| 0-5 | Vector에 weight matrix를 곱하면 새로운 표현이 된다 | matrix-multiplication-basic ★ |
+| 0-6 | Dot product는 두 vector가 얼마나 잘 맞는지 계산한다 | dot-product-basic ★ |
+| 0-7 | Softmax는 점수를 "참고 비율"처럼 바꾼다 | softmax-basic |
+| 0-8 | Loss는 틀린 정도, Backpropagation은 고치는 방향이다 | loss-basic, backprop-basic ★ |
+
+★ = seed Q&A 포함
+
 ## Q&A 주석 시스템
 
 각 섹션 핵심 개념 아래에 접고 펼 수 있는 **Q&A 블록**이 삽입됩니다. 우측 하단 **Q&A 목록 패널**에서 전체 목록을 보고 클릭하면 해당 위치로 이동합니다.
