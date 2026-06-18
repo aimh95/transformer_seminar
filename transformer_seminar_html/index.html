@@ -341,40 +341,15 @@
     .sec-anchor { display: block; height: 0; overflow: hidden; }
 
     /* ══════════════════════════════════════════
-       INTERACTIVE SIMULATOR
+       FLOW ANIMATION (Section 0 — X / H / Target 흐름)
     ══════════════════════════════════════════ */
-    #sim-section { background:#fff; border-bottom:2px solid var(--border); padding:28px 18px 32px; }
-    .sim-inner { max-width:960px; margin:0 auto; }
-    .sim-title { font-size:18px; font-weight:800; text-align:center; color:var(--text); margin-bottom:7px; }
-    .sim-sub { text-align:center; color:var(--muted); font-size:12.5px; margin-bottom:16px; max-width:680px; margin-left:auto; margin-right:auto; }
-    .sim-mode-bar { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
-    .sim-mode-btn { padding:5px 15px; border-radius:20px; font-size:12px; font-weight:600; border:2px solid var(--border); background:var(--white); color:var(--sub); cursor:pointer; transition:all .15s; }
-    .sim-mode-btn.active { background:#2563EB; border-color:#2563EB; color:#fff; }
-    .sim-toy-note { font-size:11px; color:var(--muted); }
+    .flow-anim-wrap { margin-top:16px; }
     .sim-prog-wrap { background:#F3F4F6; border-radius:6px; height:5px; margin:0 0 5px; }
-    .sim-prog-bar { height:100%; background:#2563EB; border-radius:6px; transition:width .4s ease; width:7.14%; }
-    .sim-step-lbl { text-align:right; font-size:11px; color:var(--muted); margin-bottom:10px; }
-    /* 3-col layout */
-    .sim-layout { display:grid; grid-template-columns:130px 1fr 250px; gap:12px; min-height:320px; margin-bottom:12px; }
-    @media(max-width:680px){ .sim-layout { grid-template-columns:1fr; } }
-    /* Left pipeline */
-    .sim-left { display:flex; flex-direction:column; align-items:center; gap:0; }
-    .sim-node { width:116px; padding:5px 7px; border-radius:7px; background:#F3F4F6; border:2px solid var(--border); font-size:10.5px; font-weight:600; text-align:center; color:var(--sub); transition:all .3s; white-space:nowrap; }
-    .sim-node.active { background:#EFF6FF; border-color:#2563EB; color:#1D4ED8; box-shadow:0 2px 10px rgba(37,99,235,.18); }
-    .sim-node-back.active { background:#FFF1F2!important; border-color:#EF4444!important; color:#DC2626!important; }
-    .sim-arr-v { font-size:12px; color:#D1D5DB; line-height:1.3; font-weight:700; }
-    /* Center viz */
-    .sim-center { background:#FAFAFA; border:1.5px solid var(--border); border-radius:10px; padding:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:280px; overflow:hidden; }
-    .sim-center h4 { font-size:11.5px; font-weight:700; color:var(--muted); text-align:center; margin-bottom:10px; }
-    /* Right panel */
-    .sim-right { display:flex; flex-direction:column; gap:7px; }
-    .sim-steptitle { font-size:13px; font-weight:800; color:var(--text); line-height:1.4; }
-    .sim-desc { font-size:12px; color:var(--sub); line-height:1.7; }
-    .sim-fc { background:#FFFBEB; border:2px solid #FCD34D; border-radius:7px; padding:8px 11px; font-family:'Courier New',monospace; font-size:11.5px; font-weight:700; color:#78350F; line-height:1.7; white-space:pre-line; }
-    .sim-sc { background:#F0F9FF; border:1.5px solid #BAE6FD; border-radius:6px; padding:7px 11px; font-family:'Courier New',monospace; font-size:11px; color:#0C4A6E; line-height:1.7; white-space:pre-line; }
-    .sim-dc { background:#F5F3FF; border:1.5px solid #C4B5FD; border-radius:6px; padding:8px 11px; font-family:'Courier New',monospace; font-size:10.5px; color:#4C1D95; line-height:1.8; white-space:pre-line; }
+    .sim-prog-bar { height:100%; background:#2563EB; border-radius:6px; transition:width .4s ease; width:12.5%; }
+    .sim-step-lbl { text-align:right; font-size:11px; color:var(--muted); margin-bottom:6px; }
+    .sim-current-title { text-align:center; font-size:14px; font-weight:800; color:var(--text); margin:0 0 10px; line-height:1.4; }
     /* Controls */
-    .sim-controls { display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:center; margin-top:4px; }
+    .sim-controls { display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:center; margin-top:12px; }
     .sim-ctrl { padding:6px 14px; border-radius:7px; font-size:12px; font-weight:600; border:2px solid var(--border); background:var(--white); color:var(--sub); cursor:pointer; transition:all .15s; }
     .sim-ctrl:hover { background:#F3F4F6; }
     .sim-ctrl-play { background:#2563EB; border-color:#2563EB; color:#fff; }
@@ -383,28 +358,22 @@
     .sim-spd-lbl { font-size:11px; color:var(--muted); }
     .sim-spd { padding:3px 9px; border-radius:5px; font-size:11px; border:1.5px solid var(--border); background:var(--white); color:var(--sub); cursor:pointer; }
     .sim-spd.on { background:#374151; color:#fff; border-color:#374151; }
-    /* Viz helpers */
-    .vt { display:inline-block; padding:4px 10px; border-radius:6px; font-size:12.5px; font-weight:700; margin:3px; }
-    .vt-w { background:#F3F4F6; border:1.5px solid #D1D5DB; color:#374151; }
-    .vt-i { background:#DBEAFE; border:1.5px solid #93C5FD; color:#1E3A8A; }
-    .vv { display:flex; gap:3px; margin:4px 0; align-items:center; }
-    .vv-l { font-size:10px; color:var(--muted); width:52px; text-align:right; margin-right:3px; }
-    .vc { width:40px; height:26px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:10.5px; font-weight:700; border:1.5px solid transparent; }
-    .vc-q { background:#FEF2F2; border-color:#FECACA; color:#991B1B; }
-    .vc-k { background:#EFF6FF; border-color:#BFDBFE; color:#1E3A8A; }
-    .vc-v { background:#DCFCE7; border-color:#BBF7D0; color:#14532D; }
-    .vc-x { background:#F0F9FF; border-color:#BAE6FD; color:#0C4A6E; }
-    .vc-s { background:#F5F3FF; border-color:#C4B5FD; color:#4C1D95; }
-    .vc-g { background:#F3F4F6; border-color:#D1D5DB; color:#374151; }
-    .vbar { display:flex; align-items:center; gap:5px; margin:3px 0; }
-    .vbar-n { font-size:10.5px; color:var(--sub); width:36px; text-align:right; }
-    .vbar-bg { background:#F3F4F6; border-radius:3px; height:14px; flex:1; overflow:hidden; }
-    .vbar-f { height:100%; border-radius:3px; transition:width .5s; }
-    .vbar-v { font-size:10px; color:var(--muted); width:32px; }
-    .vbk { background:#FFF1F2; border:2px dashed #FCA5A5; border-radius:7px; padding:7px 10px; margin:3px 0; display:flex; align-items:center; gap:7px; font-size:11px; font-weight:600; color:#991B1B; }
-    .vbk-arr { color:#EF4444; font-size:14px; }
-    .vbadge { display:inline-block; background:#FEE2E2; border:1px solid #FECACA; border-radius:4px; padding:1px 5px; font-size:9.5px; font-weight:700; color:#DC2626; margin:1px; animation:vpulse 1.2s ease infinite; }
-    @keyframes vpulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .script-link { font-size:11px; color:var(--muted); text-decoration:underline; }
+    .script-link:hover { color:var(--sub); }
+    /* Animated SVG: highlight + moving dots (modern browsers support CSS transitions on cx/cy/x/y) */
+    #flow-svg .fhl { stroke:#F59E0B !important; stroke-width:3.5px !important; transition:stroke .25s, stroke-width .25s; filter:drop-shadow(0 0 5px rgba(245,158,11,.65)); }
+    #flow-svg #dotEnc, #flow-svg #dotDec { transition:cx .6s ease, cy .6s ease, fill .4s ease; }
+    #flow-svg #dotEncLabel, #flow-svg #dotDecLabel { transition:x .6s ease, y .6s ease, fill .4s ease; font-size:12px; font-weight:800; paint-order:stroke; stroke:#fff; stroke-width:3px; }
+    #flow-svg #dotEnc, #flow-svg #dotEncLabel, #flow-svg #dotDec, #flow-svg #dotDecLabel { cursor:pointer; }
+    .flow-tip {
+      position:fixed; z-index:80; pointer-events:none; max-width:270px;
+      background:#111827; color:#F3F4F6; border-radius:8px; padding:10px 13px;
+      font-size:11.5px; line-height:1.55; box-shadow:0 6px 20px rgba(0,0,0,.28);
+      opacity:0; transform:translateY(4px); transition:opacity .12s ease, transform .12s ease;
+    }
+    .flow-tip.show { opacity:1; transform:translateY(0); }
+    .flow-tip .ft-title { display:block; font-weight:800; color:#FCD34D; margin-bottom:4px; }
+    .flow-tip .ft-vec { display:block; margin-top:5px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:10.5px; color:#A7F3D0; word-break:break-all; }
 
   /* ── Pre-knowledge Section ─────────────────────────────── */
   #prereq-section { background:linear-gradient(170deg,#F0F9FF 0%,#EFF6FF 80%); border-bottom:2px solid #BFDBFE; padding:30px 18px 42px; }
@@ -779,77 +748,6 @@
   </div>
 </section>
 
-<!-- ══════ INTERACTIVE SIMULATOR ══════ -->
-<section id="sim-section">
-  <div class="sim-inner">
-    <h2 class="sim-title">Forward Pass부터 Backpropagation까지 한눈에 보기</h2>
-    <p class="sim-sub">문장이 vector로 바뀌고, attention 계산을 거쳐 다음 token 확률이 만들어진 뒤, loss가 다시 weight를 업데이트하는 방향을 시각화합니다.</p>
-
-    <div class="sim-mode-bar">
-      <button class="sim-mode-btn active" id="smbeg" onclick="simSetMode('beginner')">Beginner</button>
-      <button class="sim-mode-btn" id="smdet" onclick="simSetMode('detail')">Detail</button>
-      <span class="sim-toy-note">※ toy example — d_model=4, d_k=3, vocab=7 (illustrative values)</span>
-    </div>
-
-    <div class="sim-prog-wrap"><div class="sim-prog-bar" id="sim-prog"></div></div>
-    <div class="sim-step-lbl" id="sim-lbl">Step 1 / 14</div>
-
-    <div class="sim-layout">
-      <!-- Left: pipeline nodes -->
-      <div class="sim-left">
-        <div class="sim-node" id="sn0">📥 입력</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn1">✂️ Tokenizer</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn2">🔤 Embedding</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn3">📍 Pos.Enc</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn4">Q / K / V</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn5">Score / Scale</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn6">Softmax / Attn</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn7">FFN</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn8">Logits → P</div>
-        <div class="sim-arr-v">↓</div>
-        <div class="sim-node" id="sn9">Loss</div>
-        <div class="sim-arr-v" style="color:#EF4444;">↑</div>
-        <div class="sim-node sim-node-back" id="sn10">∂L Backprop</div>
-      </div>
-
-      <!-- Center: visualization -->
-      <div class="sim-center" id="sim-viz"></div>
-
-      <!-- Right: description panel -->
-      <div class="sim-right">
-        <div class="sim-steptitle" id="sim-ttl"></div>
-        <div class="sim-desc" id="sim-desc"></div>
-        <div class="sim-fc" id="sim-fc" style="display:none;"></div>
-        <div class="sim-sc" id="sim-sc" style="display:none;"></div>
-        <div class="sim-dc" id="sim-dc" style="display:none;"></div>
-      </div>
-    </div>
-
-    <!-- Controls -->
-    <div class="sim-controls">
-      <button class="sim-ctrl" onclick="simGo(-1)">◀ 이전</button>
-      <button class="sim-ctrl sim-ctrl-play" id="sim-playbtn" onclick="simToggle()">⏸ 일시정지</button>
-      <button class="sim-ctrl" onclick="simGo(1)">다음 ▶</button>
-      <button class="sim-ctrl" onclick="simRestart()">↺ 처음부터</button>
-      <div class="sim-spd-wrap">
-        <span class="sim-spd-lbl">속도:</span>
-        <button class="sim-spd" onclick="simSetSpd(2600)">느리게</button>
-        <button class="sim-spd on" id="spd-mid" onclick="simSetSpd(1800)">보통</button>
-        <button class="sim-spd" onclick="simSetSpd(900)">빠르게</button>
-      </div>
-    </div>
-    <div class="qa-target" data-anchor="backpropagation"></div>
-  </div>
-</section>
-
 <main class="page">
 
 <!-- ═══════════════════════════════════════════════════════ -->
@@ -881,9 +779,159 @@
     <div class="flow-box fb-tgt">Le chat est<br>sur le tapis.</div>
   </div>
 
-  <div class="svg-box">
-    <img src="assets/01_overall_flow.svg" alt="Transformer 전체 Encoder-Decoder 구조" loading="lazy">
-    <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+  <div class="flow-anim-wrap">
+    <div class="sim-prog-wrap"><div class="sim-prog-bar" id="flow-prog"></div></div>
+    <div class="sim-step-lbl" id="flow-lbl">Step 1 / 8</div>
+    <div class="sim-current-title" id="flow-current-title"></div>
+
+    <div class="svg-box">
+      <svg id="flow-svg" viewBox="0 0 980 700" xmlns="http://www.w3.org/2000/svg"
+           font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" style="display:block;width:100%;height:auto;">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#374151"/>
+          </marker>
+          <marker id="arr-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#16A34A"/>
+          </marker>
+          <marker id="arr-o" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#EA580C"/>
+          </marker>
+        </defs>
+
+        <rect width="980" height="700" fill="#F8F9FB" rx="10"/>
+        <text x="490" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">Transformer Encoder-Decoder 전체 구조</text>
+
+        <!-- ====== ENCODER (center x=195) ====== -->
+        <text x="195" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#2563EB">ENCODER</text>
+
+        <rect id="fSrc" x="85" y="58" width="220" height="36" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+        <text x="195" y="81" text-anchor="middle" font-size="12" fill="#1D4ED8" font-weight="600">Source 문장</text>
+        <line x1="195" y1="94" x2="195" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="210" y="106" font-size="9" fill="#9CA3AF">(T,)</text>
+
+        <rect id="fEmb" x="85" y="114" width="220" height="36" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+        <text x="195" y="137" text-anchor="middle" font-size="12" fill="#1D4ED8">Embedding</text>
+        <line x1="195" y1="150" x2="195" y2="168" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="210" y="162" font-size="9" fill="#9CA3AF">(T, d_model)</text>
+
+        <rect id="fPe" x="85" y="170" width="220" height="36" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+        <text x="195" y="193" text-anchor="middle" font-size="12" fill="#1D4ED8">Positional Encoding</text>
+        <line x1="195" y1="206" x2="195" y2="224" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect id="fBlock" x="64" y="226" width="262" height="212" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2" stroke-dasharray="8,3" fill-opacity="0.45"/>
+        <text x="195" y="246" text-anchor="middle" font-size="11" font-weight="700" fill="#2563EB">Encoder Layer × 6</text>
+
+        <rect id="fMhsa" x="80" y="251" width="230" height="36" rx="6" fill="#BFDBFE" stroke="#3B82F6" stroke-width="1.5"/>
+        <text x="195" y="273" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">Multi-Head Self-Attention</text>
+        <line x1="195" y1="287" x2="195" y2="301" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="fAddNorm1" x="115" y="303" width="160" height="26" rx="5" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1"/>
+        <text x="195" y="320" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+        <line x1="195" y1="329" x2="195" y2="343" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="fFfn" x="80" y="345" width="230" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+        <text x="195" y="367" text-anchor="middle" font-size="11" font-weight="600" fill="#78350F">Feed Forward Network</text>
+        <line x1="195" y1="381" x2="195" y2="395" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="fAddNorm2" x="115" y="397" width="160" height="26" rx="5" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1"/>
+        <text x="195" y="414" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+
+        <line x1="195" y1="438" x2="195" y2="454" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="fHenc" x="80" y="456" width="230" height="42" rx="8" fill="#DCFCE7" stroke="#16A34A" stroke-width="2"/>
+        <text x="195" y="474" text-anchor="middle" font-size="13" font-weight="700" fill="#15803D">H_enc</text>
+        <text x="195" y="490" text-anchor="middle" font-size="9" fill="#16A34A">Encoder Output ∈ ℝ^{T × d_model}</text>
+
+        <!-- ====== DECODER (center x=730) ====== -->
+        <text x="730" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#7C3AED">DECODER</text>
+
+        <rect id="dTgt" x="610" y="58" width="240" height="42" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+        <text x="730" y="76" text-anchor="middle" font-size="12" fill="#6D28D9" font-weight="600">Target 문장 (shifted right)</text>
+        <text x="730" y="93" text-anchor="middle" font-size="10" fill="#8B5CF6">[&lt;SOS&gt;, Le, chat, est, ...]</text>
+        <line x1="730" y1="100" x2="730" y2="118" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect id="dEmb" x="610" y="120" width="240" height="36" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+        <text x="730" y="143" text-anchor="middle" font-size="12" fill="#6D28D9">Embedding</text>
+        <line x1="730" y1="156" x2="730" y2="174" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect id="dPe" x="610" y="176" width="240" height="36" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+        <text x="730" y="199" text-anchor="middle" font-size="12" fill="#6D28D9">Positional Encoding</text>
+        <line x1="730" y1="212" x2="730" y2="230" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect id="dBlock" x="594" y="232" width="272" height="310" rx="10" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2" stroke-dasharray="8,3" fill-opacity="0.45"/>
+        <text x="730" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED">Decoder Layer × 6</text>
+
+        <rect id="dMmha" x="610" y="257" width="240" height="40" rx="6" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1.5"/>
+        <text x="730" y="273" text-anchor="middle" font-size="11" font-weight="600" fill="#4C1D95">Masked Multi-Head Self-Attention</text>
+        <text x="730" y="289" text-anchor="middle" font-size="9" fill="#7C3AED">Look-Ahead Mask 적용</text>
+        <line x1="730" y1="297" x2="730" y2="311" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="dAddNorm1" x="650" y="313" width="160" height="26" rx="5" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="1"/>
+        <text x="730" y="330" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+        <line x1="730" y1="339" x2="730" y2="353" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect id="dCross" x="610" y="355" width="240" height="42" rx="6" fill="#DCFCE7" stroke="#16A34A" stroke-width="2"/>
+        <text x="730" y="373" text-anchor="middle" font-size="11" font-weight="700" fill="#15803D">Cross-Attention</text>
+        <text x="730" y="389" text-anchor="middle" font-size="9" fill="#16A34A">Q←Decoder  /  K,V←H_enc</text>
+        <line x1="730" y1="397" x2="730" y2="411" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="dAddNorm2" x="650" y="413" width="160" height="26" rx="5" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="1"/>
+        <text x="730" y="430" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+        <line x1="730" y1="439" x2="730" y2="453" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect id="dFfn" x="610" y="455" width="240" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+        <text x="730" y="477" text-anchor="middle" font-size="11" font-weight="600" fill="#78350F">Feed Forward Network</text>
+        <line x1="730" y1="491" x2="730" y2="505" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="dAddNorm3" x="650" y="507" width="160" height="26" rx="5" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="1"/>
+        <text x="730" y="524" text-anchor="middle" font-size="10" fill="#374151">Add &amp; Norm</text>
+
+        <line x1="730" y1="542" x2="730" y2="560" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="746" y="554" font-size="9" fill="#9CA3AF">(T', d_model)</text>
+        <rect id="dLinear" x="620" y="562" width="220" height="34" rx="7" fill="#FEE2E2" stroke="#F87171" stroke-width="1.5"/>
+        <text x="730" y="583" text-anchor="middle" font-size="12" fill="#991B1B">Linear (d_model → vocab_size)</text>
+        <line x1="730" y1="596" x2="730" y2="612" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="dSoftmax" x="620" y="614" width="220" height="34" rx="7" fill="#FEE2E2" stroke="#F87171" stroke-width="1.5"/>
+        <text x="730" y="635" text-anchor="middle" font-size="12" fill="#991B1B">Softmax</text>
+        <line x1="730" y1="648" x2="730" y2="664" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+        <rect id="dOut" x="610" y="666" width="240" height="36" rx="8" fill="#FFF7ED" stroke="#FB923C" stroke-width="2"/>
+        <text x="730" y="683" text-anchor="middle" font-size="13" font-weight="700" fill="#9A3412">번역 token 확률</text>
+        <text x="730" y="697" text-anchor="middle" font-size="9" fill="#C2410C">P(next token) ∈ ℝ^{vocab_size}</text>
+
+        <!-- Cross-connection H_enc → Cross-Attention -->
+        <path id="crossPath" d="M 310 477 C 450 477, 450 376, 610 376"
+              stroke="#16A34A" stroke-width="2" fill="none" stroke-dasharray="7,3"
+              marker-end="url(#arr-g)"/>
+        <text x="424" y="467" text-anchor="middle" font-size="10" font-weight="600" fill="#15803D">K, V ← H_enc</text>
+        <text x="424" y="480" text-anchor="middle" font-size="9" fill="#16A34A">6개 Decoder Layer에 공유</text>
+
+        <!-- Autoregressive loop-back: predicted token → Target (next inference step) -->
+        <path id="loopPath" d="M 850 684 C 945 684, 945 79, 850 79"
+              stroke="#EA580C" stroke-width="2" fill="none" stroke-dasharray="6,4"
+              marker-end="url(#arr-o)" opacity="0.3"/>
+        <text x="958" y="383" text-anchor="middle" font-size="9" fill="#EA580C" transform="rotate(90 958 383)">자기회귀: 예측 token → Target에 추가</text>
+
+        <text x="490" y="686" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+
+        <!-- Moving markers: encoder side(X→H, blue→green), decoder side(Target→예측, purple→orange) -->
+        <circle id="dotEnc" cx="195" cy="76" r="9" fill="#2563EB" stroke="#fff" stroke-width="2" style="display:none;"/>
+        <text id="dotEncLabel" x="208" y="80" font-size="12" font-weight="800" fill="#2563EB" style="display:none;">X</text>
+        <circle id="dotDec" cx="730" cy="79" r="9" fill="#7C3AED" stroke="#fff" stroke-width="2" style="display:none;"/>
+        <text id="dotDecLabel" x="743" y="83" font-size="12" font-weight="800" fill="#7C3AED" style="display:none;">Target</text>
+      </svg>
+      <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
+    </div>
+    <div id="flow-tip" class="flow-tip"></div>
+
+    <div class="sim-controls">
+      <button class="sim-ctrl" onclick="flowGo(-1)">◀ 이전</button>
+      <button class="sim-ctrl sim-ctrl-play" id="flow-playbtn" onclick="flowToggle()">⏸ 일시정지</button>
+      <button class="sim-ctrl" onclick="flowGo(1)">다음 ▶</button>
+      <button class="sim-ctrl" onclick="flowRestart()">↺ 처음부터</button>
+      <div class="sim-spd-wrap">
+        <span class="sim-spd-lbl">속도:</span>
+        <button class="sim-spd" onclick="flowSetSpd(2600)">느리게</button>
+        <button class="sim-spd on" onclick="flowSetSpd(1800)">보통</button>
+        <button class="sim-spd" onclick="flowSetSpd(900)">빠르게</button>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:10px;">
+      <a href="presenter_script.md" target="_blank" class="script-link">발표자 스크립트 보기</a>
+    </div>
   </div>
 
   <div class="summary">
@@ -1151,6 +1199,15 @@
     <span class="sec-num a">7</span>
     <h2>Q, K, V 생성 — 같은 X에서 세 가지 투영</h2>
   </div>
+
+  <div class="fc">
+    <div class="fc-label">Attention 수식 — 먼저 보기</div>
+    <div class="fc-body" style="font-size:17px;">
+      Attention(Q, K, V) = softmax( QKᵀ / √d_k ) · V
+    </div>
+    <div class="fc-note">Self-Attention이 결국 계산하는 것은 이 한 줄입니다. 이 수식을 계산하려면 먼저 Q, K, V가 필요합니다. 지금부터 Q, K, V가 무엇이고 어떻게 만들어지는지부터 보겠습니다.</div>
+  </div>
+
   <p>Self-Attention의 시작은 입력 X에서 <span class="tq">Query(Q)</span>, <span class="tk">Key(K)</span>, <span class="tv">Value(V)</span>를 만드는 것입니다. 각각 다른 학습 가능한 weight matrix를 곱해 선형 투영합니다.</p>
 
   <div class="qkv-grid">
@@ -1949,275 +2006,121 @@ function prereqSetMode(m) {
 }
 
 /* ═══════════════════════════════════════════════════
-   INTERACTIVE FORWARD/BACKPROP SIMULATOR  (14 steps)
-   toy example — d_model=4, d_k=3, vocab=7
-   All numbers are illustrative values, not real weights.
+   FLOW ANIMATION — Section 0 (Inference only)
+   X → H_enc, Target → Cross-Attention → 다음 token → 자기회귀
 ═══════════════════════════════════════════════════ */
-const TOK = ['The','cat','mat'];
-const VT = (t,cls)=>`<span class="vt ${cls}">${t}</span>`;
-const VC = (v,cls)=>`<div class="vc ${cls}">${v}</div>`;
-const VV = (label,vals,cls,extra)=>`<div class="vv">${label?`<span class="vv-l">${label}</span>`:''}${vals.map(v=>VC(v,cls)).join('')}${extra||''}</div>`;
-const BAR = (name,val,max,color,note)=>`<div class="vbar"><span class="vbar-n">${name}</span><div class="vbar-bg"><div class="vbar-f" style="width:${(val/max*100).toFixed(1)}%;background:${color};"></div></div><span class="vbar-v">${typeof val==='number'?val.toFixed(2):val}</span>${note||''}</div>`;
-const MAT_CELL=(v,bg,bc,tc)=>`<td style="background:${bg};border:1px solid ${bc};color:${tc};font-weight:700;font-size:11.5px;padding:4px 8px;text-align:center;">${v}</td>`;
-const TH=(v,bg,tc)=>`<th style="background:${bg};color:${tc};font-size:11px;padding:4px 8px;">${v}</th>`;
-
-const SIM_STEPS=[
-{ni:'sn0',
- t:'Step 1 / 14 — 문장이 입력된다',
- b:'모델은 자연어 문장을 바로 계산할 수 없습니다. 먼저 문장을 token으로 나누어야 합니다.',
- d:'입력 문장은 아직 tensor가 아닙니다. 이 시뮬레이터는 toy example로 3개 token ["The","cat","mat"]만 사용합니다.',
- f:'',s:'',dc:'',
- viz:`<h4>입력 문장</h4>
-  <div style="font-size:19px;font-weight:800;color:#2563EB;text-align:center;margin:18px 0;padding:14px;background:#EFF6FF;border-radius:10px;border:2px solid #BFDBFE;">"The cat is on the mat."</div>
-  <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;">↓ Tokenizer로 전달<br><em>시뮬레이터에서는 ["The","cat","mat"] 3 token 사용</em></div>`},
-
-{ni:'sn1',
- t:'Step 2 / 14 — 문장이 token id로 바뀐다',
- b:'token id는 의미가 아니라 vocabulary에서의 index입니다. 모델이 계산하는 대상은 아직 vector가 아닙니다.',
- d:'Tokenizer는 문장을 subword 단위로 분리합니다. 여기서는 이해를 위해 단어 단위로 단순화했습니다.',
- f:'',s:'input→output: ["The","cat","mat"] → [4,5,6]',dc:'',
- viz:`<h4>Tokenizer</h4>
-  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0;">${TOK.map(t=>VT(t,'vt-w')).join('')}</div>
-  <div style="font-size:16px;color:var(--muted);text-align:center;margin:6px 0;">↓ vocab index</div>
-  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0;">${['id 4','id 5','id 6'].map(t=>VT(t,'vt-i')).join('')}</div>
-  <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;">token id는 vocabulary에서의 정수 index입니다</div>`},
-
-{ni:'sn2',
- t:'Step 3 / 14 — token id가 embedding vector로 바뀐다',
- b:'Embedding Layer는 lookup table입니다. token id는 이 table의 row를 선택하는 index 역할을 합니다.',
- d:'W_emb ∈ R^{V×d_model}. id 5("cat")은 W_emb[5]를 가져옵니다. W_emb의 값은 학습 중 업데이트됩니다.',
- f:'W_emb ∈ R^{V × d_model}\nE_cat = W_emb[5] = [0.2, 0.7, -0.1, 0.4]',
- s:'W_emb: 7 × 4   (V=7, d_model=4)\nE_cat : 1 × 4',
- dc:'* 숫자는 toy example illustrative values',
- viz:`<h4>Embedding Lookup</h4>
-  <div style="display:flex;align-items:flex-start;gap:10px;justify-content:center;flex-wrap:wrap;">
-    <div>${[['id 0','&lt;SOS&gt;','#FEF3C7','#92400E'],['id 4','The','#DBEAFE','#1E3A8A'],['id 5','cat','#DCFCE7','#14532D'],['id 6','mat','#EDE9FE','#4C1D95']].map(([id,tok,bg,tc],i)=>`
-      <div style="display:flex;align-items:center;gap:4px;margin:2px 0;${i===2?'outline:2px solid #16A34A;border-radius:4px;':''}">
-        <span style="font-size:9.5px;color:var(--muted);width:30px;text-align:right;">${id}</span>
-        <span class="vt" style="background:${bg};color:${tc};border:1.5px solid ${tc}44;font-size:11px;padding:3px 8px;">${tok}</span>
-        ${i===2?'<span style="font-size:9px;color:#16A34A;">← 선택</span>':''}
-      </div>`).join('')}
-    <div style="font-size:10px;color:var(--muted);text-align:center;">…</div></div>
-    <div style="margin-top:20px;font-size:18px;color:var(--muted);">→</div>
-    <div style="margin-top:18px;"><div style="font-size:10px;color:var(--muted);margin-bottom:3px;">E_cat =</div>
-    ${VV('',['0.2','0.7','-0.1','0.4'],'vc-x')}<div style="font-size:10px;color:var(--muted);text-align:center;">d_model=4</div></div>
-  </div>`},
-
-{ni:'sn3',
- t:'Step 4 / 14 — 위치 정보가 더해진다',
- b:'Transformer는 문장을 순서대로 읽는 RNN이 아니므로, 위치 정보를 vector에 더해줘야 합니다.',
- d:'Positional Encoding은 sin/cos 함수로 생성됩니다. 같은 단어라도 위치가 다르면 다른 PE가 더해집니다.',
- f:'Input = Embedding + PositionalEncoding',
- s:'E_cat: [0.2,  0.7, -0.1, 0.4]\nPE(1): [0.0,  0.1,  0.0, 0.1]\nX_cat: [0.2,  0.8, -0.1, 0.5]',
- dc:'',
- viz:`<h4>Positional Encoding 덧셈</h4>
-  ${[['E_cat',['0.2','0.7','-0.1','0.4'],'vc-x',''],['PE(1)',['0.0','0.1','0.0','0.1'],'vc-g','+'],['X_cat',['0.2','0.8','-0.1','0.5'],'vc-x','=']].map(([l,v,c,pre],i)=>`
-    <div class="vv" style="${i===2?'border-top:2px solid #BFDBFE;padding-top:6px;':''}">
-      <span class="vv-l" style="${i===2?'font-weight:700;color:#1D4ED8;':''}">${pre} ${l}</span>
-      ${v.map(x=>VC(x,c)).join('')}
-    </div>`).join('')}
-  <div style="font-size:11px;color:var(--muted);margin-top:10px;text-align:center;">3개 token 각각 동일 과정 → X ∈ R^{3×4}</div>`},
-
-{ni:'sn4',
- t:'Step 5 / 14 — X에서 Q, K, V를 만든다',
- b:'같은 X에서 출발하지만 서로 다른 weight matrix를 곱하기 때문에 Q, K, V는 서로 다른 역할로 학습됩니다.',
- d:'Q=XW^Q, K=XW^K, V=XW^V. X는 공유되지만 W^Q, W^K, W^V는 독립적으로 학습됩니다.',
- f:'Q = XW^Q\nK = XW^K\nV = XW^V',
- s:'X: 3×4  W^Q,W^K: 4×3  W^V: 4×4\nQ,K: 3×3   V: 3×4',
- dc:'',
- viz:`<h4>Q / K / V 생성</h4>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:7px;">
-    <div style="background:#F0F9FF;border:2px solid #BAE6FD;border-radius:7px;padding:7px 18px;font-size:13px;font-weight:700;color:#0C4A6E;">X (3 × 4)</div>
-    <div style="font-size:11px;color:var(--muted);">× W^Q &nbsp;&nbsp;&nbsp; × W^K &nbsp;&nbsp;&nbsp; × W^V</div>
-    <div style="display:flex;gap:10px;">
-      <div style="background:#FEF2F2;border:2px solid #FECACA;border-radius:7px;padding:8px 14px;font-weight:800;color:#991B1B;text-align:center;font-size:13px;">Q<br><span style="font-size:9.5px;font-weight:400;">(3×3) Query</span></div>
-      <div style="background:#EFF6FF;border:2px solid #BFDBFE;border-radius:7px;padding:8px 14px;font-weight:800;color:#1E3A8A;text-align:center;font-size:13px;">K<br><span style="font-size:9.5px;font-weight:400;">(3×3) Key</span></div>
-      <div style="background:#DCFCE7;border:2px solid #BBF7D0;border-radius:7px;padding:8px 14px;font-weight:800;color:#14532D;text-align:center;font-size:13px;">V<br><span style="font-size:9.5px;font-weight:400;">(3×4) Value</span></div>
-    </div>
-    <div style="font-size:10.5px;color:var(--muted);text-align:center;">역할은 처음부터 설계가 아니라 학습 과정에서 분화됩니다</div>
-  </div>`},
-
-{ni:'sn5',
- t:'Step 6 / 14 — Q와 K를 내적해 score를 만든다',
- b:'Score Matrix의 i번째 row는 i번째 token이 다른 token들을 얼마나 참고할지를 나타냅니다.',
- d:'score[i][j] = q_i · k_j. row=Query 위치, col=Key 위치. QK^T shape=(seq_len×seq_len).',
- f:'Score = Q K^T\nscore_ij = q_i · k_j',
- s:'Q: 3×3  K^T: 3×3  Score: 3×3',
- dc:'q_cat=[0.4,0.1,0.7]  k_The=[0.2,0.5,0.1]\n= 0.4×0.2 + 0.1×0.5 + 0.7×0.1\n= 0.08+0.05+0.07 = 0.20',
- viz:(()=>{
-  const sc=[[' 1.80',' 0.20',' 0.60'],[' 0.20',' 1.60',' 0.40'],[' 0.60',' 0.40',' 1.40']];
-  return `<h4>Score = Q K^T &nbsp;(3 × 3)</h4>
-    <table style="border-collapse:collapse;margin:0 auto;">
-      <thead><tr><th style="background:transparent;border:none;"></th>${TOK.map(t=>TH(t,'#EFF6FF','#1D4ED8')).join('')}</tr></thead>
-      <tbody>${TOK.map((rt,i)=>`<tr>${TH(rt,'#FEF2F2','#991B1B')}${[0,1,2].map(j=>MAT_CELL(sc[i][j],'#F5F3FF','#C4B5FD','#4C1D95')).join('')}</tr>`).join('')}</tbody>
-    </table>
-    <div style="font-size:10px;color:var(--muted);margin-top:7px;text-align:center;">row = Query 위치 &nbsp;|&nbsp; column = Key 위치</div>`;
- })()},
-
-{ni:'sn5',
- t:'Step 7 / 14 — score를 √d_k로 나누어 안정화한다',
- b:'Q와 K 내적은 d_k개의 항을 더하는 연산입니다. d_k가 커질수록 분산이 커져 softmax가 한쪽으로 치우칠 수 있습니다.',
- d:'score의 분산 ≈ d_k. √d_k로 나누면 분산 ≈ 1로 안정화됩니다. seq_len이 아닌 d_k 때문입니다.',
- f:'ScaledScore = Score / √d_k\n√d_k = √3 ≈ 1.73',
- s:'Score, ScaledScore: 3 × 3',
- dc:'Before: 1.80/1.73≈1.04  0.20/1.73≈0.12\nAfter:  softmax 입력이 완만해짐',
- viz:(()=>{
-  const sc=[['1.04','0.12','0.35'],['0.12','0.92','0.23'],['0.35','0.23','0.81']];
-  return `<h4>ScaledScore = Score / √3</h4>
-    <table style="border-collapse:collapse;margin:0 auto;">
-      <thead><tr><th style="background:transparent;border:none;"></th>${TOK.map(t=>TH(t,'#EFF6FF','#1D4ED8')).join('')}</tr></thead>
-      <tbody>${TOK.map((rt,i)=>`<tr>${TH(rt,'#FEF2F2','#991B1B')}${[0,1,2].map(j=>MAT_CELL(sc[i][j],'#F5F3FF','#C4B5FD','#4C1D95')).join('')}</tr>`).join('')}</tbody>
-    </table>
-    <div style="font-size:10.5px;color:#D97706;font-weight:600;margin-top:7px;text-align:center;">√d_k로 나누는 이유는 seq_len이 아닌 d_k 차원의 분산 때문입니다</div>`;
- })()},
-
-{ni:'sn6',
- t:'Step 8 / 14 — softmax로 참고 비율을 만든다',
- b:'softmax는 score를 합이 1인 비율로 바꿉니다. 이 비율은 "어디를 얼마나 참고할지"를 의미합니다.',
- d:'softmax(x_i)=exp(x_i)/Σexp(x_j). 각 row 합=1. AttentionWeight 행렬 shape=3×3.',
- f:'AttWeight = softmax(ScaledScore)',
- s:'ScaledScore: 3×3  →  AttWeight: 3×3',
- dc:'cat row: [0.12,0.92,0.23]\nsoftmax → [0.16, 0.65, 0.19]\n(합 = 1.00 ✓)',
- viz:(()=>{
-  const rows=[[0.55,0.28,0.17],[0.16,0.65,0.19],[0.27,0.24,0.49]];
-  const cols=['#60A5FA','#34D399','#F59E0B'];
-  return `<h4>AttentionWeight = softmax(ScaledScore)</h4>
-    ${rows.map((row,i)=>`<div style="margin:5px 0;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">Query: ${TOK[i]}</div>
-    ${row.map((v,j)=>BAR(TOK[j],v,1,cols[j],'')).join('')}</div>`).join('')}`;
- })()},
-
-{ni:'sn6',
- t:'Step 9 / 14 — AttentionOutput = AttentionWeight × V',
- b:'Q와 K는 어디를 얼마나 참고할지 결정하고, Value는 실제로 전달될 정보를 담습니다.',
- d:'AttentionOutput = AttentionWeight × V. context vector = weighted sum of V rows.',
- f:'AttentionOutput = AttentionWeight × V',
- s:'AttWeight: 3×3  V: 3×4  →  AttOutput: 3×4',
- dc:'out_cat = 0.16·V_The + 0.65·V_cat + 0.19·V_mat',
- viz:`<h4>Weighted Sum with V — "cat" 위치</h4>
-  ${VV('<span style="color:#60A5FA;">0.16 ×</span>',['0.1','0.2','0.3','0.1'],'vc-x','<span style="font-size:9.5px;color:var(--muted);margin-left:3px;">(V_The)</span>')}
-  ${VV('<span style="color:#34D399;">0.65 ×</span>',['0.2','0.7','-0.1','0.4'],'vc-v','<span style="font-size:9.5px;color:var(--muted);margin-left:3px;">(V_cat)</span>')}
-  ${VV('<span style="color:#F59E0B;">0.19 ×</span>',['0.3','0.5','0.0','0.2'],'vc-x','<span style="font-size:9.5px;color:var(--muted);margin-left:3px;">(V_mat)</span>')}
-  <div style="font-size:12px;color:var(--muted);text-align:center;margin:3px 0;">= (가중합)</div>
-  ${VV('<b style="color:#1D4ED8;">out_cat</b>',['0.20','0.60','-0.01','0.30'],'vc-k')}
-  <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:5px;">Forward pass: 입력→출력 방향 ✓</div>`},
-
-{ni:'sn7',
- t:'Step 10 / 14 — FFN이 각 token vector를 독립적으로 가공한다',
- b:'Attention은 token 간 정보를 섞고, FFN은 섞인 각 token vector를 독립적으로 가공합니다.',
- d:'FFN은 position-wise입니다. W₁, W₂를 보면 token 간 연결이 없음을 알 수 있습니다.',
- f:'FFN(x) = max(0, xW₁+b₁) W₂+b₂',
- s:'x: 1×4  W₁: 4×8  W₂: 8×4\n(toy: d_model=4, d_ff=8)',
- dc:'token 간 화살표 없음 → 독립 처리\nResidual: LayerNorm(x + FFN(x))',
- viz:`<h4>Position-wise FFN (token 간 독립)</h4>
-  <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:10px 0;">
-    ${[['The','#EFF6FF','#93C5FD'],['cat','#DCFCE7','#86EFAC'],['mat','#FEF3C7','#FDE68A']].map(([t,bg,bd])=>`
-      <div style="text-align:center;">
-        <div style="background:${bg};border:2px solid ${bd};border-radius:6px;padding:5px 9px;font-size:11.5px;font-weight:700;">${t}</div>
-        <div style="font-size:14px;color:var(--muted);">↓</div>
-        <div style="background:#FFF7ED;border:2px solid #FED7AA;border-radius:6px;padding:4px 9px;font-size:10px;color:#92400E;">MLP</div>
-        <div style="font-size:14px;color:var(--muted);">↓</div>
-        <div style="background:${bg};border:2px solid ${bd};border-radius:6px;padding:5px 9px;font-size:11.5px;font-weight:700;">${t}′</div>
-      </div>`).join('')}
-  </div>
-  <div style="font-size:10.5px;color:#D97706;font-weight:600;text-align:center;margin-top:5px;">↕ token 간 연결 없음 — 각 token 독립 처리</div>`},
-
-{ni:'sn8',
- t:'Step 11 / 14 — Decoder가 다음 token 후보 점수를 만든다',
- b:'Decoder output은 vocabulary 전체에 대한 점수인 logits로 변환됩니다.',
- d:'Logits=H_dec·W_vocab+b. W_vocab ∈ R^{d_model×V}.',
- f:'Logits = H_dec W_vocab + b',
- s:'H_dec: 1×4  W_vocab: 4×7  →  Logits: 1×7',
- dc:'',
- viz:(()=>{
-  const tks=['<SOS>','Le','chat','est','The','cat','mat'];
-  const lg=[0.1,0.3,3.2,1.1,0.4,0.2,0.1];
-  return `<h4>Logits (vocab 전체 점수)</h4>
-    ${tks.map((t,i)=>BAR(t,lg[i],3.2,i===2?'#059669':'#93C5FD',i===2?'<span style="font-size:9px;color:#059669;">← 최고</span>':'')).join('')}`;
- })()},
-
-{ni:'sn8',
- t:'Step 12 / 14 — softmax로 다음 token 확률을 만든다',
- b:'모델은 vocabulary의 모든 token 중 다음 token일 확률을 계산합니다.',
- d:'P(y_t|y_<t,x)=softmax(Logits). 확률의 합=1.',
- f:'P(next token) = softmax(Logits)',
- s:'Logits: 1×7  →  Prob: 1×7  (합=1)',
- dc:'P(chat)=0.82 → 가장 높은 확률',
- viz:(()=>{
-  const tks=['<SOS>','Le','chat','est','The','cat','mat'];
-  const pr=[0.01,0.04,0.82,0.07,0.02,0.03,0.01];
-  return `<h4>P(next token) = softmax(Logits)</h4>
-    ${tks.map((t,i)=>BAR(t,pr[i],1,i===2?'#059669':'#93C5FD',i===2?'<span style="font-size:9px;color:#059669;">← 정답!</span>':'')).join('')}`;
- })()},
-
-{ni:'sn9',
- t:'Step 13 / 14 — 정답 token과 비교해 loss를 계산한다',
- b:'정답 token의 확률이 낮으면 loss가 커지고, 높으면 loss가 작아집니다.',
- d:'Cross-Entropy Loss: L=-log P(target). P(chat)=0.82이면 Loss≈0.20.',
- f:'Target = "chat"\nLoss = -log P(chat)',
- s:'Loss = -log(0.82) ≈ 0.20',
- dc:'완벽 예측(P=1.0) → Loss=0\nP=0.5 → Loss≈0.69\nP=0.1 → Loss≈2.30',
- viz:`<h4>Loss 계산</h4>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin:8px 0;">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <div style="text-align:center;"><div style="font-size:10px;color:var(--muted);">P(chat)</div><div style="font-size:28px;font-weight:900;color:#059669;">0.82</div></div>
-      <div style="font-size:18px;color:var(--muted);">vs</div>
-      <div style="text-align:center;"><div style="font-size:10px;color:var(--muted);">정답 Target</div><div style="background:#DCFCE7;border:2px solid #86EFAC;border-radius:6px;padding:5px 12px;font-size:13px;font-weight:800;color:#14532D;">chat ✓</div></div>
-    </div>
-    <div style="text-align:center;background:#FFF1F2;border:2px solid #FECACA;border-radius:8px;padding:10px 18px;">
-      <div style="font-size:10px;color:var(--muted);">Cross-Entropy Loss</div>
-      <div style="font-size:24px;font-weight:900;color:#EF4444;">L ≈ 0.20</div>
-      <div style="font-size:10px;color:var(--muted);">= −log(0.82)</div>
-    </div>
-    <div style="font-size:10.5px;color:var(--muted);text-align:center;">P → 1.0일수록 Loss → 0 &nbsp;|&nbsp; P → 0일수록 Loss → ∞</div>
-  </div>`},
-
-{ni:'sn10',
- t:'Step 14 / 14 — Backpropagation: gradient가 weight를 업데이트한다',
- b:'모델은 loss를 줄이는 방향으로 weight를 조금씩 수정합니다. 정답 예측에 도움이 된 경로는 더 강화될 수 있습니다.',
- d:'Chain rule로 gradient가 output→decoder→attention→embedding 방향으로 역전파됩니다.',
- f:'W ← W - η ∂L/∂W\nη = learning rate',
- s:'Forward: 입력→출력\nBackward: Loss→weight (역방향)',
- dc:'W_vocab: 정답 logit 높이는 방향으로 조정될 수 있음\nW^Q,W^K: 유용 attention score가 커지는 방향으로 조정될 수 있음\nW^V: 정답 예측에 유리한 정보 방향으로 조정될 수 있음\nW_emb: 더 유용한 표현이 되는 방향으로 조정될 수 있음',
- viz:`<h4>Backpropagation 방향 (역방향)</h4>
-  <div style="font-size:10.5px;color:var(--muted);text-align:center;margin-bottom:7px;">Loss에서 시작해 output → decoder → attention → embedding 방향으로 흐름</div>
-  <div style="display:flex;flex-direction:column;gap:3px;">
-    <div class="vbk" style="border-color:#EF4444;background:#FFF1F2;"><span class="vbk-arr">←</span> Loss = 0.20</div>
-    ${['W_vocab','W^Q','W^K','W^V','W_emb'].map(w=>`<div class="vbk"><span class="vbk-arr">←</span> ∂L/∂${w}<span class="vbadge">${w} 업데이트</span></div>`).join('')}
-  </div>
-  <div style="font-size:10px;color:#92400E;background:#FEF3C7;border-radius:6px;padding:6px 10px;margin-top:7px;line-height:1.6;">
-    "정답 예측에 도움이 되는 방향으로 조정됩니다"<br>gradient 방향은 loss landscape에 따라 달라지며, 단정할 수 없습니다.
-  </div>`},
+const FLOW_STEPS=[
+ {t:'Step 1 / 8 — Source 문장이 Encoder에 입력된다',
+  hl:['fSrc'],
+  enc:{cx:195,cy:76,label:'X',color:'#2563EB',show:true},
+  dec:{show:false}},
+ {t:'Step 2 / 8 — X가 Encoder Layer × 6을 통과하며 표현이 갱신된다',
+  hl:['fEmb','fPe','fBlock'],
+  enc:{cx:195,cy:363,label:'X',color:'#2563EB',show:true},
+  dec:{show:false}},
+ {t:'Step 3 / 8 — Encoder가 H_enc를 만든다',
+  hl:['fHenc'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{show:false}},
+ {t:'Step 4 / 8 — Decoder가 지금까지 생성된 Target 문장을 입력받는다',
+  hl:['dTgt'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true}},
+ {t:'Step 5 / 8 — Target이 Masked Self-Attention을 통과한다',
+  hl:['dEmb','dPe','dMmha'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:277,label:'Target',color:'#7C3AED',show:true}},
+ {t:'Step 6 / 8 — Cross-Attention에서 H와 Target이 만난다 (Q←Target, K,V←H)',
+  hl:['dCross','crossPath'],
+  enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:376,label:'Target',color:'#7C3AED',show:true}},
+ {t:'Step 7 / 8 — FFN → Linear → Softmax로 다음 token 확률이 계산된다',
+  hl:['dFfn','dLinear','dSoftmax','dOut'],
+  enc:{show:false},
+  dec:{cx:730,cy:684,label:'예측 token',color:'#EA580C',show:true}},
+ {t:'Step 8 / 8 — 예측된 token이 Target 문장 뒤에 추가되어 다시 입력된다 (자기회귀)',
+  hl:['loopPath','dTgt'],
+  enc:{show:false},
+  dec:{cx:730,cy:79,label:'Target (+1)',color:'#7C3AED',show:true}},
 ];
 
-let simSt=0,simTmr=null,simPaused=false,simSpd=1800,simMode='beginner';
+let flowSt=0,flowTmr=null,flowPaused=false,flowSpd=1800;
 
-function simRender(i){
-  const s=SIM_STEPS[i];
-  document.getElementById('sim-prog').style.width=((i+1)/SIM_STEPS.length*100).toFixed(1)+'%';
-  document.getElementById('sim-lbl').textContent=`Step ${i+1} / ${SIM_STEPS.length}`;
-  document.getElementById('sim-ttl').textContent=s.t;
-  document.getElementById('sim-desc').innerHTML=(simMode==='beginner'?s.b:s.d)||s.b;
-  const fc=document.getElementById('sim-fc');
-  fc.textContent=s.f||''; fc.style.display=s.f?'block':'none';
-  const sc=document.getElementById('sim-sc');
-  sc.innerHTML=s.s?('<b>Shape:</b> '+s.s.replace(/\n/g,'<br>')):''; sc.style.display=(s.s&&simMode!=='beginner')?'block':'none';
-  const dc=document.getElementById('sim-dc');
-  dc.innerHTML=s.dc?s.dc.replace(/\n/g,'<br>'):''; dc.style.display=(s.dc&&simMode==='detail')?'block':'none';
-  document.getElementById('sim-viz').innerHTML=typeof s.viz==='function'?s.viz():s.viz;
-  document.querySelectorAll('.sim-node').forEach(n=>n.classList.remove('active'));
-  const nd=document.getElementById(s.ni);
-  if(nd)nd.classList.add('active');
-  simSt=i;
+function flowRender(i){
+  const s=FLOW_STEPS[i];
+  document.getElementById('flow-prog').style.width=((i+1)/FLOW_STEPS.length*100).toFixed(1)+'%';
+  document.getElementById('flow-lbl').textContent=`Step ${i+1} / ${FLOW_STEPS.length}`;
+  document.getElementById('flow-current-title').textContent=s.t;
+  document.querySelectorAll('#flow-svg .fhl').forEach(el=>el.classList.remove('fhl'));
+  s.hl.forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add('fhl'); });
+  const dotEnc=document.getElementById('dotEnc'), lblEnc=document.getElementById('dotEncLabel');
+  const dotDec=document.getElementById('dotDec'), lblDec=document.getElementById('dotDecLabel');
+  if(s.enc && s.enc.show){
+    dotEnc.style.display=''; lblEnc.style.display='';
+    dotEnc.setAttribute('cx',s.enc.cx); dotEnc.setAttribute('cy',s.enc.cy); dotEnc.setAttribute('fill',s.enc.color);
+    lblEnc.setAttribute('x',s.enc.cx+13); lblEnc.setAttribute('y',s.enc.cy+4); lblEnc.textContent=s.enc.label; lblEnc.setAttribute('fill',s.enc.color);
+  } else { dotEnc.style.display='none'; lblEnc.style.display='none'; }
+  if(s.dec && s.dec.show){
+    dotDec.style.display=''; lblDec.style.display='';
+    dotDec.setAttribute('cx',s.dec.cx); dotDec.setAttribute('cy',s.dec.cy); dotDec.setAttribute('fill',s.dec.color);
+    lblDec.setAttribute('x',s.dec.cx+13); lblDec.setAttribute('y',s.dec.cy+4); lblDec.textContent=s.dec.label; lblDec.setAttribute('fill',s.dec.color);
+  } else { dotDec.style.display='none'; lblDec.style.display='none'; }
+  flowSt=i;
 }
-function simGo(d){clearTimeout(simTmr);simRender(Math.max(0,Math.min(SIM_STEPS.length-1,simSt+d)));if(!simPaused)simSched();}
-function simSched(){clearTimeout(simTmr);if(simSt>=SIM_STEPS.length-1){simPaused=true;const b=document.getElementById('sim-playbtn');b.textContent='▶ 재생';b.classList.remove('sim-ctrl-play');return;}simTmr=setTimeout(()=>{simRender(simSt+1);simSched();},simSpd);}
-function simToggle(){simPaused=!simPaused;const b=document.getElementById('sim-playbtn');if(simPaused){clearTimeout(simTmr);b.textContent='▶ 재생';b.classList.remove('sim-ctrl-play');}else{b.textContent='⏸ 일시정지';b.classList.add('sim-ctrl-play');simSched();}}
-function simRestart(){clearTimeout(simTmr);simPaused=false;const b=document.getElementById('sim-playbtn');b.textContent='⏸ 일시정지';b.classList.add('sim-ctrl-play');simRender(0);simSched();}
-function simSetMode(m){simMode=m;document.getElementById('smbeg').classList.toggle('active',m==='beginner');document.getElementById('smdet').classList.toggle('active',m==='detail');simRender(simSt);}
-function simSetSpd(ms){simSpd=ms;document.querySelectorAll('.sim-spd').forEach(b=>b.classList.remove('on'));const idx=ms===2600?0:ms===1800?1:2;document.querySelectorAll('.sim-spd')[idx]?.classList.add('on');if(!simPaused){clearTimeout(simTmr);simSched();}}
+function flowGo(d){clearTimeout(flowTmr);flowRender(Math.max(0,Math.min(FLOW_STEPS.length-1,flowSt+d)));if(!flowPaused)flowSched();}
+function flowSched(){clearTimeout(flowTmr);if(flowSt>=FLOW_STEPS.length-1){flowPaused=true;const b=document.getElementById('flow-playbtn');b.textContent='▶ 재생';b.classList.remove('sim-ctrl-play');return;}flowTmr=setTimeout(()=>{flowRender(flowSt+1);flowSched();},flowSpd);}
+function flowToggle(){flowPaused=!flowPaused;const b=document.getElementById('flow-playbtn');if(flowPaused){clearTimeout(flowTmr);b.textContent='▶ 재생';b.classList.remove('sim-ctrl-play');}else{b.textContent='⏸ 일시정지';b.classList.add('sim-ctrl-play');flowSched();}}
+function flowRestart(){clearTimeout(flowTmr);flowPaused=false;const b=document.getElementById('flow-playbtn');b.textContent='⏸ 일시정지';b.classList.add('sim-ctrl-play');flowRender(0);flowSched();}
+function flowSetSpd(ms){flowSpd=ms;document.querySelectorAll('.sim-spd').forEach(b=>b.classList.remove('on'));const idx=ms===2600?0:ms===1800?1:2;document.querySelectorAll('.sim-spd')[idx]?.classList.add('on');if(!flowPaused){clearTimeout(flowTmr);flowSched();}}
 
-simRender(0);
-simSched();
+/* ── Hover tooltip: example sentence + example vector for X / H / Target / 예측 token ── */
+const FLOW_TIPS = {
+ 'X': {title:'X — Encoder 입력 (token embedding + position 정보)',
+  sentence:'Source: "The cat is on the mat."',
+  vector:'X(cat) ≈ [0.2, 0.7, -0.1, 0.4, ...]  (d_model=512)'},
+ 'H': {title:'H — Encoder 출력 (문장 전체 정보가 반영된 표현)',
+  sentence:'Source: "The cat is on the mat."',
+  vector:'H(cat) ≈ [0.31, -0.52, 0.68, 0.05, ...]  (d_model=512, "on"·"mat"의 정보가 섞여 들어감)'},
+ 'Target': {title:'Target — Decoder 입력 (지금까지 생성된 문장)',
+  sentence:'Target: "<SOS>, Le, chat, est, sur, le"',
+  vector:'Target(chat) ≈ [0.18, 0.55, -0.29, 0.46, ...]  (d_model=512)'},
+ 'Target (+1)': {title:'Target — 예측 token이 추가된 다음 입력',
+  sentence:'Target: "<SOS>, Le, chat, est, sur, le, tapis"',
+  vector:'Target(tapis) ≈ [0.27, -0.11, 0.63, 0.05, ...]  (d_model=512)'},
+ '예측 token': {title:'예측 token — Softmax 출력 (다음 token 확률 분포)',
+  sentence:'다음 token 후보: tapis(0.62), table(0.10), sol(0.07), ...',
+  vector:'P(next) ≈ [tapis:0.62, table:0.10, sol:0.07, ...]  (vocab_size 차원, 합=1.0)'},
+};
+function flowTipShow(e,label){
+  const info=FLOW_TIPS[label]; if(!info) return;
+  const tip=document.getElementById('flow-tip');
+  tip.innerHTML=`<span class="ft-title">${info.title}</span>${info.sentence}<span class="ft-vec">${info.vector}</span>`;
+  tip.classList.add('show');
+  flowTipMove(e);
+}
+function flowTipMove(e){
+  const tip=document.getElementById('flow-tip');
+  const pad=16;
+  let left=e.clientX+pad, top=e.clientY+pad;
+  if(left>window.innerWidth-280) left=e.clientX-pad-270;
+  if(top>window.innerHeight-110) top=e.clientY-pad-100;
+  tip.style.left=left+'px'; tip.style.top=top+'px';
+}
+function flowTipHide(){ document.getElementById('flow-tip').classList.remove('show'); }
+function setupFlowTips(){
+  [['dotEnc','dotEncLabel'],['dotDec','dotDecLabel']].forEach(([dotId,lblId])=>{
+    const dot=document.getElementById(dotId), lbl=document.getElementById(lblId);
+    [dot,lbl].forEach(el=>{
+      el.addEventListener('mouseenter',e=>flowTipShow(e,lbl.textContent));
+      el.addEventListener('mousemove',flowTipMove);
+      el.addEventListener('mouseleave',flowTipHide);
+    });
+  });
+}
+setupFlowTips();
+
+flowRender(0);
+flowSched();
 
 /* ── Q&A Annotation System ─────────────────────────────── */
 const qaItems = [
@@ -2234,8 +2137,16 @@ const qaItems = [
     id: 'qa-attention-score-matrix-001',
     q: 'Score Matrix의 (i, j) 값은 구체적으로 무엇을 의미하나요?',
     short: 'score_ij = q_i · k_j. i번째 token이 j번째 token을 얼마나 참고할지의 raw 점수입니다.',
-    detail: 'Score = QKᵀ 계산 결과, score_ij는 i번째 Query 벡터와 j번째 Key 벡터의 내적입니다. 두 벡터가 비슷한 방향을 가리킬수록 내적이 크고, 이는 "i번째 token이 j번째 token에 주목해야 한다"는 신호입니다. 이 값은 아직 정규화 전(raw)이므로 √d_k로 나누고 Softmax를 거쳐야 최종 Attention Weight가 됩니다. Softmax 이전에는 절댓값보다 상대적 크기 비교가 중요합니다.',
+    detail: '먼저 표를 \'각 token의 입장표\'라고 보면 쉽습니다. 한 row는 한 token의 입장이고, column은 그 token이 참고할 후보들입니다. 그다음 조금 더 정확히 보면 row는 Query 위치, column은 Key 위치입니다. Score = QKᵀ 계산 결과, score_ij는 i번째 Query 벡터와 j번째 Key 벡터의 내적입니다. 두 벡터가 비슷한 방향을 가리킬수록 내적이 크고, 이는 "i번째 token이 j번째 token에 주목해야 한다"는 신호입니다. 이 값은 아직 정규화 전(raw)이므로 √d_k로 나누고 Softmax를 거쳐야 최종 Attention Weight가 됩니다. Softmax 이전에는 절댓값보다 상대적 크기 비교가 중요합니다.',
     summary: 'score_ij = q_i · k_j. 값 크다 = i가 j를 더 참고. Softmax 전 raw 점수이므로 절댓값 자체는 의미 없음.'
+  },
+  {
+    anchor: 'attention-score-matrix',
+    id: 'qa-attention-score-matrix-002',
+    q: 'Score Matrix의 숫자는 정확히 무엇을 의미하나요?',
+    short: '각 숫자는 row token이 column token을 얼마나 참고할 후보인지 나타내는 raw score입니다.',
+    detail: '각 숫자는 row token이 column token을 얼마나 참고할 후보인지 나타내는 raw score입니다. 아직 최종 참고 비율은 아니며, softmax를 거쳐 attention weight가 됩니다. 값이 높을수록 softmax 이후 해당 token의 Value가 더 많이 반영될 가능성이 큽니다.',
+    summary: 'Score Matrix 숫자 = 참고 후보 raw score. softmax를 거쳐야 실제 참고 비율(attention weight)이 됩니다.'
   },
   {
     anchor: 'look-ahead-mask',
@@ -2252,14 +2163,6 @@ const qaItems = [
     short: '아니오. FFN은 각 token 위치를 독립적으로 처리합니다. token 간 정보 교환은 Attention의 역할입니다.',
     detail: 'FFN(x) = max(0, xW₁ + b₁)W₂ + b₂. 이 연산은 각 token의 벡터 x에 대해 완전히 독립적으로 적용됩니다. "cat" 위치의 FFN 출력은 같은 레이어 내 "The"나 "mat"의 현재 벡터와 전혀 무관하게 계산됩니다. token 간 정보 혼합은 이미 Attention 단계에서 이루어졌으며, FFN은 그 결과를 각 위치에서 독립적으로 비선형 변환하는 역할입니다. 그래서 FFN을 "position-wise"라고 부릅니다.',
     summary: 'FFN = position-wise 독립 변환. token 혼합은 Attention이 담당. FFN은 각 위치에서 512→2048→512 MLP만 수행.'
-  },
-  {
-    anchor: 'backpropagation',
-    id: 'qa-backpropagation-001',
-    q: 'Backpropagation이 Transformer에서 어떻게 흐르나요? 어떤 weight가 업데이트되나요?',
-    short: 'Loss에서 시작해 출력층 → Decoder → Attention → Embedding 방향(역방향)으로 Chain rule로 gradient가 전파됩니다.',
-    detail: 'Forward pass가 Input → Embedding → Encoder → Decoder → Logits → Loss 순이라면, Backward pass는 반대 방향입니다. ∂L/∂W_vocab → ∂L/∂H_dec → ∂L/∂W^Q, W^K, W^V → ∂L/∂W_emb 순으로 gradient가 계산됩니다. 각 weight는 W ← W − η·(∂L/∂W)로 업데이트됩니다. 핵심은 "정답 token의 확률을 높이는 방향"으로 모든 weight가 동시에 조정된다는 것입니다. 어떤 weight가 얼마나 기여했는지를 Chain rule이 정확히 추적합니다.',
-    summary: 'Backprop = Loss → W_vocab → W^Q/K/V → W_emb 방향 chain rule. 모든 weight를 W ← W−η∂L/∂W로 동시 업데이트.'
   },
   /* ── Pre-knowledge Q&As ─── */
   {

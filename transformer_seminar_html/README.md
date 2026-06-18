@@ -85,18 +85,27 @@ transformer_seminar_html/
 | 19 | 학습 시점 vs 추론 시점 | 학습 vs 추론 |
 | 20 | 전체 요약 | |
 
-## Interactive Simulator
+## 전체 흐름 애니메이션 (Section 0)
 
-이 HTML에는 **Forward Pass부터 Backpropagation까지** 보여주는 toy Transformer 시뮬레이터가 포함되어 있습니다.
+Section 0 "전체 흐름 한눈에 보기"의 Encoder-Decoder 그림은 고정된 채로,
+그 위에서 X(입력), H(Encoder 출력), Target 문장이 어떻게 움직이는지를 보여주는
+8 step 애니메이션이 포함되어 있습니다.
 
-시뮬레이터는 실제 대형 모델의 수치를 재현하는 것이 아니라,
-입력 token이 vector로 바뀌고, attention/FFN/decoder를 거쳐 확률과 loss가 만들어진 뒤,
-gradient가 weight를 업데이트하는 방향을 시각적으로 이해하기 위한 교육용 예시입니다.
+범위는 **추론(Inference)** 으로 한정합니다. 학습/Loss/Backpropagation은 다루지 않습니다.
 
-- toy example: d_model=4, d_k=3, vocab=7 (illustrative values)
-- 14 step 구성: 입력 → Tokenizer → Embedding → PE → Q/K/V → Score → Softmax → AttOutput → FFN → Logits → Prob → Loss → Backprop
-- Beginner / Detail 모드 전환
-- 재생 / 일시정지 / 이전 / 다음 / 속도 조절
+- 8 step 구성: Source 입력 → Encoder 통과 → H_enc 생성 → Target 입력 → Masked Self-Attention → Cross-Attention(H ↔ Target) → FFN/Linear/Softmax → 자기회귀(예측 token이 Target에 추가)
+- 정적 SVG 위에 강조(highlight)와 움직이는 점(dot)으로 X/H/Target의 흐름을 표시
+- 재생 / 일시정지 / 이전 / 다음 / 처음부터 / 속도 조절
+
+## 발표 운영 방식
+
+전체 흐름 애니메이션은 청중에게 보여주는 시각 자료입니다.  
+자세한 설명은 `presenter_script.md`에 분리되어 있습니다.
+
+발표자는 애니메이션 Step을 넘기면서 `presenter_script.md`의 각 Step별 스크립트를 참고해 설명합니다.
+
+이렇게 분리한 이유는 청중 화면에 긴 설명문을 노출하지 않고,
+발표자가 맥락과 난이도에 맞게 설명할 수 있도록 하기 위해서입니다.
 
 ## 사전 지식 섹션
 
@@ -132,7 +141,6 @@ index.html#qa-attention-score-matrix-001
 index.html#qa-qkv-projection-001
 index.html#qa-look-ahead-mask-001
 index.html#qa-ffn-position-wise-001
-index.html#qa-backpropagation-001
 ```
 
 ### 새 Q&A 추가 방법
@@ -175,7 +183,6 @@ index.html#qa-backpropagation-001
 | padding-mask | sec17 |
 | linear-softmax | sec18 |
 | training-vs-inference | sec19 |
-| backpropagation | 시뮬레이터 ★ |
 
 ★ = seed Q&A 포함
 
