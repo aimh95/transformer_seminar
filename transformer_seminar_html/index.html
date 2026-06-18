@@ -481,6 +481,117 @@
   .qa-index-collapsed .qa-index-body { display:none; }
   @media(max-width:680px){ .qa-index-panel { width:calc(100vw - 32px); right:16px; bottom:16px; } }
 
+    /* ══════════════════════════════════════════════
+       QKV-Learn Stepper (sec 7-learn)
+    ══════════════════════════════════════════════ */
+
+    /* Step progress */
+    .qls-prog-wrap { height:4px; background:var(--border); border-radius:4px; margin:0 0 6px; }
+    .qls-prog-bar  { height:100%; background:var(--q); border-radius:4px; transition:width .35s ease; }
+    .qls-step-lbl  { font-size:11px; color:var(--muted); text-align:right; margin-bottom:6px; }
+    .qls-step-title { font-size:14px; font-weight:800; color:var(--text); text-align:center; margin:0 0 14px; line-height:1.4; }
+
+    /* Panel show/hide */
+    .qls-panel { display:none; }
+    .qls-panel.on { display:block; animation:qlsFadeIn .25s ease; }
+    @keyframes qlsFadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+    /* Score Matrix table */
+    .sm-tbl { border-collapse:collapse; margin:14px auto; font-size:13px; font-family:'Courier New',Consolas,monospace; }
+    .sm-tbl th, .sm-tbl td {
+      border:1px solid var(--border); padding:8px 10px;
+      text-align:center; min-width:84px;
+      transition:background .3s, color .3s, border-color .3s;
+    }
+    .sm-tbl th { background:#F9FAFB; font-size:11px; font-weight:700; }
+    .sm-tbl th.hq { color:var(--q); }
+    .sm-tbl th.hk { color:var(--k); }
+    .sm-tbl td.cv { background:#fff; color:var(--sub); }
+    .sm-tbl td.cm { background:#2D3748; color:#9CA3AF; font-style:italic; }
+
+    /* Row highlight (Query Le) */
+    .sm-tbl.hl-row .row-le th,
+    .sm-tbl.hl-row .row-le td.cv { background:#FEF2F2; color:var(--q); font-weight:700; border-color:#FECACA; }
+    .sm-tbl.hl-row .row-le { outline:2px solid var(--q); }
+
+    /* Column highlight (Key Le) */
+    .sm-tbl.hl-col td.col-le.cv,
+    .sm-tbl.hl-col th.col-le { background:#DBEAFE; color:var(--k); font-weight:700; border-color:#93C5FD; }
+
+    /* Single cell highlight (q₂·k₂) */
+    .sm-tbl.hl-cell td.key-cell {
+      background:#DCFCE7; color:var(--v); font-weight:700;
+      border:2px solid #16A34A;
+      position:relative;
+    }
+    .sm-tbl.hl-cell td.key-cell::after {
+      content:"↑"; position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+      color:#16A34A; font-size:16px; font-weight:900;
+    }
+
+    /* Both col + row for step 4 */
+    .sm-tbl.hl-both .row-le td.cv { background:#FEF2F2; color:var(--q); font-weight:700; border-color:#FECACA; }
+    .sm-tbl.hl-both .row-le th    { background:#FEF2F2; color:var(--q); font-weight:700; }
+    .sm-tbl.hl-both td.col-le.cv  { background:#DBEAFE; color:var(--k); font-weight:700; border-color:#93C5FD; }
+    .sm-tbl.hl-both th.col-le     { background:#DBEAFE; color:var(--k); font-weight:700; }
+    .sm-tbl.hl-both td.key-cell   { background:#DCFCE7; color:#16A34A; font-weight:700; border:2px solid #16A34A; }
+
+    /* Learning direction boxes */
+    .learn-dir { margin:14px 0; display:flex; flex-direction:column; gap:10px; }
+    .ld-row {
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+      background:var(--white); border:1.5px solid var(--border);
+      border-radius:10px; padding:12px 18px;
+    }
+    .ld-formula { font-family:'Courier New',Consolas,monospace; font-size:14px; font-weight:700; }
+    .ld-up   { color:#16A34A; font-size:18px; font-weight:900; }
+    .ld-dn   { color:var(--q); font-size:18px; font-weight:900; }
+    .ld-arr  { color:var(--muted); font-size:13px; flex:1; }
+    .ld-row.row-up { border-color:#86EFAC; background:#DCFCE7; }
+    .ld-row.row-dn { border-color:#FECACA; background:#FEF2F2; }
+
+    /* QKV summary cards (final) */
+    .qkv-ls-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0; }
+    @media(max-width:640px){ .qkv-ls-grid { grid-template-columns:1fr; } }
+    .qkv-ls-card { border-radius:10px; padding:16px 18px; border:2px solid; }
+    .qkv-ls-card.lsq { background:var(--q-light);  border-color:#FECACA; }
+    .qkv-ls-card.lsk { background:var(--k-light);  border-color:#93C5FD; }
+    .qkv-ls-card.lsv { background:var(--v-light);  border-color:#86EFAC; }
+    .qkv-ls-card .ls-let { font-size:28px; font-weight:900; line-height:1; margin-bottom:6px; }
+    .qkv-ls-card.lsq .ls-let { color:var(--q); }
+    .qkv-ls-card.lsk .ls-let { color:var(--k); }
+    .qkv-ls-card.lsv .ls-let { color:var(--v); }
+    .qkv-ls-card .ls-role { font-size:13px; font-weight:700; margin-bottom:4px; }
+    .qkv-ls-card .ls-desc { font-size:12px; color:var(--sub); line-height:1.6; }
+
+    /* Step 2 init/trained comparison */
+    .init-train-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+    @media(max-width:560px){ .init-train-grid { grid-template-columns:1fr; } }
+    .it-card { border-radius:10px; padding:14px 18px; }
+    .it-card.it-init  { background:#FEF2F2; border:1.5px solid #FECACA; }
+    .it-card.it-train { background:var(--v-light); border:1.5px solid #86EFAC; }
+    .it-card .it-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
+    .it-card.it-init  .it-label { color:var(--q); }
+    .it-card.it-train .it-label { color:var(--v); }
+    .it-card .it-body { font-size:13px; color:var(--sub); line-height:1.7; font-family:'Courier New',Consolas,monospace; }
+
+    /* Step 3 learning flow */
+    .lflow { display:flex; flex-direction:column; align-items:center; gap:4px; margin:14px 0; }
+    .lflow-box {
+      width:100%; max-width:380px; padding:10px 18px;
+      border-radius:8px; font-size:13px; font-weight:600; text-align:center;
+    }
+    .lflow-box.lf-in   { background:var(--enc-light); border:1.5px solid var(--enc-mid); color:#1E40AF; }
+    .lflow-box.lf-loss { background:#FEF2F2; border:1.5px solid #FECACA; color:var(--q); font-weight:700; font-family:monospace; }
+    .lflow-box.lf-bp   { background:var(--mask-light); border:1.5px solid #D1D5DB; color:var(--sub); }
+    .lflow-box.lf-w    { background:var(--q-light); border:1.5px solid #FECACA; color:var(--q); }
+    .lflow-box.lf-out  { background:var(--v-light); border:1.5px solid #86EFAC; color:#15803D; font-weight:700; }
+    .lflow-arr { color:var(--muted); font-size:18px; font-weight:700; }
+
+    @media(max-width:560px){
+      .sm-tbl { font-size:11px; }
+      .sm-tbl th, .sm-tbl td { min-width:60px; padding:5px 6px; }
+    }
   </style>
 </head>
 <body>
@@ -1258,6 +1369,309 @@
     <span class="body">Q, K, V = 같은 X를 다른 W로 선형 변환. 역할은 학습으로 결정된다. Q는 무엇을 찾는가, K는 어떤 특징인가, V는 실제로 전달할 내용.</span>
   </div>
   <div class="qa-target" data-anchor="qkv-projection"></div>
+</section>
+
+<hr class="div" style="margin-top:48px;">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Section 7-L: Q/K/V 역할이 학습되는 원리 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="sec-qkv-learn">
+  <div class="sec-hd">
+    <span class="sec-num a">7+</span>
+    <h2>Q/K/V 역할이 학습되는 원리</h2>
+  </div>
+  <p>
+    Q, K, V는 처음부터 사람이 의미를 부여한 벡터가 아닙니다.
+    Attention 수식 안에서 역할이 나뉘고, 정답 token을 맞히는 학습 과정에서 그 역할로 수렴합니다.
+    아래 5단계로 살펴봅니다.
+  </p>
+
+  <!-- ── Stepper controls ── -->
+  <div class="qls-prog-wrap"><div class="qls-prog-bar" id="qls-prog" style="width:20%"></div></div>
+  <div class="qls-step-lbl" id="qls-lbl">Step 1 / 5</div>
+  <div class="qls-step-title" id="qls-title">Attention Score = Q와 K의 내적</div>
+
+  <!-- ======= PANEL 1: Score 수식 ======= -->
+  <div class="qls-panel on" id="qls-p1">
+    <p><span class="tq">Q</span>와 <span class="tk">K</span>의 내적(dot product)으로 Attention Score를 계산합니다.</p>
+    <div class="fc">
+      <div class="fc-label">Attention Score Matrix</div>
+      <div class="fc-body">
+        AttentionScoreMatrix = <span style="color:var(--q)">Q</span> · <span style="color:var(--k)">K</span>ᵀ<br>
+        score<sub>ij</sub> = (Q · Kᵀ)<sub>ij</sub> = q<sub>i</sub> · k<sub>j</sub>
+      </div>
+      <div class="fc-note">
+        q<sub>i</sub>: i번째 token의 Query vector &nbsp;|&nbsp;
+        k<sub>j</sub>: j번째 token의 Key vector<br>
+        score<sub>ij</sub>: i번째 token이 j번째 token을 얼마나 참고해야 하는지를 나타내는 raw 점수
+      </div>
+    </div>
+    <p>아래는 Decoder Masked Self-Attention의 Score Matrix 예시입니다. (mask 위치는 −∞로 차단)</p>
+    <div style="overflow-x:auto; margin:4px 0;">
+      <table class="sm-tbl" id="sm-main">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="hk col-sos">Key &lt;SOS&gt;</th>
+            <th class="hk col-le">Key Le</th>
+            <th class="hk col-chat">Key chat</th>
+            <th class="hk col-est">Key est</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-sos">
+            <th class="hq">Query &lt;SOS&gt;</th>
+            <td class="cv col-sos">q₁·k₁</td>
+            <td class="cm col-le">−∞</td>
+            <td class="cm col-chat">−∞</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-le">
+            <th class="hq">Query Le</th>
+            <td class="cv col-sos">q₂·k₁</td>
+            <td class="cv col-le key-cell">q₂·k₂</td>
+            <td class="cm col-chat">−∞</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-chat">
+            <th class="hq">Query chat</th>
+            <td class="cv col-sos">q₃·k₁</td>
+            <td class="cv col-le">q₃·k₂</td>
+            <td class="cv col-chat">q₃·k₃</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-est">
+            <th class="hq">Query est</th>
+            <td class="cv col-sos">q₄·k₁</td>
+            <td class="cv col-le">q₄·k₂</td>
+            <td class="cv col-chat">q₄·k₃</td>
+            <td class="cv col-est">q₄·k₄</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <strong>shape 정리:</strong>
+      Q: (T, d_k), &nbsp; Kᵀ: (d_k, T) &nbsp;→&nbsp; Score: (T, T) &nbsp;|&nbsp;
+      Softmax 이후 Attention Weight가 되고, 이 Attention Weight가 V와 곱해져 AttentionOutput을 만듭니다.
+    </div>
+  </div>
+
+  <!-- ======= PANEL 2: Q/K/V는 처음엔 의미 없다 ======= -->
+  <div class="qls-panel" id="qls-p2">
+    <div class="warn">
+      <strong>학습 초기의 W^Q, W^K, W^V는 랜덤하게 초기화</strong>되어 있습니다.
+      따라서 학습 초기에는 Query, Key, Value가 아래 의미를 제대로 가지지 않습니다.
+    </div>
+    <div class="init-train-grid">
+      <div class="it-card it-init">
+        <div class="it-label">초기 상태 (랜덤)</div>
+        <div class="it-body">
+          W^Q = random<br>
+          W^K = random<br>
+          W^V = random<br>
+          <br>
+          → Q, K, V 역할 없음
+        </div>
+      </div>
+      <div class="it-card it-train">
+        <div class="it-label">학습 수렴 후</div>
+        <div class="it-body">
+          Q → 찾고 싶은 정보<br>
+          K → 참고 대상의 특징<br>
+          V → 실제 전달할 정보<br>
+          <br>
+          → 역할이 수렴됨
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      이 의미는 사람이 label로 알려준 것이 아닙니다.
+      <strong>Attention 수식 안에서 맡는 위치(row/column)</strong>와
+      <strong>loss 학습 결과</strong>로 생기는 해석입니다.
+    </div>
+  </div>
+
+  <!-- ======= PANEL 3: 학습 신호는 정답 token에서 온다 ======= -->
+  <div class="qls-panel" id="qls-p3">
+    <p>모델은 정답 token의 확률을 높이는 방향으로 학습됩니다. 예시: Decoder에서 <code style="font-family:monospace; background:#F3F4F6; padding:1px 6px; border-radius:4px;">Le</code> 다음에 <code style="font-family:monospace; background:#F3F4F6; padding:1px 6px; border-radius:4px;">chat</code>을 예측해야 하는 상황.</p>
+    <div class="fc">
+      <div class="fc-label">Loss 수식</div>
+      <div class="fc-body">Loss = −log P(chat)</div>
+      <div class="fc-note">정답 token의 확률이 낮을수록 loss가 커짐. 모델은 loss를 줄이는 방향으로 Attention Score를 조정함.</div>
+    </div>
+    <div class="lflow">
+      <div class="lflow-box lf-in">Decoder input so far: &lt;SOS&gt; Le &nbsp; → &nbsp; Target: chat</div>
+      <div class="lflow-arr">↓</div>
+      <div class="lflow-box lf-loss">Loss = −log P(chat) &nbsp; (정답 확률이 낮으면 클수록 큰 loss)</div>
+      <div class="lflow-arr">↓ Backpropagation</div>
+      <div class="lflow-box lf-w">W^Q, W^K, W^V 업데이트</div>
+      <div class="lflow-arr">↓</div>
+      <div class="lflow-box lf-out">chat 예측에 도움되는 token의 Attention Score 증가</div>
+    </div>
+  </div>
+
+  <!-- ======= PANEL 4: Query는 row를 담당한다 ======= -->
+  <div class="qls-panel" id="qls-p4">
+    <p><span class="tq">Query</span>는 Score Matrix의 <strong>row</strong>를 담당합니다. 아래 표에서 <strong>Query Le row</strong>를 주목하세요.</p>
+    <div style="overflow-x:auto; margin:4px 0;">
+      <table class="sm-tbl hl-row">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="hk col-sos">Key &lt;SOS&gt;</th>
+            <th class="hk col-le">Key Le</th>
+            <th class="hk col-chat">Key chat</th>
+            <th class="hk col-est">Key est</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-sos">
+            <th class="hq">Query &lt;SOS&gt;</th>
+            <td class="cv col-sos">q₁·k₁</td>
+            <td class="cm col-le">−∞</td>
+            <td class="cm col-chat">−∞</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-le">
+            <th class="hq" style="background:#FEF2F2; color:var(--q); font-weight:700;">⟶ Query Le</th>
+            <td class="cv col-sos">q₂·k₁</td>
+            <td class="cv col-le key-cell">q₂·k₂</td>
+            <td class="cm col-chat">−∞</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-chat">
+            <th class="hq">Query chat</th>
+            <td class="cv col-sos">q₃·k₁</td>
+            <td class="cv col-le">q₃·k₂</td>
+            <td class="cv col-chat">q₃·k₃</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-est">
+            <th class="hq">Query est</th>
+            <td class="cv col-sos">q₄·k₁</td>
+            <td class="cv col-le">q₄·k₂</td>
+            <td class="cv col-chat">q₄·k₃</td>
+            <td class="cv col-est">q₄·k₄</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>Query Le row =</strong>
+      [ q<sub>Le</sub>·k<sub>&lt;SOS&gt;</sub>, &nbsp; q<sub>Le</sub>·k<sub>Le</sub>, &nbsp; −∞, &nbsp; −∞ ]<br><br>
+      이 row는 <em>"Le 위치가 다음 token인 chat을 예측하기 위해, &lt;SOS&gt;와 Le를 얼마나 참고할지"</em>를 결정합니다.<br>
+      그래서 q<sub>Le</sub>는 <strong>현재 위치가 무엇을 참고해야 하는지 결정하는 벡터</strong>로 학습됩니다.
+    </div>
+  </div>
+
+  <!-- ======= PANEL 5: Key는 column을 담당한다 + 학습 방향 + 요약 ======= -->
+  <div class="qls-panel" id="qls-p5">
+    <p><span class="tk">Key</span>는 Score Matrix의 <strong>column</strong>을 담당합니다. 아래 표에서 <strong>Key Le column</strong>을 주목하세요.</p>
+    <div style="overflow-x:auto; margin:4px 0;">
+      <table class="sm-tbl hl-col">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="hk col-sos">Key &lt;SOS&gt;</th>
+            <th class="hk col-le" style="background:#DBEAFE; color:var(--k); font-weight:700;">↓ Key Le</th>
+            <th class="hk col-chat">Key chat</th>
+            <th class="hk col-est">Key est</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-sos">
+            <th class="hq">Query &lt;SOS&gt;</th>
+            <td class="cv col-sos">q₁·k₁</td>
+            <td class="cm col-le">−∞</td>
+            <td class="cm col-chat">−∞</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-le">
+            <th class="hq">Query Le</th>
+            <td class="cv col-sos">q₂·k₁</td>
+            <td class="cv col-le" style="background:#DBEAFE; color:var(--k); font-weight:700;">q₂·k₂</td>
+            <td class="cm col-chat">−∞</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-chat">
+            <th class="hq">Query chat</th>
+            <td class="cv col-sos">q₃·k₁</td>
+            <td class="cv col-le" style="background:#DBEAFE; color:var(--k); font-weight:700;">q₃·k₂</td>
+            <td class="cv col-chat">q₃·k₃</td>
+            <td class="cm col-est">−∞</td>
+          </tr>
+          <tr class="row-est">
+            <th class="hq">Query est</th>
+            <td class="cv col-sos">q₄·k₁</td>
+            <td class="cv col-le" style="background:#DBEAFE; color:var(--k); font-weight:700;">q₄·k₂</td>
+            <td class="cv col-chat">q₄·k₃</td>
+            <td class="cv col-est">q₄·k₄</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      k<sub>Le</sub>는 여러 Query와 비교됩니다.
+      <strong>q<sub>Le</sub>·k<sub>Le</sub>, &nbsp; q<sub>chat</sub>·k<sub>Le</sub>, &nbsp; q<sub>est</sub>·k<sub>Le</sub></strong><br>
+      각 위치에서 <em>"너는 내가 지금 참고할 만한 token이냐?"</em>라는 질문을 받습니다.<br>
+      그래서 Key는 <strong>다른 token들이 나를 찾을 때 매칭되는 특징</strong>을 담는 방향으로 학습됩니다.
+    </div>
+
+    <div style="height:1px; background:var(--border); margin:20px 0;"></div>
+    <p><strong>학습이 이 방향으로 밀어주는 원리</strong> — 정답이 <code style="font-family:monospace; background:#F3F4F6; padding:1px 6px; border-radius:4px;">chat</code>이면 Loss = −log P(chat) 최소화</p>
+    <div class="learn-dir">
+      <div class="ld-row row-up">
+        <span class="ld-formula" style="color:var(--q)">q<sub>Le</sub>·k<sub>Le</sub></span>
+        <span class="ld-up">↑</span>
+        <span class="ld-arr">→ softmax 이후 Le에 대한 Attention Weight 증가 → chat 예측에 도움</span>
+      </div>
+      <div class="ld-row row-dn">
+        <span class="ld-formula" style="color:var(--q)">q<sub>i</sub>·k<sub>j</sub></span>
+        <span class="ld-dn">↓</span>
+        <span class="ld-arr">→ 정답 예측에 방해되는 token의 Attention Weight 감소</span>
+      </div>
+    </div>
+
+    <div style="height:1px; background:var(--border); margin:20px 0;"></div>
+    <p><strong>학습이 수렴하면 Q, K, V는 다음 역할로 수렴합니다.</strong></p>
+    <div class="qkv-ls-grid">
+      <div class="qkv-ls-card lsq">
+        <div class="ls-let">Q</div>
+        <div class="ls-role">Query</div>
+        <div class="ls-desc">현재 위치가 무엇을 참고해야 하는지 결정하는 벡터. Score Matrix의 row를 담당.</div>
+      </div>
+      <div class="qkv-ls-card lsk">
+        <div class="ls-let">K</div>
+        <div class="ls-role">Key</div>
+        <div class="ls-desc">다른 token들이 나를 찾을 때 매칭되는 특징을 담는 벡터. Score Matrix의 column을 담당.</div>
+      </div>
+      <div class="qkv-ls-card lsv">
+        <div class="ls-let">V</div>
+        <div class="ls-role">Value</div>
+        <div class="ls-desc">Attention Weight에 따라 실제로 다음 layer로 전달되는 정보를 담는 벡터.</div>
+      </div>
+    </div>
+    <div class="warn">
+      Q, K, V의 의미는 사람이 직접 부여한 label이 아닙니다.
+      <strong>Attention 수식 안에서 맡는 역할</strong>과 <strong>정답 token을 맞히기 위한 loss 학습 결과</strong>로 생기는 해석입니다.
+    </div>
+  </div>
+
+  <!-- ── Step Controls ── -->
+  <div class="sim-controls" style="margin-top:18px;">
+    <button class="sim-ctrl" onclick="qlsGo(-1)">◀ 이전</button>
+    <button class="sim-ctrl sim-ctrl-play" id="qls-playbtn" onclick="qlsToggle()">⏸ 자동 재생</button>
+    <button class="sim-ctrl" onclick="qlsGo(1)">다음 ▶</button>
+    <button class="sim-ctrl" onclick="qlsReset()">↺ 처음부터</button>
+  </div>
+
+  <div class="summary">
+    <span class="tag">한 줄 요약</span>
+    <span class="body">Q/K/V의 역할(row/column/value)은 Attention 수식 구조가 결정하고, 어떤 방향으로 학습될지는 loss가 결정한다.</span>
+  </div>
+  <div class="qa-target" data-anchor="qkv-learn"></div>
 </section>
 
 <hr class="div" style="margin-top:48px;">
@@ -2267,6 +2681,69 @@ function qaIndexToggle() {
 }
 
 qaInit();
+
+// ── Q/K/V 학습 원리 스테퍼 ──────────────────────────────────────────
+const qlsSteps = [
+  { title: 'Attention Score = Q와 K의 내적',          panel: 'qls-p1' },
+  { title: 'Q / K / V는 처음엔 의미 없다',             panel: 'qls-p2' },
+  { title: '학습 신호는 정답 token에서 온다',           panel: 'qls-p3' },
+  { title: 'Query는 Score Matrix의 row를 담당한다',    panel: 'qls-p4' },
+  { title: 'Key는 column, 학습 방향 & Q/K/V 역할 정리', panel: 'qls-p5' },
+];
+
+let qlsIdx  = 0;
+let qlsTimer = null;
+
+function qlsRender(i) {
+  const n = qlsSteps.length;
+  qlsIdx = (i + n) % n;
+  const s = qlsSteps[qlsIdx];
+
+  document.getElementById('qls-title').textContent = s.title;
+  document.getElementById('qls-lbl').textContent   = 'Step ' + (qlsIdx + 1) + ' / ' + n;
+  document.getElementById('qls-prog').style.width  = ((qlsIdx + 1) / n * 100) + '%';
+
+  qlsSteps.forEach(function(step) {
+    var el = document.getElementById(step.panel);
+    if (el) el.classList.remove('on');
+  });
+  var cur = document.getElementById(s.panel);
+  if (cur) cur.classList.add('on');
+}
+
+function qlsGo(d) {
+  if (qlsTimer) { clearInterval(qlsTimer); qlsTimer = null; }
+  document.getElementById('qls-playbtn').textContent = '▶ 자동 재생';
+  qlsRender(qlsIdx + d);
+}
+
+function qlsToggle() {
+  var btn = document.getElementById('qls-playbtn');
+  if (qlsTimer) {
+    clearInterval(qlsTimer);
+    qlsTimer = null;
+    btn.textContent = '▶ 자동 재생';
+  } else {
+    btn.textContent = '⏸ 일시정지';
+    qlsTimer = setInterval(function() {
+      if (qlsIdx >= qlsSteps.length - 1) {
+        clearInterval(qlsTimer);
+        qlsTimer = null;
+        btn.textContent = '▶ 자동 재생';
+      } else {
+        qlsRender(qlsIdx + 1);
+      }
+    }, 3200);
+  }
+}
+
+function qlsReset() {
+  if (qlsTimer) { clearInterval(qlsTimer); qlsTimer = null; }
+  document.getElementById('qls-playbtn').textContent = '▶ 자동 재생';
+  qlsRender(0);
+}
+
+qlsRender(0);
 </script>
 </body>
 </html>
