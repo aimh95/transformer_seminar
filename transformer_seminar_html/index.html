@@ -344,10 +344,15 @@
        FLOW ANIMATION (Section 0 — X / H / Target 흐름)
     ══════════════════════════════════════════ */
     .flow-anim-wrap { margin-top:16px; }
+    .prereq-hd { cursor:pointer; user-select:none; display:flex; align-items:flex-start; gap:12px; }
+    .prereq-hd:hover .prereq-title { color:var(--enc); }
+    .prereq-toggle-btn { margin-left:auto; flex-shrink:0; font-size:13px; color:var(--muted); background:none; border:1.5px solid var(--border); border-radius:6px; padding:2px 10px; cursor:pointer; transition:background .15s; }
+    .prereq-toggle-btn:hover { background:var(--bg); }
+    #prereq-body.prereq-collapsed { display:none; }
     .sim-prog-wrap { background:#F3F4F6; border-radius:6px; height:5px; margin:0 0 5px; }
     .sim-prog-bar { height:100%; background:#2563EB; border-radius:6px; transition:width .4s ease; width:12.5%; }
     .sim-step-lbl { text-align:right; font-size:11px; color:var(--muted); margin-bottom:6px; }
-    .sim-current-title { text-align:center; font-size:14px; font-weight:800; color:var(--text); margin:0 0 10px; line-height:1.4; }
+    .sim-current-title { text-align:center; font-size:14px; font-weight:800; color:var(--text); margin:0 0 10px; line-height:1.4; min-height:2.8em; display:flex; align-items:center; justify-content:center; }
     /* Controls */
     .sim-controls { display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:center; margin-top:12px; }
     .sim-ctrl { padding:6px 14px; border-radius:7px; font-size:12px; font-weight:600; border:2px solid var(--border); background:var(--white); color:var(--sub); cursor:pointer; transition:all .15s; }
@@ -633,7 +638,11 @@
 <!-- ══════ PRE-KNOWLEDGE SECTION ══════ -->
 <section id="prereq-section">
   <div class="prereq-inner">
-    <h2 class="prereq-title">0. Transformer를 보기 전에: 숫자, Vector, Matrix, Weight 감 잡기</h2>
+    <div class="prereq-hd" onclick="prereqToggle()">
+      <h2 class="prereq-title">0. Transformer를 보기 전에: 숫자, Vector, Matrix, Weight 감 잡기</h2>
+      <button class="prereq-toggle-btn" id="prereq-btn" onclick="event.stopPropagation();prereqToggle()">▼ 펼치기</button>
+    </div>
+    <div id="prereq-body" class="prereq-collapsed">
     <p class="prereq-sub">Transformer는 결국 "문장을 숫자 벡터로 바꾸고, 여러 weight matrix를 거치며, 정답에 가까워지도록 weight를 수정하는 모델"입니다.<br>
     아래 개념들은 수학을 엄밀하게 배우는 것이 아니라, Transformer 수식을 읽기 위한 최소한의 직관을 만드는 것이 목표입니다.</p>
 
@@ -867,6 +876,7 @@
       </div>
       <p style="font-size:13px;color:#93C5FD;margin-top:16px;line-height:1.7;">즉, Transformer는 문장을 숫자 vector로 바꾸고, weight matrix를 통해 표현을 변환하며, loss를 줄이는 방향으로 그 weight들을 학습하는 모델입니다.</p>
     </div>
+    </div><!-- #prereq-body -->
   </div>
 </section>
 
@@ -1046,7 +1056,7 @@
 
     <div class="sim-controls">
       <button class="sim-ctrl" onclick="flowGo(-1)">◀ 이전</button>
-      <button class="sim-ctrl sim-ctrl-play" id="flow-playbtn" onclick="flowToggle()">⏸ 일시정지</button>
+      <button class="sim-ctrl" id="flow-playbtn" onclick="flowToggle()">▶ 재생</button>
       <button class="sim-ctrl" onclick="flowGo(1)">다음 ▶</button>
       <button class="sim-ctrl" onclick="flowRestart()">↺ 처음부터</button>
       <div class="sim-spd-wrap">
@@ -1064,6 +1074,7 @@
   <div class="summary">
     <span class="tag">한 줄 요약</span>
     <span class="body"><span class="te">Encoder</span>는 입력 문장 전체를 읽어 내부 표현(H_enc)을 만든다. <span class="td">Decoder</span>는 H_enc를 참고하며 번역 문장을 한 token씩 생성한다.</span>
+  </div>
   </div>
 </section>
 
@@ -2495,13 +2506,13 @@ const FLOW_STEPS=[
   dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
   tgtSeq:'[<SOS>]',
   toks:['<SOS>'], newTok:null, eos:false},
- {t:'Masked Self-Attention — [<SOS>] 하나로 어텐션 계산 (Look-Ahead Mask 적용)',
+ {t:'Masked SA — [<SOS>] 하나, Look-Ahead Mask 적용',
   hl:['dEmb','dPe','dMmha'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:277,label:'Target',color:'#7C3AED',show:true},
   tgtSeq:'[<SOS>]',
   toks:['<SOS>'], newTok:null, eos:false},
- {t:'Cross-Attention — Q←Decoder, K·V←H_enc: 소스 문맥을 처음으로 참조',
+ {t:'Cross-Attention — Q←Decoder, K·V←H_enc',
   hl:['dCross','crossPath'],
   enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:376,label:'Target',color:'#7C3AED',show:true},
@@ -2515,13 +2526,13 @@ const FLOW_STEPS=[
   toks:['<SOS>'], newTok:'Le', eos:false},
 
  // ── 2nd token: chat ──────────────────────────────────────
- {t:'"Le" 추가 → Target 성장: [<SOS>, Le] → Decoder 재입력',
+ {t:'"Le" 추가 → [<SOS>, Le] → Decoder 재입력',
   hl:['loopPath','dTgt'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
   tgtSeq:'[<SOS>, Le]',
   toks:['<SOS>','Le'], newTok:null, eos:false},
- {t:'Decoder 처리 — [<SOS>, Le]: Masked SA로 Le↔SOS 관계 파악 + Cross-Attn으로 H_enc 참조',
+ {t:'[<SOS>, Le] → Masked SA + Cross-Attn + FFN',
   hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
   enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
@@ -2535,13 +2546,13 @@ const FLOW_STEPS=[
   toks:['<SOS>','Le'], newTok:'chat', eos:false},
 
  // ── 3rd token: est ───────────────────────────────────────
- {t:'"chat" 추가 → Target 성장: [<SOS>, Le, chat] → Decoder 재입력',
+ {t:'"chat" 추가 → [<SOS>, Le, chat] → Decoder 재입력',
   hl:['loopPath','dTgt'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
   tgtSeq:'[<SOS>, Le, chat]',
   toks:['<SOS>','Le','chat'], newTok:null, eos:false},
- {t:'Decoder 처리 — [<SOS>, Le, chat]: Masked SA로 3 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+ {t:'[<SOS>, Le, chat] → Masked SA + Cross-Attn + FFN',
   hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
   enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
@@ -2555,13 +2566,13 @@ const FLOW_STEPS=[
   toks:['<SOS>','Le','chat'], newTok:'est', eos:false},
 
  // ── 4th token: sur ───────────────────────────────────────
- {t:'"est" 추가 → Target 성장: [<SOS>, Le, chat, est] → Decoder 재입력',
+ {t:'"est" 추가 → [<SOS>, Le, chat, est] → Decoder 재입력',
   hl:['loopPath','dTgt'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
   tgtSeq:'[<SOS>, Le, chat, est]',
   toks:['<SOS>','Le','chat','est'], newTok:null, eos:false},
- {t:'Decoder 처리 — [<SOS>, Le, chat, est]: Masked SA로 4 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+ {t:'[<SOS>, Le, chat, est] → Masked SA + Cross-Attn + FFN',
   hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
   enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
@@ -2575,13 +2586,13 @@ const FLOW_STEPS=[
   toks:['<SOS>','Le','chat','est'], newTok:'sur', eos:false},
 
  // ── 5th token: le ────────────────────────────────────────
- {t:'"sur" 추가 → Target 성장: [<SOS>, ..., est, sur] → Decoder 재입력',
+ {t:'"sur" 추가 → [..., est, sur] → Decoder 재입력',
   hl:['loopPath','dTgt'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
   tgtSeq:'[<SOS>, Le, chat, est, sur]',
   toks:['<SOS>','Le','chat','est','sur'], newTok:null, eos:false},
- {t:'Decoder 처리 — [<SOS>, ..., sur]: Masked SA로 5 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+ {t:'[<SOS>, ..., est, sur] → Masked SA + Cross-Attn + FFN',
   hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
   enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
@@ -2595,13 +2606,13 @@ const FLOW_STEPS=[
   toks:['<SOS>','Le','chat','est','sur'], newTok:'le', eos:false},
 
  // ── 6th token: tapis ─────────────────────────────────────
- {t:'"le" 추가 → Target 성장: [<SOS>, ..., sur, le] → Decoder 재입력',
+ {t:'"le" 추가 → [..., sur, le] → Decoder 재입력',
   hl:['loopPath','dTgt'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
   tgtSeq:'[<SOS>, Le, chat, est, sur, le]',
   toks:['<SOS>','Le','chat','est','sur','le'], newTok:null, eos:false},
- {t:'Decoder 처리 — [<SOS>, ..., sur, le]: Masked SA로 6 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+ {t:'[<SOS>, ..., sur, le] → Masked SA + Cross-Attn + FFN',
   hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
   enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
@@ -2615,7 +2626,7 @@ const FLOW_STEPS=[
   toks:['<SOS>','Le','chat','est','sur','le'], newTok:'tapis', eos:false},
 
  // ── EOS → 완료 ───────────────────────────────────────────
- {t:'"tapis" 추가 → Target 성장: [<SOS>, ..., le, tapis] → 마지막 Decoder 입력',
+ {t:'"tapis" 추가 → [..., le, tapis] → 마지막 Decoder 입력',
   hl:['loopPath','dTgt'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
   dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
@@ -2629,7 +2640,7 @@ const FLOW_STEPS=[
   toks:['<SOS>','Le','chat','est','sur','le','tapis'], newTok:null, eos:true},
 ];
 
-let flowSt=0,flowTmr=null,flowPaused=false,flowSpd=1600;
+let flowSt=0,flowTmr=null,flowPaused=true,flowSpd=1600;
 
 function flowRender(i){
   const s=FLOW_STEPS[i];
@@ -2726,7 +2737,13 @@ function setupFlowTips(){
 setupFlowTips();
 
 flowRender(0);
-flowSched();
+
+function prereqToggle(){
+  const body=document.getElementById('prereq-body');
+  const btn=document.getElementById('prereq-btn');
+  const collapsed=body.classList.toggle('prereq-collapsed');
+  btn.textContent=collapsed?'▼ 펼치기':'▲ 접기';
+}
 
 /* ── Q&A Annotation System ─────────────────────────────── */
 const qaItems = [
