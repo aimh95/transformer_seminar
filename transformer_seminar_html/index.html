@@ -374,6 +374,17 @@
     .flow-tip.show { opacity:1; transform:translateY(0); }
     .flow-tip .ft-title { display:block; font-weight:800; color:#FCD34D; margin-bottom:4px; }
     .flow-tip .ft-vec { display:block; margin-top:5px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:10.5px; color:#A7F3D0; word-break:break-all; }
+    /* Token generation bar */
+    .token-gen-bar-wrap { margin:10px 0 4px; }
+    .token-gen-bar-label { font-size:11px; color:var(--muted); margin-bottom:6px; text-align:center; font-weight:600; letter-spacing:.03em; }
+    .token-gen-bar { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; min-height:36px; align-items:center; padding:4px 0; }
+    .tgb-token { padding:5px 12px; border-radius:8px; font-size:13px; font-weight:700; border:2px solid; display:inline-block; line-height:1; }
+    .tgb-token.tgb-sos  { background:#F5F3FF; border-color:#C4B5FD; color:#5B21B6; }
+    .tgb-token.tgb-done { background:#EDE9FE; border-color:#A78BFA; color:#4C1D95; }
+    .tgb-token.tgb-new  { background:#FFF7ED; border-color:#FB923C; color:#9A3412; animation:tgbPop .4s cubic-bezier(.34,1.56,.64,1); }
+    .tgb-token.tgb-eos  { background:#DCFCE7; border-color:#86EFAC; color:#166534; animation:tgbPop .4s cubic-bezier(.34,1.56,.64,1); }
+    .tgb-arr { color:#9CA3AF; font-size:20px; padding:0 2px; }
+    @keyframes tgbPop { from{transform:scale(0.3) translateY(10px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
 
   /* ── Pre-knowledge Section ─────────────────────────────── */
   #prereq-section { background:linear-gradient(170deg,#F0F9FF 0%,#EFF6FF 80%); border-bottom:2px solid #BFDBFE; padding:30px 18px 42px; }
@@ -892,7 +903,7 @@
 
   <div class="flow-anim-wrap">
     <div class="sim-prog-wrap"><div class="sim-prog-bar" id="flow-prog"></div></div>
-    <div class="sim-step-lbl" id="flow-lbl">Step 1 / 8</div>
+    <div class="sim-step-lbl" id="flow-lbl">Step 1 / 24</div>
     <div class="sim-current-title" id="flow-current-title"></div>
 
     <div class="svg-box">
@@ -955,7 +966,7 @@
 
         <rect id="dTgt" x="610" y="58" width="240" height="42" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
         <text x="730" y="76" text-anchor="middle" font-size="12" fill="#6D28D9" font-weight="600">Target 문장 (shifted right)</text>
-        <text x="730" y="93" text-anchor="middle" font-size="10" fill="#8B5CF6">[&lt;SOS&gt;, Le, chat, est, ...]</text>
+        <text id="dTgtSeq" x="730" y="93" text-anchor="middle" font-size="10" fill="#8B5CF6">[&lt;SOS&gt;]</text>
         <line x1="730" y1="100" x2="730" y2="118" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
 
         <rect id="dEmb" x="610" y="120" width="240" height="36" rx="7" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
@@ -1013,7 +1024,7 @@
         <!-- Autoregressive loop-back: predicted token → Target (next inference step) -->
         <path id="loopPath" d="M 850 684 C 945 684, 945 79, 850 79"
               stroke="#EA580C" stroke-width="2" fill="none" stroke-dasharray="6,4"
-              marker-end="url(#arr-o)" opacity="0.3"/>
+              marker-end="url(#arr-o)" opacity="0.25"/>
         <text x="958" y="383" text-anchor="middle" font-size="9" fill="#EA580C" transform="rotate(90 958 383)">자기회귀: 예측 token → Target에 추가</text>
 
         <text x="490" y="686" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
@@ -1027,6 +1038,11 @@
       <div class="svg-cap">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</div>
     </div>
     <div id="flow-tip" class="flow-tip"></div>
+
+    <div class="token-gen-bar-wrap" id="token-gen-wrap" style="display:none;">
+      <div class="token-gen-bar-label">자기회귀 생성 현황 (추론 시 Decoder 출력이 쌓이는 과정)</div>
+      <div class="token-gen-bar" id="token-gen-bar"></div>
+    </div>
 
     <div class="sim-controls">
       <button class="sim-ctrl" onclick="flowGo(-1)">◀ 이전</button>
@@ -2455,41 +2471,165 @@ function prereqSetMode(m) {
    X → H_enc, Target → Cross-Attention → 다음 token → 자기회귀
 ═══════════════════════════════════════════════════ */
 const FLOW_STEPS=[
- {t:'Step 1 / 8 — Source 문장이 Encoder에 입력된다',
+ // ── Encoder ──────────────────────────────────────────────
+ {t:'Source 문장이 Encoder에 입력된다',
   hl:['fSrc'],
   enc:{cx:195,cy:76,label:'X',color:'#2563EB',show:true},
-  dec:{show:false}},
- {t:'Step 2 / 8 — X가 Encoder Layer × 6을 통과하며 표현이 갱신된다',
+  dec:{show:false},
+  tgtSeq:null, toks:[], newTok:null, eos:false},
+ {t:'X가 Encoder Layer × 6을 통과하며 문맥이 반영된다',
   hl:['fEmb','fPe','fBlock'],
   enc:{cx:195,cy:363,label:'X',color:'#2563EB',show:true},
-  dec:{show:false}},
- {t:'Step 3 / 8 — Encoder가 H_enc를 만든다',
+  dec:{show:false},
+  tgtSeq:null, toks:[], newTok:null, eos:false},
+ {t:'Encoder 완료 — H_enc 생성: 소스 전체 문맥이 압축됨',
   hl:['fHenc'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
-  dec:{show:false}},
- {t:'Step 4 / 8 — Decoder가 지금까지 생성된 Target 문장을 입력받는다',
+  dec:{show:false},
+  tgtSeq:null, toks:[], newTok:null, eos:false},
+
+ // ── 1st token: Le ────────────────────────────────────────
+ {t:'Decoder 시작 — 첫 입력은 <SOS> 하나뿐',
   hl:['dTgt'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
-  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true}},
- {t:'Step 5 / 8 — Target이 Masked Self-Attention을 통과한다',
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>]',
+  toks:['<SOS>'], newTok:null, eos:false},
+ {t:'Masked Self-Attention — [<SOS>] 하나로 어텐션 계산 (Look-Ahead Mask 적용)',
   hl:['dEmb','dPe','dMmha'],
   enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
-  dec:{cx:730,cy:277,label:'Target',color:'#7C3AED',show:true}},
- {t:'Step 6 / 8 — Cross-Attention에서 H와 Target이 만난다 (Q←Target, K,V←H)',
+  dec:{cx:730,cy:277,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>]',
+  toks:['<SOS>'], newTok:null, eos:false},
+ {t:'Cross-Attention — Q←Decoder, K·V←H_enc: 소스 문맥을 처음으로 참조',
   hl:['dCross','crossPath'],
   enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
-  dec:{cx:730,cy:376,label:'Target',color:'#7C3AED',show:true}},
- {t:'Step 7 / 8 — FFN → Linear → Softmax로 다음 token 확률이 계산된다',
+  dec:{cx:730,cy:376,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>]',
+  toks:['<SOS>'], newTok:null, eos:false},
+ {t:'FFN → Linear → Softmax → 첫 번째 token "Le" 예측',
   hl:['dFfn','dLinear','dSoftmax','dOut'],
   enc:{show:false},
-  dec:{cx:730,cy:684,label:'예측 token',color:'#EA580C',show:true}},
- {t:'Step 8 / 8 — 예측된 token이 Target 문장 뒤에 추가되어 다시 입력된다 (자기회귀)',
+  dec:{cx:730,cy:684,label:'"Le"',color:'#EA580C',show:true},
+  tgtSeq:'[<SOS>]',
+  toks:['<SOS>'], newTok:'Le', eos:false},
+
+ // ── 2nd token: chat ──────────────────────────────────────
+ {t:'"Le" 추가 → Target 성장: [<SOS>, Le] → Decoder 재입력',
   hl:['loopPath','dTgt'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le]',
+  toks:['<SOS>','Le'], newTok:null, eos:false},
+ {t:'Decoder 처리 — [<SOS>, Le]: Masked SA로 Le↔SOS 관계 파악 + Cross-Attn으로 H_enc 참조',
+  hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
+  enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le]',
+  toks:['<SOS>','Le'], newTok:null, eos:false},
+ {t:'Linear → Softmax → "chat" 예측',
+  hl:['dLinear','dSoftmax','dOut'],
   enc:{show:false},
-  dec:{cx:730,cy:79,label:'Target (+1)',color:'#7C3AED',show:true}},
+  dec:{cx:730,cy:684,label:'"chat"',color:'#EA580C',show:true},
+  tgtSeq:'[<SOS>, Le]',
+  toks:['<SOS>','Le'], newTok:'chat', eos:false},
+
+ // ── 3rd token: est ───────────────────────────────────────
+ {t:'"chat" 추가 → Target 성장: [<SOS>, Le, chat] → Decoder 재입력',
+  hl:['loopPath','dTgt'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat]',
+  toks:['<SOS>','Le','chat'], newTok:null, eos:false},
+ {t:'Decoder 처리 — [<SOS>, Le, chat]: Masked SA로 3 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+  hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
+  enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat]',
+  toks:['<SOS>','Le','chat'], newTok:null, eos:false},
+ {t:'Linear → Softmax → "est" 예측',
+  hl:['dLinear','dSoftmax','dOut'],
+  enc:{show:false},
+  dec:{cx:730,cy:684,label:'"est"',color:'#EA580C',show:true},
+  tgtSeq:'[<SOS>, Le, chat]',
+  toks:['<SOS>','Le','chat'], newTok:'est', eos:false},
+
+ // ── 4th token: sur ───────────────────────────────────────
+ {t:'"est" 추가 → Target 성장: [<SOS>, Le, chat, est] → Decoder 재입력',
+  hl:['loopPath','dTgt'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est]',
+  toks:['<SOS>','Le','chat','est'], newTok:null, eos:false},
+ {t:'Decoder 처리 — [<SOS>, Le, chat, est]: Masked SA로 4 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+  hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
+  enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est]',
+  toks:['<SOS>','Le','chat','est'], newTok:null, eos:false},
+ {t:'Linear → Softmax → "sur" 예측',
+  hl:['dLinear','dSoftmax','dOut'],
+  enc:{show:false},
+  dec:{cx:730,cy:684,label:'"sur"',color:'#EA580C',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est]',
+  toks:['<SOS>','Le','chat','est'], newTok:'sur', eos:false},
+
+ // ── 5th token: le ────────────────────────────────────────
+ {t:'"sur" 추가 → Target 성장: [<SOS>, ..., est, sur] → Decoder 재입력',
+  hl:['loopPath','dTgt'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur]',
+  toks:['<SOS>','Le','chat','est','sur'], newTok:null, eos:false},
+ {t:'Decoder 처리 — [<SOS>, ..., sur]: Masked SA로 5 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+  hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
+  enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur]',
+  toks:['<SOS>','Le','chat','est','sur'], newTok:null, eos:false},
+ {t:'Linear → Softmax → "le" 예측',
+  hl:['dLinear','dSoftmax','dOut'],
+  enc:{show:false},
+  dec:{cx:730,cy:684,label:'"le"',color:'#EA580C',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur]',
+  toks:['<SOS>','Le','chat','est','sur'], newTok:'le', eos:false},
+
+ // ── 6th token: tapis ─────────────────────────────────────
+ {t:'"le" 추가 → Target 성장: [<SOS>, ..., sur, le] → Decoder 재입력',
+  hl:['loopPath','dTgt'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur, le]',
+  toks:['<SOS>','Le','chat','est','sur','le'], newTok:null, eos:false},
+ {t:'Decoder 처리 — [<SOS>, ..., sur, le]: Masked SA로 6 token 관계 파악 + Cross-Attn으로 H_enc 참조',
+  hl:['dEmb','dPe','dMmha','dCross','crossPath','dFfn'],
+  enc:{cx:610,cy:376,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:440,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur, le]',
+  toks:['<SOS>','Le','chat','est','sur','le'], newTok:null, eos:false},
+ {t:'Linear → Softmax → "tapis" 예측',
+  hl:['dLinear','dSoftmax','dOut'],
+  enc:{show:false},
+  dec:{cx:730,cy:684,label:'"tapis"',color:'#EA580C',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur, le]',
+  toks:['<SOS>','Le','chat','est','sur','le'], newTok:'tapis', eos:false},
+
+ // ── EOS → 완료 ───────────────────────────────────────────
+ {t:'"tapis" 추가 → Target 성장: [<SOS>, ..., le, tapis] → 마지막 Decoder 입력',
+  hl:['loopPath','dTgt'],
+  enc:{cx:195,cy:477,label:'H',color:'#16A34A',show:true},
+  dec:{cx:730,cy:79,label:'Target',color:'#7C3AED',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur, le, tapis]',
+  toks:['<SOS>','Le','chat','est','sur','le','tapis'], newTok:null, eos:false},
+ {t:'<EOS> 예측 → 자기회귀 완료: "Le chat est sur le tapis."',
+  hl:['dLinear','dSoftmax','dOut'],
+  enc:{show:false},
+  dec:{cx:730,cy:684,label:'<EOS>',color:'#16A34A',show:true},
+  tgtSeq:'[<SOS>, Le, chat, est, sur, le, tapis]',
+  toks:['<SOS>','Le','chat','est','sur','le','tapis'], newTok:null, eos:true},
 ];
 
-let flowSt=0,flowTmr=null,flowPaused=false,flowSpd=1800;
+let flowSt=0,flowTmr=null,flowPaused=false,flowSpd=1600;
 
 function flowRender(i){
   const s=FLOW_STEPS[i];
@@ -2510,6 +2650,30 @@ function flowRender(i){
     dotDec.setAttribute('cx',s.dec.cx); dotDec.setAttribute('cy',s.dec.cy); dotDec.setAttribute('fill',s.dec.color);
     lblDec.setAttribute('x',s.dec.cx+13); lblDec.setAttribute('y',s.dec.cy+4); lblDec.textContent=s.dec.label; lblDec.setAttribute('fill',s.dec.color);
   } else { dotDec.style.display='none'; lblDec.style.display='none'; }
+  // dTgt 시퀀스 텍스트 업데이트
+  const dTgtSeqEl=document.getElementById('dTgtSeq');
+  if(dTgtSeqEl) dTgtSeqEl.textContent=s.tgtSeq||'[<SOS>]';
+  // 토큰 생성 바 업데이트
+  const tgWrap=document.getElementById('token-gen-wrap');
+  const tgBar=document.getElementById('token-gen-bar');
+  if(s.toks && s.toks.length>0){
+    tgWrap.style.display='';
+    tgBar.innerHTML='';
+    s.toks.forEach(function(tok){
+      const el=document.createElement('span');
+      el.className='tgb-token '+(tok==='<SOS>'?'tgb-sos':'tgb-done');
+      el.textContent=tok;
+      tgBar.appendChild(el);
+    });
+    if(s.newTok){
+      const arr=document.createElement('span'); arr.className='tgb-arr'; arr.textContent='→'; tgBar.appendChild(arr);
+      const el=document.createElement('span'); el.className='tgb-token tgb-new'; el.textContent=s.newTok; tgBar.appendChild(el);
+    }
+    if(s.eos){
+      const arr=document.createElement('span'); arr.className='tgb-arr'; arr.textContent='→'; tgBar.appendChild(arr);
+      const el=document.createElement('span'); el.className='tgb-token tgb-eos'; el.textContent='<EOS>'; tgBar.appendChild(el);
+    }
+  } else { tgWrap.style.display='none'; }
   flowSt=i;
 }
 function flowGo(d){clearTimeout(flowTmr);flowRender(Math.max(0,Math.min(FLOW_STEPS.length-1,flowSt+d)));if(!flowPaused)flowSched();}
@@ -2526,15 +2690,12 @@ const FLOW_TIPS = {
  'H': {title:'H — Encoder 출력 (문장 전체 정보가 반영된 표현)',
   sentence:'Source: "The cat is on the mat."',
   vector:'H(cat) ≈ [0.31, -0.52, 0.68, 0.05, ...]  (d_model=512, "on"·"mat"의 정보가 섞여 들어감)'},
- 'Target': {title:'Target — Decoder 입력 (지금까지 생성된 문장)',
-  sentence:'Target: "<SOS>, Le, chat, est, sur, le"',
-  vector:'Target(chat) ≈ [0.18, 0.55, -0.29, 0.46, ...]  (d_model=512)'},
- 'Target (+1)': {title:'Target — 예측 token이 추가된 다음 입력',
-  sentence:'Target: "<SOS>, Le, chat, est, sur, le, tapis"',
-  vector:'Target(tapis) ≈ [0.27, -0.11, 0.63, 0.05, ...]  (d_model=512)'},
- '예측 token': {title:'예측 token — Softmax 출력 (다음 token 확률 분포)',
-  sentence:'다음 token 후보: tapis(0.62), table(0.10), sol(0.07), ...',
-  vector:'P(next) ≈ [tapis:0.62, table:0.10, sol:0.07, ...]  (vocab_size 차원, 합=1.0)'},
+ 'Target': {title:'Target — Decoder 입력 (매 스텝마다 1 token씩 성장)',
+  sentence:'[<SOS>] → [<SOS>, Le] → [<SOS>, Le, chat] → ... → [<SOS>, ..., tapis]',
+  vector:'추론 시 이전 스텝 예측 token이 추가되어 입력이 1씩 늘어납니다. (자기회귀)'},
+ '"Le"': {title:'예측 token — 첫 번째 생성 token "Le"',
+  sentence:'Softmax 확률: Le(0.71), La(0.12), Un(0.06), ...',
+  vector:'argmax P(next | <SOS>) = "Le"  (French definite article)'},
 };
 function flowTipShow(e,label){
   const info=FLOW_TIPS[label]; if(!info) return;
