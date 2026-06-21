@@ -1709,9 +1709,40 @@
     score_ij가 크다 = "i번째 token이 j번째 token에 주목한다"
   </div>
 
+  <div class="warn">
+    <strong>흔한 오해:</strong> Attention은 자기 자신(대각선)에 가장 집중한다?<br>
+    실제로 학습이 수렴한 모델에서는 <strong>통사·의미 관계</strong>가 Attention을 주도합니다.
+    위 행렬에서 가장 높은 값은 대각선이 아닌, 문법적으로 서로 의존하는 token 쌍입니다.
+  </div>
+
+  <p>위 예시의 주요 Attention 패턴을 읽는 법:</p>
+  <div class="qkv-grid" style="grid-template-columns:repeat(2,1fr); gap:10px;">
+    <div class="qkv-card q" style="border-color:#FECACA;">
+      <div class="qkv-label" style="color:var(--q);">The → cat &nbsp; 0.52</div>
+      <div class="qkv-desc">관사 "The"가 자신이 수식하는 명사 "cat"에 집중.<br><em>수식어 → 핵어 관계</em></div>
+    </div>
+    <div class="qkv-card q" style="border-color:#FECACA;">
+      <div class="qkv-label" style="color:var(--q);">the → mat &nbsp; 0.51</div>
+      <div class="qkv-desc">관사 "the"가 자신이 수식하는 명사 "mat"에 집중.<br><em>같은 수식어 → 핵어 패턴</em></div>
+    </div>
+    <div class="qkv-card k" style="border-color:#93C5FD;">
+      <div class="qkv-label" style="color:var(--k);">cat → is &nbsp; 0.38 &nbsp;|&nbsp; is → cat &nbsp; 0.46</div>
+      <div class="qkv-desc">주어 "cat"과 동사 "is"가 서로를 강하게 참조.<br><em>subject ↔ verb 상호 참조</em></div>
+    </div>
+    <div class="qkv-card v" style="border-color:#86EFAC;">
+      <div class="qkv-label" style="color:var(--v);">on → mat &nbsp; 0.48 &nbsp;|&nbsp; mat → the &nbsp; 0.38</div>
+      <div class="qkv-desc">전치사 "on"이 목적어 "mat"에 집중,<br>"mat"은 자신의 관사 "the"를 강하게 참조.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    행렬의 나머지 값(낮은 attention)은 0에 가깝지만 0은 아닙니다.
+    Softmax는 모든 값을 양수로 만들기 때문에, 무관한 token에도 작은 확률이 분배됩니다.
+  </div>
+
   <div class="summary">
     <span class="tag">한 줄 요약</span>
-    <span class="body">Score = QKᵀ, shape (seq_len, seq_len). score_ij = q_i · k_j = i번째가 j번째를 얼마나 참고할지의 원시 점수.</span>
+    <span class="body">Score = QKᵀ, shape (seq_len, seq_len). 학습된 Attention은 대각선이 아닌 통사·의미 관계 token 쌍에서 높은 값을 가진다.</span>
   </div>
   <div class="qa-target" data-anchor="attention-score-matrix"></div>
 </section>

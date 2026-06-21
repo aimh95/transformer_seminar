@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 565" width="740" height="565"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 590" width="740" height="590"
      font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
 
-  <rect width="740" height="565" fill="#F8F9FB" rx="8"/>
+  <rect width="740" height="590" fill="#F8F9FB" rx="8"/>
   <text x="370" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">Attention Score Matrix = QKᵀ</text>
   <text x="370" y="44" text-anchor="middle" font-size="10" fill="#6B7280">row = Query 위치 (무엇을 찾는가),  col = Key 위치 (무엇을 참고하는가)</text>
 
   <!-- Tokens: The, cat, is, on, the, mat -->
-  <!-- Uniform grid: 6 cols × 72px starting at x=120, 6 rows × 52px starting at y=72 -->
-  <!-- col left edges: 120,192,264,336,408,480 / col centers: 156,228,300,372,444,516 -->
-  <!-- row top edges: 72,124,176,228,280,332 / row text-y: 103,155,207,259,311,363 -->
+  <!-- Uniform grid: 6 cols × 72px @ x=120, 6 rows × 52px @ y=72 -->
+  <!-- col centers: 156,228,300,372,444,516 / row text-y: 103,155,207,259,311,363 -->
 
   <!-- Column headers (Key) -->
   <text x="370" y="62" text-anchor="middle" font-size="10" fill="#1D4ED8" font-weight="600">Key (j) →</text>
@@ -29,120 +28,127 @@
   <text x="80" y="311" text-anchor="end" font-size="10" font-weight="700" fill="#DC2626">the</text>
   <text x="80" y="363" text-anchor="end" font-size="10" font-weight="700" fill="#DC2626">mat</text>
 
-  <!-- ===== Score Matrix Cells (softmax 후 예시 값, 각 row 합 = 1.0) ===== -->
-  <!-- Color: HIGH(≥0.35)=#1D4ED8 text=white, MED(0.15~0.34)=#93C5FD text=#1E3A8A, LOW(<0.15)=#DBEAFE text=#374151 -->
+  <!-- ===== Score Matrix Cells ===== -->
+  <!-- HIGH(≥0.35)=#1D4ED8 text=white bold | MED(0.15~0.34)=#93C5FD text=#1E3A8A | LOW(<0.15)=#DBEAFE text=#374151 -->
 
-  <!-- Row 0: The (주로 자기 자신 + the(5)와 관계) -->
-  <rect x="120" y="72" width="72" height="52" fill="#1D4ED8"/>
-  <text x="156" y="103" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.42</text>
-  <rect x="192" y="72" width="72" height="52" fill="#DBEAFE"/>
-  <text x="228" y="103" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
-  <rect x="264" y="72" width="72" height="52" fill="#DBEAFE"/>
-  <text x="300" y="103" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
-  <rect x="336" y="72" width="72" height="52" fill="#DBEAFE"/>
-  <text x="372" y="103" text-anchor="middle" font-size="12" fill="#374151">0.07</text>
-  <rect x="408" y="72" width="72" height="52" fill="#93C5FD"/>
-  <text x="444" y="103" text-anchor="middle" font-size="12" fill="#1E3A8A">0.28</text>
-  <rect x="480" y="72" width="72" height="52" fill="#DBEAFE"/>
-  <text x="516" y="103" text-anchor="middle" font-size="12" fill="#374151">0.09</text>
+  <!-- Row 0: The  [0.10, 0.52*, 0.08, 0.06, 0.16, 0.08]  관사→수식명사 cat -->
+  <rect x="120" y="72"  width="72" height="52" fill="#DBEAFE"/>
+  <text x="156" y="103" text-anchor="middle" font-size="12" fill="#374151">0.10</text>
+  <rect x="192" y="72"  width="72" height="52" fill="#1D4ED8"/>
+  <text x="228" y="103" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.52</text>
+  <rect x="264" y="72"  width="72" height="52" fill="#DBEAFE"/>
+  <text x="300" y="103" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
+  <rect x="336" y="72"  width="72" height="52" fill="#DBEAFE"/>
+  <text x="372" y="103" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
+  <rect x="408" y="72"  width="72" height="52" fill="#93C5FD"/>
+  <text x="444" y="103" text-anchor="middle" font-size="12" fill="#1E3A8A">0.16</text>
+  <rect x="480" y="72"  width="72" height="52" fill="#DBEAFE"/>
+  <text x="516" y="103" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
 
-  <!-- Row 1: cat (자기 자신 + mat) -->
-  <rect x="120" y="124" width="72" height="52" fill="#DBEAFE"/>
-  <text x="156" y="155" text-anchor="middle" font-size="12" fill="#374151">0.07</text>
-  <rect x="192" y="124" width="72" height="52" fill="#1D4ED8"/>
-  <text x="228" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.45</text>
-  <rect x="264" y="124" width="72" height="52" fill="#DBEAFE"/>
-  <text x="300" y="155" text-anchor="middle" font-size="12" fill="#374151">0.10</text>
+  <!-- Row 1: cat  [0.22, 0.15, 0.38*, 0.09, 0.07, 0.09]  주어→동사 is, 관사 The 중간 -->
+  <rect x="120" y="124" width="72" height="52" fill="#93C5FD"/>
+  <text x="156" y="155" text-anchor="middle" font-size="12" fill="#1E3A8A">0.22</text>
+  <rect x="192" y="124" width="72" height="52" fill="#93C5FD"/>
+  <text x="228" y="155" text-anchor="middle" font-size="12" fill="#1E3A8A">0.15</text>
+  <rect x="264" y="124" width="72" height="52" fill="#1D4ED8"/>
+  <text x="300" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.38</text>
   <rect x="336" y="124" width="72" height="52" fill="#DBEAFE"/>
-  <text x="372" y="155" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
+  <text x="372" y="155" text-anchor="middle" font-size="12" fill="#374151">0.09</text>
   <rect x="408" y="124" width="72" height="52" fill="#DBEAFE"/>
-  <text x="444" y="155" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
-  <rect x="480" y="124" width="72" height="52" fill="#93C5FD"/>
-  <text x="516" y="155" text-anchor="middle" font-size="12" fill="#1E3A8A">0.24</text>
+  <text x="444" y="155" text-anchor="middle" font-size="12" fill="#374151">0.07</text>
+  <rect x="480" y="124" width="72" height="52" fill="#DBEAFE"/>
+  <text x="516" y="155" text-anchor="middle" font-size="12" fill="#374151">0.09</text>
 
-  <!-- Row 2: is -->
+  <!-- Row 2: is   [0.07, 0.46*, 0.13, 0.22, 0.06, 0.06]  동사→주어 cat, 보어 on 중간 -->
   <rect x="120" y="176" width="72" height="52" fill="#DBEAFE"/>
-  <text x="156" y="207" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
-  <rect x="192" y="176" width="72" height="52" fill="#93C5FD"/>
-  <text x="228" y="207" text-anchor="middle" font-size="12" fill="#1E3A8A">0.18</text>
-  <rect x="264" y="176" width="72" height="52" fill="#1D4ED8"/>
-  <text x="300" y="207" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.40</text>
+  <text x="156" y="207" text-anchor="middle" font-size="12" fill="#374151">0.07</text>
+  <rect x="192" y="176" width="72" height="52" fill="#1D4ED8"/>
+  <text x="228" y="207" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.46</text>
+  <rect x="264" y="176" width="72" height="52" fill="#DBEAFE"/>
+  <text x="300" y="207" text-anchor="middle" font-size="12" fill="#374151">0.13</text>
   <rect x="336" y="176" width="72" height="52" fill="#93C5FD"/>
-  <text x="372" y="207" text-anchor="middle" font-size="12" fill="#1E3A8A">0.16</text>
+  <text x="372" y="207" text-anchor="middle" font-size="12" fill="#1E3A8A">0.22</text>
   <rect x="408" y="176" width="72" height="52" fill="#DBEAFE"/>
-  <text x="444" y="207" text-anchor="middle" font-size="12" fill="#374151">0.10</text>
+  <text x="444" y="207" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
   <rect x="480" y="176" width="72" height="52" fill="#DBEAFE"/>
-  <text x="516" y="207" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
+  <text x="516" y="207" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
 
-  <!-- Row 3: on -->
+  <!-- Row 3: on   [0.06, 0.11, 0.08, 0.09, 0.18, 0.48*]  전치사→목적어 mat, 관사 the 중간 -->
   <rect x="120" y="228" width="72" height="52" fill="#DBEAFE"/>
-  <text x="156" y="259" text-anchor="middle" font-size="12" fill="#374151">0.07</text>
+  <text x="156" y="259" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
   <rect x="192" y="228" width="72" height="52" fill="#DBEAFE"/>
-  <text x="228" y="259" text-anchor="middle" font-size="12" fill="#374151">0.09</text>
-  <rect x="264" y="228" width="72" height="52" fill="#93C5FD"/>
-  <text x="300" y="259" text-anchor="middle" font-size="12" fill="#1E3A8A">0.20</text>
-  <rect x="336" y="228" width="72" height="52" fill="#1D4ED8"/>
-  <text x="372" y="259" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.38</text>
-  <rect x="408" y="228" width="72" height="52" fill="#DBEAFE"/>
-  <text x="444" y="259" text-anchor="middle" font-size="12" fill="#374151">0.07</text>
-  <rect x="480" y="228" width="72" height="52" fill="#93C5FD"/>
-  <text x="516" y="259" text-anchor="middle" font-size="12" fill="#1E3A8A">0.19</text>
+  <text x="228" y="259" text-anchor="middle" font-size="12" fill="#374151">0.11</text>
+  <rect x="264" y="228" width="72" height="52" fill="#DBEAFE"/>
+  <text x="300" y="259" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
+  <rect x="336" y="228" width="72" height="52" fill="#DBEAFE"/>
+  <text x="372" y="259" text-anchor="middle" font-size="12" fill="#374151">0.09</text>
+  <rect x="408" y="228" width="72" height="52" fill="#93C5FD"/>
+  <text x="444" y="259" text-anchor="middle" font-size="12" fill="#1E3A8A">0.18</text>
+  <rect x="480" y="228" width="72" height="52" fill="#1D4ED8"/>
+  <text x="516" y="259" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.48</text>
 
-  <!-- Row 4: the -->
-  <rect x="120" y="280" width="72" height="52" fill="#93C5FD"/>
-  <text x="156" y="311" text-anchor="middle" font-size="12" fill="#1E3A8A">0.26</text>
+  <!-- Row 4: the  [0.13, 0.06, 0.05, 0.15, 0.10, 0.51*]  관사→수식명사 mat -->
+  <rect x="120" y="280" width="72" height="52" fill="#DBEAFE"/>
+  <text x="156" y="311" text-anchor="middle" font-size="12" fill="#374151">0.13</text>
   <rect x="192" y="280" width="72" height="52" fill="#DBEAFE"/>
-  <text x="228" y="311" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
+  <text x="228" y="311" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
   <rect x="264" y="280" width="72" height="52" fill="#DBEAFE"/>
-  <text x="300" y="311" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
-  <rect x="336" y="280" width="72" height="52" fill="#DBEAFE"/>
-  <text x="372" y="311" text-anchor="middle" font-size="12" fill="#374151">0.07</text>
-  <rect x="408" y="280" width="72" height="52" fill="#1D4ED8"/>
-  <text x="444" y="311" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.36</text>
-  <rect x="480" y="280" width="72" height="52" fill="#93C5FD"/>
-  <text x="516" y="311" text-anchor="middle" font-size="12" fill="#1E3A8A">0.17</text>
+  <text x="300" y="311" text-anchor="middle" font-size="12" fill="#374151">0.05</text>
+  <rect x="336" y="280" width="72" height="52" fill="#93C5FD"/>
+  <text x="372" y="311" text-anchor="middle" font-size="12" fill="#1E3A8A">0.15</text>
+  <rect x="408" y="280" width="72" height="52" fill="#DBEAFE"/>
+  <text x="444" y="311" text-anchor="middle" font-size="12" fill="#374151">0.10</text>
+  <rect x="480" y="280" width="72" height="52" fill="#1D4ED8"/>
+  <text x="516" y="311" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.51</text>
 
-  <!-- Row 5: mat (자기 자신 + cat) -->
+  <!-- Row 5: mat  [0.05, 0.16, 0.06, 0.27, 0.38*, 0.08]  핵어→관사 the, 전치사 on 중간 -->
   <rect x="120" y="332" width="72" height="52" fill="#DBEAFE"/>
-  <text x="156" y="363" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
+  <text x="156" y="363" text-anchor="middle" font-size="12" fill="#374151">0.05</text>
   <rect x="192" y="332" width="72" height="52" fill="#93C5FD"/>
-  <text x="228" y="363" text-anchor="middle" font-size="12" fill="#1E3A8A">0.22</text>
+  <text x="228" y="363" text-anchor="middle" font-size="12" fill="#1E3A8A">0.16</text>
   <rect x="264" y="332" width="72" height="52" fill="#DBEAFE"/>
-  <text x="300" y="363" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
+  <text x="300" y="363" text-anchor="middle" font-size="12" fill="#374151">0.06</text>
   <rect x="336" y="332" width="72" height="52" fill="#93C5FD"/>
-  <text x="372" y="363" text-anchor="middle" font-size="12" fill="#1E3A8A">0.15</text>
-  <rect x="408" y="332" width="72" height="52" fill="#DBEAFE"/>
-  <text x="444" y="363" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
-  <rect x="480" y="332" width="72" height="52" fill="#1D4ED8"/>
-  <text x="516" y="363" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.41</text>
+  <text x="372" y="363" text-anchor="middle" font-size="12" fill="#1E3A8A">0.27</text>
+  <rect x="408" y="332" width="72" height="52" fill="#1D4ED8"/>
+  <text x="444" y="363" text-anchor="middle" font-size="12" font-weight="700" fill="white">0.38</text>
+  <rect x="480" y="332" width="72" height="52" fill="#DBEAFE"/>
+  <text x="516" y="363" text-anchor="middle" font-size="12" fill="#374151">0.08</text>
 
-  <!-- Grid border + divider lines (drawn on top, between cells only — never through text) -->
+  <!-- Grid border + divider lines -->
   <rect x="120" y="72" width="432" height="312" fill="none" stroke="#FFFFFF" stroke-width="2"/>
   <line x1="120" y1="124" x2="552" y2="124" stroke="white" stroke-width="2"/>
   <line x1="120" y1="176" x2="552" y2="176" stroke="white" stroke-width="2"/>
   <line x1="120" y1="228" x2="552" y2="228" stroke="white" stroke-width="2"/>
   <line x1="120" y1="280" x2="552" y2="280" stroke="white" stroke-width="2"/>
   <line x1="120" y1="332" x2="552" y2="332" stroke="white" stroke-width="2"/>
-  <line x1="192" y1="72" x2="192" y2="384" stroke="white" stroke-width="2"/>
-  <line x1="264" y1="72" x2="264" y2="384" stroke="white" stroke-width="2"/>
-  <line x1="336" y1="72" x2="336" y2="384" stroke="white" stroke-width="2"/>
-  <line x1="408" y1="72" x2="408" y2="384" stroke="white" stroke-width="2"/>
-  <line x1="480" y1="72" x2="480" y2="384" stroke="white" stroke-width="2"/>
+  <line x1="192" y1="72"  x2="192" y2="384" stroke="white" stroke-width="2"/>
+  <line x1="264" y1="72"  x2="264" y2="384" stroke="white" stroke-width="2"/>
+  <line x1="336" y1="72"  x2="336" y2="384" stroke="white" stroke-width="2"/>
+  <line x1="408" y1="72"  x2="408" y2="384" stroke="white" stroke-width="2"/>
+  <line x1="480" y1="72"  x2="480" y2="384" stroke="white" stroke-width="2"/>
 
   <!-- Legend -->
-  <rect x="84" y="395" width="20" height="14" rx="2" fill="#1D4ED8"/>
+  <rect x="84"  y="395" width="20" height="14" rx="2" fill="#1D4ED8"/>
   <text x="112" y="407" font-size="10" fill="#374151">높은 attention (≥ 0.35)</text>
   <rect x="270" y="395" width="20" height="14" rx="2" fill="#93C5FD"/>
-  <text x="298" y="407" font-size="10" fill="#374151">중간 attention</text>
-  <rect x="420" y="395" width="20" height="14" rx="2" fill="#DBEAFE"/>
-  <text x="448" y="407" font-size="10" fill="#374151">낮은 attention</text>
+  <text x="298" y="407" font-size="10" fill="#374151">중간 attention (0.15 ~ 0.34)</text>
+  <rect x="476" y="395" width="20" height="14" rx="2" fill="#DBEAFE"/>
+  <text x="504" y="407" font-size="10" fill="#374151">낮은 attention (&lt; 0.15)</text>
 
-  <!-- Annotation -->
+  <!-- Note -->
   <text x="370" y="427" text-anchor="middle" font-size="10" fill="#374151">각 row의 값은 softmax 이후라 합이 1.0  |  값은 설명을 위한 예시 (학습된 실제 값은 다름)</text>
 
-  <!-- score_ij formula -->
+  <!-- score_ij formula box -->
   <rect x="84" y="437" width="554" height="32" rx="6" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
   <text x="361" y="457" text-anchor="middle" font-size="11" fill="#78350F" font-weight="600">score[i][j] = q_i · k_j  →  i번째 Query가 j번째 Key를 얼마나 "검색했는지" 나타낸다</text>
 
-  <text x="370" y="551" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
+  <!-- Pattern annotation panel -->
+  <rect x="84" y="477" width="554" height="80" rx="6" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="361" y="494" text-anchor="middle" font-size="10" font-weight="700" fill="#166534">▶ 주요 패턴: 대각선 우세(자기 자신)가 아닌 통사·의미 관계가 Attention을 주도</text>
+  <text x="100" y="511" font-size="9.5" fill="#374151">• The→cat (0.52), the→mat (0.51) : 관사가 자신이 수식하는 명사에 집중  (수식어 → 핵어)</text>
+  <text x="100" y="526" font-size="9.5" fill="#374151">• cat→is (0.38), is→cat (0.46)  : 주어와 동사의 상호 참조  (subject ↔ verb)</text>
+  <text x="100" y="541" font-size="9.5" fill="#374151">• on→mat (0.48), mat→the (0.38) : 전치사→목적어,  명사→자신의 관사</text>
+
+  <text x="370" y="574" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">Redrawn based on "Attention Is All You Need", Vaswani et al., 2017.</text>
 </svg>
